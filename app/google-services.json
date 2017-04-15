@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "44179126132",
+    "firebase_url": "https://taramtidam-b1015.firebaseio.com",
+    "project_id": "taramtidam-b1015",
+    "storage_bucket": "taramtidam-b1015.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:44179126132:android:c07616eb42c544ce",
+        "android_client_info": {
+          "package_name": "com.taramtidam.taramtidam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "44179126132-nta48duotbh2qvjorbdln867hog9pkvk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCplysy81wwgZKa1tXQHChqOs5npQB0A0Q"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
