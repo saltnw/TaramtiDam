@@ -6,36 +6,13 @@
     android:layout_height="match_parent"
     tools:context="com.taramtidam.taramtidam.MainActivity">
 
-    <EditText
-        android:id="@+id/editText2"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="User Name"
-        android:inputType="textPersonName"
-        android:visibility="visible"
-        tools:layout_editor_absoluteX="83dp"
-        tools:layout_editor_absoluteY="67dp" />
+        android:text="Hello World!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/editText3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:visibility="visible"
-        tools:layout_editor_absoluteX="85dp"
-        tools:layout_editor_absoluteY="129dp" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="221dp"
-        android:layout_height="73dp"
-        android:background="@color/colorAccent"
-        android:text="Log In"
-        android:textSize="36sp"
-        android:visibility="visible"
-        tools:layout_editor_absoluteX="83dp"
-        tools:layout_editor_absoluteY="220dp" />
 </android.support.constraint.ConstraintLayout>
