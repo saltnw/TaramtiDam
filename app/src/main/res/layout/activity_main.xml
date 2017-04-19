@@ -6,36 +6,37 @@
     android:layout_height="match_parent"
     tools:context="com.taramtidam.taramtidam.MainActivity">
 
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="User Name"
-        android:inputType="textPersonName"
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="163dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="419dp"
+        android:background="?attr/colorButtonNormal"
+        android:text="Log In"
+        android:textSize="18sp"
         android:visibility="visible"
-        tools:layout_editor_absoluteX="83dp"
-        tools:layout_editor_absoluteY="67dp" />
+        app:layout_constraintHorizontal_bias="0.737"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/editText3"
+    <TextView
+        android:id="@+id/infoTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:visibility="visible"
-        tools:layout_editor_absoluteX="85dp"
-        tools:layout_editor_absoluteY="129dp" />
+        android:text="TextView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="30dp" />
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="221dp"
-        android:layout_height="73dp"
-        android:background="@color/colorAccent"
-        android:text="Log In"
-        android:textSize="36sp"
-        android:visibility="visible"
-        tools:layout_editor_absoluteX="83dp"
-        tools:layout_editor_absoluteY="220dp" />
+        android:id="@+id/logoutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:layout_marginLeft="40dp"
+        android:text="log out"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
 </android.support.constraint.ConstraintLayout>
