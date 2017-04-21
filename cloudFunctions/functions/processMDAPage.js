@@ -13,6 +13,7 @@ var db = admin.database();
 var ref = db.ref();
 ref.child("MDA").remove();
 var nodeRef = ref.child("MDA");
+var GeoFire = require("geofire");
 
 function onDonationPageReceived(page)
 {
@@ -20,7 +21,6 @@ function onDonationPageReceived(page)
     var promiseArray = [];
     var cheerio = require('cheerio');
    $ = cheerio.load(page)
-   var data = new Array();
    $('tr').each(function(i, tr){
      var children = $(this).children();
      var dateItem = children.eq(0);
@@ -76,10 +76,11 @@ function getGeoLocationAndPush(row, timeout)
           }
           row["latitude"] = res[0].latitude;
           row["longitude"] = res[0].longitude;
-          var newMobileRef =  nodeRef.push(row)
-          resolve("done");
-          var geoFire = new GeoFire(newMobileRef)
-          //geoFire.set("geoLoc")                              // Create a GeoFire index
+          var newMobileRef =  nodeRef.push(row);
+          var geoFire = new GeoFire(newMobileRef);
+          geoFire.set("geoLoc", [res[0].latitude, res[0].longitude]).then(function() {
+              resolve("done");
+          })
         }
         else if (err)
         {
