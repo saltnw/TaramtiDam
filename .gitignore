@@ -8,3 +8,6 @@
 /captures
 .externalNativeBuild
 /.idea/modules.xml
+/cloudFunctions/functions/node_modules
+/cloudFunctions/appengine/lib
+.idea/misc.xml
