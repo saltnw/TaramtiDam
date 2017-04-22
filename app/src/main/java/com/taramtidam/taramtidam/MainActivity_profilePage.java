@@ -10,7 +10,7 @@ import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity_profilePage extends AppCompatActivity {
 
     EditText userName;
     EditText userEmail;
@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_profilepage);
 
 
         lastDonateDate = (TextView) findViewById(R.id.lastdonate);
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         Button updateDateButton = (Button) findViewById(R.id.donatedToday);
         updateDateButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
-                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy ");
+                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
                 Date date = new Date();
                 lastDonateDate.setText(dateFormat.format(date));
             }

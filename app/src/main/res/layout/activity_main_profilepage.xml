@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.taramtidam.taramtidam.MainActivity">
+    tools:context="com.taramtidam.taramtidam.MainActivity_profilePage">
 
     <Button
         android:id="@+id/donatedToday"
@@ -33,7 +33,7 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="2dp"
         android:text="My Profile"
@@ -51,11 +51,11 @@
         android:layout_marginTop="10dp"
         android:ems="10"
         android:hint="email"
-        android:inputType="textPersonName"
+        android:inputType="textEmailAddress"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/UserName"
-        app:layout_constraintHorizontal_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/UserName" />
 
     <EditText
         android:id="@+id/UserName"
