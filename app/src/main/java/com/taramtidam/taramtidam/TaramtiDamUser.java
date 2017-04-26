@@ -40,15 +40,6 @@ public class TaramtiDamUser {
         this.completedRegisteration = false;
     }
 
-    public TaramtiDamUser(String uid, String fullName,String email) {
-        this.uid = uid;
-        this.fullName = fullName;
-        this.email = email;
-        this.address = "";
-        this.bloodType = "";
-        this.completedRegisteration = false;
-    }
-
     public boolean isCompletedRegisteration() {
         return completedRegisteration;
     }
