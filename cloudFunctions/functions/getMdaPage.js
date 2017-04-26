@@ -3,13 +3,10 @@ var unirest = require("unirest")
 const DOMAIN = "https://www.mdais.org";
 const PAGE = "/index.php?option=com_blooddonations&view=blooddonations&Itemid=771&lang=he"
 
-//onValidCookie
-function obtainValidCookie()
+function obtainValidCookie(onValidCookie)
 {
-	return new Promise((resolve, reject) => {
-		unirest.get(DOMAIN).header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36").end(function(response) {
-		extractValidCookie(response.body, (cookie) => resolve(cookie));
-		})
+	unirest.get(DOMAIN).header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36").end(function(response) {
+		extractValidCookie(response.body, (cookie) => onValidCookie(cookie));
 	})
 }
 
@@ -53,19 +50,15 @@ location = window.location; ` + stripped_response;
 	setTimeout(() => onFinish(document.cookie.match(/(rbzid=.*); e/)[1]), 50);
 }
 
-function LoadDonationPageInternal(cookie)
+function LoadDonationPageInternal(cookie, onFinish)
 {
-	return new Promise((resolve, reject) => {
-		unirest.get(DOMAIN+PAGE).header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36").header("Cookie", cookie).end(function(response) { resolve(response.body); });
-	})
+	unirest.get(DOMAIN+PAGE).header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36").header("Cookie", cookie).end(function(response) { onFinish(response.body); });
 }
 
 // API - onFinish(page)
-function LoadDonationPage()
+function LoadDonationPage(onFinish)
 {
-	return obtainValidCookie().then(function(cookie) {
-		return LoadDonationPageInternal(cookie)
-	})
+  obtainValidCookie((cookie) => { LoadDonationPageInternal(cookie, onFinish)});
 }
 
 module.exports = LoadDonationPage;

@@ -3,11 +3,8 @@
   "description": "Cloud Functions for Firebase",
   "dependencies": {
     "cheerio": "^0.22.0",
-    "firebase": "^3.8.0",
     "firebase-admin": "^4.1.2",
     "firebase-functions": "^0.5",
-    "geofire": "^4.1.2",
-    "node-geocoder": "^3.16.0",
     "unirest": "^0.5.1"
   },
   "private": true
