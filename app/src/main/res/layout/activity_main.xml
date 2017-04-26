@@ -6,51 +6,13 @@
     android:layout_height="match_parent"
     tools:context="com.taramtidam.taramtidam.MainActivity">
 
-    <Button
-        android:id="@+id/loginButton"
-        android:layout_width="163dp"
-        android:layout_height="52dp"
-        android:background="?attr/colorButtonNormal"
-        android:text="Log In"
-        android:textSize="18sp"
-        android:visibility="visible"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginEnd="40dp" />
-
     <TextView
-        android:id="@+id/infoTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="50dp"
-        app:layout_constraintHorizontal_bias="0.501"
-        android:layout_marginStart="50dp" />
-
-    <Button
-        android:id="@+id/logoutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        android:layout_marginLeft="40dp"
-        android:text="log out"
+        android:text="Hello World!"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginStart="40dp" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ProgressBar
-        android:id="@+id/loadprofileProgressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="25dp" />
 </android.support.constraint.ConstraintLayout>
