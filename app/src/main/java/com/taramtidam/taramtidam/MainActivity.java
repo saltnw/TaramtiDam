@@ -1,6 +1,10 @@
 package com.taramtidam.taramtidam;
 
+import android.app.NotificationManager;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +17,10 @@ import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -25,17 +33,23 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    public static final String TAG ="AsafMSG" ;
+    public static final String TAG ="Main activity" ;
     private FirebaseAuth mAuth;                             // firebase auth object
     private FirebaseAuth.AuthStateListener mAuthListener;   // firebase auth listener
 
     private static final int RC_SIGN_IN = 12;               // return code from firebase UI
 
     TaramtiDamUser currentLoggedUser = null ;               // holds the current logged user
+    //Geofencing
+    private static final int PERMISSIONS_REQUEST_FINE_LOCATION = 111;
+    private GoogleApiClient mClient;
+    private Geofencing mGeofencing;
 
 
 
@@ -91,6 +105,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // ...
             }
         };
+        if (ActivityCompat.checkSelfPermission(MainActivity.this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                 ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_FINE_LOCATION);
+        }
+        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        mClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .addApi(Places.GEO_DATA_API)//todo remove?
+                .enableAutoManage(this, this)
+                .build();
+        mClient.connect();
+
+        mGeofencing = new Geofencing(this, mClient);
 
     }
 
@@ -271,6 +303,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        MDAMobile mobile1= new MDAMobile(32.0908,34.7859,"1");
+        MDAMobile mobile2= new MDAMobile(73.0,34.5,"2");
+        List<MDAMobile> mobiles =new ArrayList<>();
+        mobiles.add(mobile1);
+        mobiles.add(mobile2);
+        mGeofencing.updateGeofencesList(mobiles);
+        mGeofencing.registerAllGeofences();
+        Log.i(TAG, "API Client Connection Successful!");
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+        Log.i(TAG, "API Client Connection Suspended!");
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.e(TAG, "API Client Connection Failed!");
+    }
+
 
     //function for custom email + password login. CAN BE DELETED
    /*
