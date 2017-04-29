@@ -1,6 +1,9 @@
 package com.taramtidam.taramtidam;
 
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +16,14 @@ import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -25,9 +36,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status> {
 
     public static final String TAG ="AsafMSG" ;
     private FirebaseAuth mAuth;                             // firebase auth object
@@ -36,8 +49,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int RC_SIGN_IN = 12;               // return code from firebase UI
 
     TaramtiDamUser currentLoggedUser = null ;               // holds the current logged user
-
-
+    private GoogleApiClient mGoogleApiClient;
+    private GeofencingRequest request;
+    private PendingIntent mGeofencePendingIntent;
+    private List<Geofence> mGeofenceList = new ArrayList<>();
 
 
     @Override
@@ -89,11 +104,53 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 }
                 // ...
+
             }
         };
 
+        ///------------------------------------------------------/////////////////
+        mGeofencePendingIntent = null;
+        // Create an instance of GoogleAPIClient.
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+        List<Geofence> mGeofenceList = new ArrayList<>();
+        MDAMobile mda1 = new MDAMobile(1.1, 2.2);
+        List<MDAMobile> mdaMobiles= new ArrayList<>();
+        mdaMobiles.add(mda1);
+        int i = 0;
+        for( MDAMobile mobile : mdaMobiles) { // going over the blood-mobiles and add a fence to each of them.
+            i++;
+            mGeofenceList.add(new Geofence.Builder()
+                    // Set the request ID of the geofence. This is a string to identify this
+                    // geofence.
+                    .setRequestId(String.format("MDA{}",i))
+                    .setCircularRegion(
+                            mobile.getLatitude(),
+                            mobile.getLongitude(),
+                            Constants.GEOFENCE_RADIUS_IN_METERS)
+                    .setExpirationDuration(Constants.GEOFENCE_EXPIRATION_IN_MILLISECONDS)
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_DWELL)// user linger in the location
+                    .build());
+        }
+
+
+
     }
 
+    private GeofencingRequest getGeofencingRequest() {
+
+        request = new GeofencingRequest.Builder()
+               // Notification to trigger when the Geofence is created
+               .setInitialTrigger( GeofencingRequest.INITIAL_TRIGGER_ENTER )
+               .addGeofences(mGeofenceList) // add the Geofences list
+               .build();
+        return request;
+    }
 
 
     /* define behavior to the buttons on the view  */
@@ -138,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onStart(){
+        mGoogleApiClient.connect();
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
 
@@ -146,6 +204,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onStop() {
+        mGoogleApiClient.disconnect();
         super.onStop();
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
@@ -272,6 +331,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+
+
     //function for custom email + password login. CAN BE DELETED
    /*
     private void signIn(String email, String password) {
@@ -297,4 +358,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
     */
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        try {
+            LocationServices.GeofencingApi.addGeofences(
+                    mGoogleApiClient,
+                    // The GeofenceRequest object.
+                    getGeofencingRequest(),
+                    // A pending intent that that is reused when calling removeGeofences(). This
+                    // pending intent is used to generate an intent when a matched geofence
+                    // transition is observed.
+                    getGeofencePendingIntent()
+            ).setResultCallback(this); // Result processed in onResult().
+        } catch (SecurityException securityException) {
+            // Catch exception generated if the app does not use ACCESS_FINE_LOCATION permission.
+            // logSecurityException(securityException);TODO return this line and implement method
+        }
+    }
+
+    public void onResult(Status status) {
+    }
+
+
+
+
+
+    private PendingIntent getGeofencePendingIntent() {
+        // Reuse the PendingIntent if we already have it.
+        if (mGeofencePendingIntent != null) {
+            return mGeofencePendingIntent;
+        }
+        Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
+        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
+        // calling addGeofences() and removeGeofences().
+        return PendingIntent.getService(this, 0, intent, PendingIntent.
+                FLAG_UPDATE_CURRENT);
+    }
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+
 }
