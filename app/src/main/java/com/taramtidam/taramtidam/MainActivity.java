@@ -51,8 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private GoogleApiClient mClient;
     private Geofencing mGeofencing;
     List<MDAMobile> mobiles =new ArrayList<>();
-
-
+    private boolean isFinished = false;
 
 
     @Override
@@ -131,7 +130,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                List<MDAMobile> mobiles =new ArrayList<MDAMobile>();
                 Iterable<DataSnapshot> locations= dataSnapshot.getChildren();
                 int i=0;
                 while (locations.iterator().hasNext() && i<10) {
@@ -154,6 +152,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     i++;
                 }
                 System.out.println("done");
+                mobiles.add(new MDAMobile(32.0852,34.7818,"54"));
+                mGeofencing.updateGeofencesList(mobiles);
+                mGeofencing.registerAllGeofences();
+                System.out.println("NOW DONE");
 
             }
 
@@ -347,14 +349,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        MDAMobile mobile1= new MDAMobile(32.0908,34.7859,"1");
-        MDAMobile mobile2= new MDAMobile(73.0,34.5,"2");
-        List<MDAMobile> mobiles =new ArrayList<>();
 
-        mobiles.add(mobile1);
-        mobiles.add(mobile2);
-        mGeofencing.updateGeofencesList(mobiles);
-        mGeofencing.registerAllGeofences();
         Log.i(TAG, "API Client Connection Successful!");
     }
 
