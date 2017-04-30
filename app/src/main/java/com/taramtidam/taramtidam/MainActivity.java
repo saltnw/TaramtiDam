@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     PERMISSIONS_REQUEST_FINE_LOCATION);
         }
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
+        Log.d("FENCE","Initializing Google API Client");
         mClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -121,15 +121,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .enableAutoManage(this, this)
                 .build();
 
-        ///////////////////////////Lilach Night
-        // Get a reference to our posts
+        Log.d("FENCE","Get reference to Firebase Database at MDA");
+        // Get a reference to our MDA mobiles
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("MDA");
 
-    // Attach a listener to read the data at our posts reference
+        // Attach a listener to read the data at our posts reference
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d("FENCE","Updating MDA mobiles from the database");
                 Iterable<DataSnapshot> locations= dataSnapshot.getChildren();
                 int i=0;
                 while (locations.iterator().hasNext() && i<10) {
@@ -151,11 +152,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     System.out.println("\n");
                     i++;
                 }
+                Log.d("FENCE", "Done updating mobiles");
                 System.out.println("done");
                 mobiles.add(new MDAMobile(32.0852,34.7818,"54"));
+                Log.d("FENCE","Going to update geofences list to match new MDA mobiles list");
                 mGeofencing.updateGeofencesList(mobiles);
+                Log.d("FENCE","Going to register all geofences per all MDA mobiles");
                 mGeofencing.registerAllGeofences();
-                System.out.println("NOW DONE");
 
             }
 
@@ -211,7 +214,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onStart(){
+        Log.d("FENCE","Connecting Google API Client");
         mClient.connect();//TODO put it here for now. dosent help
+        Log.d("FENCE","Initialize Geofencing object");
         mGeofencing = new Geofencing(this, mClient);
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
@@ -350,18 +355,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
-        Log.i(TAG, "API Client Connection Successful!");
+        Log.i("FENCE", "API Client Connection Successful!");
     }
 
     @Override
     public void onConnectionSuspended(int i) {
 
-        Log.i(TAG, "API Client Connection Suspended!");
+        Log.i("FENCE", "API Client Connection Suspended!");
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.e(TAG, "API Client Connection Failed!");
+        Log.e("FENCE", "API Client Connection Failed!");
     }
 
 

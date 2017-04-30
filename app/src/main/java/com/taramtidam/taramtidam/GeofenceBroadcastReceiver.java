@@ -42,7 +42,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
      */
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("LOC","got my location!");
+        Log.d("FENCE","Received location in broadcast receiver");
         // Get the Geofence Event from the Intent sent through
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
         if (geofencingEvent.hasError()) {
@@ -52,11 +52,9 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
 
         // Send the notification
-        double latitude= geofencingEvent.getTriggeringLocation().getLatitude();
-        double longitude=geofencingEvent.getTriggeringLocation().getLongitude();
-        Log.d("TheTAG","MDA mobile is near!");
-
-        sendNotification(context, "נווט אל הניידת בכתובת: בזל, תל אביב  ");
+        String MDANear = geofencingEvent.getTriggeringGeofences().get(0).getRequestId();
+        sendNotification(context, MDANear);
+        Log.d("FENCE","Notification was sent");
     }
 
 

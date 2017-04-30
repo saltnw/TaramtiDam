@@ -38,7 +38,7 @@ public class Geofencing implements ResultCallback {
 
     // Constants
     public static final String TAG = Geofencing.class.getSimpleName();
-    private static final float GEOFENCE_RADIUS = 8000; // 800 meters
+    private static final float GEOFENCE_RADIUS = 2000; // 1500 meters
     private static final long GEOFENCE_TIMEOUT = 24 * 60 * 60 * 1000; // 24 hours
 
     private List<Geofence> mGeofenceList;
@@ -73,9 +73,10 @@ public class Geofencing implements ResultCallback {
                     getGeofencingRequest(),
                     getGeofencePendingIntent()
             ).setResultCallback(this);
+            Log.d("FENCE","all Geofences were successfully registered");
         } catch (SecurityException securityException) {
             // Catch exception generated if the app does not use ACCESS_FINE_LOCATION permission.
-            Log.e(TAG, securityException.getMessage());
+            Log.e("FENCE", securityException.getMessage());
         }
     }
 
@@ -113,7 +114,7 @@ public class Geofencing implements ResultCallback {
         mGeofenceList = new ArrayList<>();
         if (mobiles == null || mobiles.isEmpty()) return;
         for (MDAMobile mobile : mobiles) {
-            String mobileID = mobile.getId();
+            String mobileID = mobile.getAddress()+", "+mobile.getCity();
             double placeLat = mobile.getLatitude();
             double placeLng = mobile.getLongitude();
             // Build a Geofence object for the MDAMobile
@@ -122,12 +123,12 @@ public class Geofencing implements ResultCallback {
                     .setExpirationDuration(GEOFENCE_TIMEOUT)
                     .setCircularRegion(placeLat, placeLng, GEOFENCE_RADIUS)
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_DWELL)
-                    .setLoiteringDelay(1000)
+                    .setLoiteringDelay(1)
                     .build();
             // Add the MDAMobile Geofence to the list
             mGeofenceList.add(geofence);
         }
-        System.out.println("doneGeofences");
+        Log.d("FENCE"," Geofences list was successfully updated");
     }
 
     /***
@@ -137,6 +138,7 @@ public class Geofencing implements ResultCallback {
      * @return the GeofencingRequest object
      */
     private GeofencingRequest getGeofencingRequest() {
+        Log.d("FENCE","Builging a GeofencingRequest...");
         GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
         builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_DWELL);
         builder.addGeofences(mGeofenceList);
@@ -151,6 +153,7 @@ public class Geofencing implements ResultCallback {
      */
     private PendingIntent getGeofencePendingIntent() {
         // Reuse the PendingIntent if we already have it.
+        Log.d("FENCE","Building/verifying a Geofence pending intent exist");
         if (mGeofencePendingIntent != null) {
             return mGeofencePendingIntent;
         }
