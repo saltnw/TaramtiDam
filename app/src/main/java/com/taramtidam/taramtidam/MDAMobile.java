@@ -1,8 +1,5 @@
 package com.taramtidam.taramtidam;
 
-import com.google.android.gms.location.places.Place;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,12 +10,28 @@ public class MDAMobile {
     private double latitude;
     private double longitude;
     private String id;
-
+    private String address;
+    private String city;
+    private String date;
+    private String time;
 
     public MDAMobile(double latitude, double longitude, String id) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.id = id;
+    }
+
+    public MDAMobile(double latitude, double longitude, String id, String address, String city, String date, String time) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.id = id;
+        this.address = address;
+        this.city = city;
+        this.date = date;
+        this.time = time;
+    }
+
+    public MDAMobile() {
     }
 
     public String getId() {
@@ -68,5 +81,37 @@ public class MDAMobile {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (id != null ? id.hashCode() : 0);
         return result;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

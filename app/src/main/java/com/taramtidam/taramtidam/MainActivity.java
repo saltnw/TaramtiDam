@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int PERMISSIONS_REQUEST_FINE_LOCATION = 111;
     private GoogleApiClient mClient;
     private Geofencing mGeofencing;
+    List<MDAMobile> mobiles =new ArrayList<>();
 
 
 
@@ -120,9 +121,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .addApi(Places.GEO_DATA_API)//todo remove?
                 .enableAutoManage(this, this)
                 .build();
-        mClient.connect();
 
-        mGeofencing = new Geofencing(this, mClient);
+        ///////////////////////////Lilach Night
+        // Get a reference to our posts
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("MDA");
+
+    // Attach a listener to read the data at our posts reference
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<MDAMobile> mobiles =new ArrayList<MDAMobile>();
+                Iterable<DataSnapshot> locations= dataSnapshot.getChildren();
+                int i=0;
+                while (locations.iterator().hasNext() && i<10) {
+                    MDAMobile currMda = new MDAMobile();
+                    DataSnapshot nextMDALoc =locations.iterator().next();
+                 //   String nextMDALoc = String.valueOf(locations.iterator().next());
+                   // System.out.println(nextMDALoc);
+                    currMda.setCity(nextMDALoc.child("city").getValue().toString());
+                    currMda.setAddress(nextMDALoc.child("description").getValue().toString());
+                    currMda.setLongitude(Double.parseDouble(nextMDALoc.child("longitude").getValue().toString()));
+                    currMda.setLatitude(Double.parseDouble(nextMDALoc.child("latitude").getValue().toString()));
+                    currMda.setTime(nextMDALoc.child("start time").getValue().toString());
+                    currMda.setDate(nextMDALoc.child("date").getValue().toString());
+                    currMda.setId(String.valueOf(i));
+
+                    mobiles.add(currMda);
+
+                    System.out.println("\n");
+                    System.out.println("\n");
+                    i++;
+                }
+                System.out.println("done");
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
 
     }
 
@@ -170,6 +209,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onStart(){
+        mClient.connect();//TODO put it here for now. dosent help
+        mGeofencing = new Geofencing(this, mClient);
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
 
@@ -309,6 +350,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         MDAMobile mobile1= new MDAMobile(32.0908,34.7859,"1");
         MDAMobile mobile2= new MDAMobile(73.0,34.5,"2");
         List<MDAMobile> mobiles =new ArrayList<>();
+
         mobiles.add(mobile1);
         mobiles.add(mobile2);
         mGeofencing.updateGeofencesList(mobiles);

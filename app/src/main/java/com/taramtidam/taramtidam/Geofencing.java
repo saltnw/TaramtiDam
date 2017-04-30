@@ -127,6 +127,7 @@ public class Geofencing implements ResultCallback {
             // Add the MDAMobile Geofence to the list
             mGeofenceList.add(geofence);
         }
+        System.out.println("doneGeofences");
     }
 
     /***
