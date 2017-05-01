@@ -38,7 +38,7 @@ public class Geofencing implements ResultCallback {
 
     // Constants
     public static final String TAG = Geofencing.class.getSimpleName();
-    private static final float GEOFENCE_RADIUS = 2000; // 1500 meters
+    private static final float GEOFENCE_RADIUS =8000; // in meters(currently larger for the demonstration-so we have mobile in range)
     private static final long GEOFENCE_TIMEOUT = 24 * 60 * 60 * 1000; // 24 hours
 
     private List<Geofence> mGeofenceList;
@@ -65,6 +65,7 @@ public class Geofencing implements ResultCallback {
         // Check that the API client is connected and that the list has Geofences in it
         if (mGoogleApiClient == null || !mGoogleApiClient.isConnected() ||
                 mGeofenceList == null || mGeofenceList.size() == 0) {
+            Log.d("FENCE", "mGoogleApiClient: "+mGoogleApiClient.toString()+", isClientConnected:"+mGoogleApiClient.isConnected()+" isListEmpy:"+ mGeofenceList.isEmpty());
             return;
         }
         try {

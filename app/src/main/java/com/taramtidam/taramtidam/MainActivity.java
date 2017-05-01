@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 Log.d("FENCE", "Done updating mobiles");
                 System.out.println("done");
-                mobiles.add(new MDAMobile(32.0852,34.7818,"54"));
+//                mobiles.add(new MDAMobile(32.0852,34.7818,"54"));
                 Log.d("FENCE","Going to update geofences list to match new MDA mobiles list");
                 mGeofencing.updateGeofencesList(mobiles);
                 Log.d("FENCE","Going to register all geofences per all MDA mobiles");
