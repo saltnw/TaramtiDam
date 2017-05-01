@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (mAuth.getCurrentUser() != null) {
             // already signed in
 
-            infotv.setText("welcome " + mAuth.getCurrentUser().getUid());  // update the TextView text
+            infotv.setText("welcome back " + mAuth.getCurrentUser().getDisplayName());  // update the TextView text
         } else {
             //not sigen in
             //infotv.setText("welcome guest!" );                  // update the TextView text
@@ -90,7 +90,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                     findViewById(R.id.logoutButton).setEnabled(true);
+                    findViewById(R.id.logoutButton).setVisibility(View.VISIBLE);
+                    findViewById(R.id.EditProfileButton).setEnabled(true);
+                    findViewById(R.id.EditProfileButton).setVisibility(View.VISIBLE);
                     findViewById(R.id.loginButton).setEnabled(false);
+                    findViewById(R.id.loginButton).setVisibility(View.INVISIBLE);
+
                     finishLoginAndRegistration();
 
                 } else {
@@ -98,7 +103,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                     infotv.setText("Hello, \nPlease sign in to continue");                  // update the TextView text
                     findViewById(R.id.logoutButton).setEnabled(false);
+                    findViewById(R.id.logoutButton).setVisibility(View.INVISIBLE);
+                    findViewById(R.id.EditProfileButton).setEnabled(false);
+                    findViewById(R.id.EditProfileButton).setVisibility(View.INVISIBLE);
                     findViewById(R.id.loginButton).setEnabled(true);
+                    findViewById(R.id.loginButton).setVisibility(View.VISIBLE);
+
                     currentLoggedUser = null;
 
                 }
@@ -300,7 +310,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     make sure that you call this function only from a firebase database listener, otherwise it is not guaranteed that "currentLoggedUser" contain data at all
     */
     private void displayProfileAfterLoadingfromDtabase (){
-        ((TextView)(findViewById(R.id.infoTextView))).setText("logged in!\n"+"userid: "+ currentLoggedUser.getuid() + "\n"+currentLoggedUser.getFullName()+"\n"+currentLoggedUser.getEmail() + "\n" );     // update the TextView text
+        TextView infotv = ((TextView)(findViewById(R.id.infoTextView)));
+
+        infotv.setText("Welcome\n"+"\t\t\t"+currentLoggedUser.getFullName() );     // update the TextView text
         //
         // add here for more things to do with profile
         //

@@ -2,10 +2,10 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     tools:context="com.taramtidam.taramtidam.ProfileActivity"
-    android:background="@drawable/profileimage"
+    android:background="@drawable/editprofilebackground"
     tools:layout_editor_absoluteY="25dp"
     tools:layout_editor_absoluteX="0dp">
 
@@ -86,6 +86,7 @@
         android:text="full name"
         android:textStyle="bold"
         android:textSize="24sp"
+        android:textColor="#c00000"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -95,16 +96,16 @@
 
     <TextView
         android:id="@+id/EmailTextView"
-        android:layout_width="134dp"
+        android:layout_width="250dp"
         android:layout_height="24dp"
         android:text="Email Text View"
         android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.543"
-        app:layout_constraintHorizontal_bias="0.539" />
+        app:layout_constraintVertical_bias="0.541"
+        android:layout_marginLeft="40dp" />
 
     <Spinner
         android:id="@+id/bloodSpinner"
@@ -156,19 +157,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.536" />
-
-    <TextView
-        android:id="@+id/ImageTextView"
-        android:layout_width="102dp"
-        android:layout_height="87dp"
-        android:textSize="16sp"
-        android:textColor="#990000"
-        android:text="Press here to upload a new profile image"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.651"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.302" />
 
 </android.support.constraint.ConstraintLayout>
