@@ -1,6 +1,10 @@
 package com.taramtidam.taramtidam;
 
+import android.app.NotificationManager;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +17,10 @@ import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -25,19 +33,25 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    public static final String TAG ="AsafMSG" ;
+    public static final String TAG ="Main activity" ;
     private FirebaseAuth mAuth;                             // firebase auth object
     private FirebaseAuth.AuthStateListener mAuthListener;   // firebase auth listener
 
     private static final int RC_SIGN_IN = 12;               // return code from firebase UI
 
     TaramtiDamUser currentLoggedUser = null ;               // holds the current logged user
-
-
+    //Geofencing
+    private static final int PERMISSIONS_REQUEST_FINE_LOCATION = 111;
+    private GoogleApiClient mClient;
+    private Geofencing mGeofencing;
+    List<MDAMobile> mobiles =new ArrayList<>();
+    private boolean isFinished = false;
 
 
     @Override
@@ -91,6 +105,68 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // ...
             }
         };
+        if (ActivityCompat.checkSelfPermission(MainActivity.this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                 ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_FINE_LOCATION);
+        }
+        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        Log.d("FENCE","Initializing Google API Client");
+        mClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .addApi(Places.GEO_DATA_API)//todo remove?
+                .enableAutoManage(this, this)
+                .build();
+
+        Log.d("FENCE","Get reference to Firebase Database at MDA");
+        // Get a reference to our MDA mobiles
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("MDA");
+
+        // Attach a listener to read the data at our posts reference
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d("FENCE","Updating MDA mobiles from the database");
+                Iterable<DataSnapshot> locations= dataSnapshot.getChildren();
+                int i=0;
+                while (locations.iterator().hasNext() && i<10) {
+                    MDAMobile currMda = new MDAMobile();
+                    DataSnapshot nextMDALoc =locations.iterator().next();
+                 //   String nextMDALoc = String.valueOf(locations.iterator().next());
+                   // System.out.println(nextMDALoc);
+                    currMda.setCity(nextMDALoc.child("city").getValue().toString());
+                    currMda.setAddress(nextMDALoc.child("description").getValue().toString());
+                    currMda.setLongitude(Double.parseDouble(nextMDALoc.child("longitude").getValue().toString()));
+                    currMda.setLatitude(Double.parseDouble(nextMDALoc.child("latitude").getValue().toString()));
+                    currMda.setTime(nextMDALoc.child("start time").getValue().toString());
+                    currMda.setDate(nextMDALoc.child("date").getValue().toString());
+                    currMda.setId(String.valueOf(i));
+
+                    mobiles.add(currMda);
+
+                    System.out.println("\n");
+                    System.out.println("\n");
+                    i++;
+                }
+                Log.d("FENCE", "Done updating mobiles");
+                System.out.println("done");
+//                mobiles.add(new MDAMobile(32.0852,34.7818,"54"));
+                Log.d("FENCE","Going to update geofences list to match new MDA mobiles list");
+                mGeofencing.updateGeofencesList(mobiles);
+                Log.d("FENCE","Going to register all geofences per all MDA mobiles");
+                mGeofencing.registerAllGeofences();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
 
     }
 
@@ -138,6 +214,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onStart(){
+        Log.d("FENCE","Connecting Google API Client");
+        mClient.connect();//TODO put it here for now. dosent help
+        Log.d("FENCE","Initialize Geofencing object");
+        mGeofencing = new Geofencing(this, mClient);
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
 
@@ -271,6 +351,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+        Log.i("FENCE", "API Client Connection Successful!");
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+        Log.i("FENCE", "API Client Connection Suspended!");
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.e("FENCE", "API Client Connection Failed!");
+    }
+
 
     //function for custom email + password login. CAN BE DELETED
    /*
