@@ -8,6 +8,7 @@
 
     <string name="blood_type_prompt">Choose a blood type</string>
     <string name="userId">userId</string>
+    <string name="profileUpdateSucess">Update Sucess!</string>
 
     <string-array name="blood_types">
         <item>A+</item>

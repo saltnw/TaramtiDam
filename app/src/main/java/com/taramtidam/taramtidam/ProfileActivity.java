@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -57,6 +58,8 @@ public class ProfileActivity extends AppCompatActivity {
 
                 DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
                 mDatabase.child("users").child(currentLoggedUser.getuid()).setValue(currentLoggedUser);
+                Toast.makeText(ProfileActivity.this, R.string.profileUpdateSucess,
+                        Toast.LENGTH_SHORT).show();  // display message
             }
         });
 
