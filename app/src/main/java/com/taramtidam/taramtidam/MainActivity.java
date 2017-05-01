@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.Intent;
 
 import com.facebook.login.LoginManager;
 import com.firebase.ui.auth.AuthUI;
@@ -45,14 +46,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final int RC_SIGN_IN = 12;               // return code from firebase UI
 
-    TaramtiDamUser currentLoggedUser = null ;               // holds the current logged user
+    TaramtiDamUser currentLoggedUser = null ;// holds the current logged user
+
+    public static final String EXTRA_ID = "com.taramtidam.user_id";
     //Geofencing
     private static final int PERMISSIONS_REQUEST_FINE_LOCATION = 111;
     private GoogleApiClient mClient;
     private Geofencing mGeofencing;
     List<MDAMobile> mobiles =new ArrayList<>();
     private boolean isFinished = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         /* set listeners to the buttons in the view */
         findViewById(R.id.loginButton).setOnClickListener(this);
         findViewById(R.id.logoutButton).setOnClickListener(this);
+        findViewById(R.id.EditProfileButton).setOnClickListener(this);
 
         /* define a listener for changing the auth state  */
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -89,9 +92,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     findViewById(R.id.logoutButton).setEnabled(true);
                     findViewById(R.id.loginButton).setEnabled(false);
                     finishLoginAndRegistration();
-
-
-
 
                 } else {
                     // User is signed out
@@ -170,8 +170,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-
-
     /* define behavior to the buttons on the view  */
     public void onClick(View arg0) {
 
@@ -195,9 +193,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             //firebaseUI finished!
 
-
-
-
         }
         //logout button was pressed
         if ( i == R.id.logoutButton){
@@ -208,9 +203,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(MainActivity.this, R.string.auth_signout_success,
                     Toast.LENGTH_SHORT).show();  // display message
         }
+
+        //Edit Profile button was pressed
+        if ( i == R.id.EditProfileButton){
+            Log.i(TAG, "edit profile btn was pressed;");
+            Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+            intent.putExtra(EXTRA_ID, mAuth.getCurrentUser().getUid());
+            startActivity(intent);
+        }
     }
-
-
 
     @Override
     protected void onStart(){
