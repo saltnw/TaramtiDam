@@ -13,6 +13,9 @@ import android.widget.Spinner;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.util.List;
+import java.util.ArrayList;
+import android.widget.ArrayAdapter;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -52,8 +55,8 @@ public class ProfileActivity extends AppCompatActivity {
                 String add2 = address2.getText().toString().trim();
                 String bloodType = bloodSpinner.getSelectedItem().toString();
 
-                currentLoggedUser.setAddress(add1);
-                //currentLoggedUser.setAnotherAddress(add2); //TODO next milestone
+                currentLoggedUser.setAddress1(add1);
+                currentLoggedUser.setAddress2(add2);
                 currentLoggedUser.setBloodType(bloodType);
 
                 DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -92,15 +95,32 @@ public class ProfileActivity extends AppCompatActivity {
         //get the user current information
         String current_full_name = currentLoggedUser.getFullName();
         String current_mail = currentLoggedUser.getEmail();
-        String current_address1 = currentLoggedUser.getAddress();
-        //String current_address2 = currentLoggerUser.getAddress2(); //TODO: add this field to user profile
+        String current_address1 = currentLoggedUser.getAddress1();
+        String current_address2 = currentLoggedUser.getAddress2();
         //String current_last_donation = null; //TODO: add this field to user profile
 
         //set content in Text views with the current information of the user
         full_name.setText(current_full_name);
         mail.setText(current_mail);
         address1.setText(current_address1,TextView.BufferType.EDITABLE);
-        //address2.setText(current_address2); //TODO next milestone
+        address2.setText(current_address2,TextView.BufferType.EDITABLE);
         //last_donation.setText(current_last_donation.toString()); //TODO next milestone
+
+        addItemsOnSpinner();
+    }
+
+    public void addItemsOnSpinner() {
+        String bloodTypes[] = {"A+","A-","B+","B-","AB+","AB-","O+","O-"};
+        List<String> list = new ArrayList<String>();
+        list.add(currentLoggedUser.getBloodType());
+        for(int i=0;i<bloodTypes.length;i++){
+            if (bloodTypes[i] != currentLoggedUser.getBloodType() ){
+                list.add(bloodTypes[i]);
+            }
+        }
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, list);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        bloodSpinner.setAdapter(dataAdapter);
     }
 }
