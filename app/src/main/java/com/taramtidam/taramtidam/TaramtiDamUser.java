@@ -23,8 +23,7 @@ public class TaramtiDamUser {
     private String uid;
     private String email;
     private String fullName;
-    private String address1;
-    private String address2;
+    private String address;
     private String bloodType;
     private int rankLevel;
     private Date lastDonation;
@@ -36,9 +35,8 @@ public class TaramtiDamUser {
         this.uid = uid;
         this.fullName = fullName;
         this.email = email;
-        this.address1 = address;
-        this.address2 = "";
-        this.bloodType = "";
+        this.address = address;
+        this.bloodType = bloodType;
         this.completedRegisteration = false;
     }
 
@@ -46,8 +44,7 @@ public class TaramtiDamUser {
         this.uid = uid;
         this.fullName = fullName;
         this.email = email;
-        this.address1 = "";
-        this.address2 = "";
+        this.address = "";
         this.bloodType = "";
         this.completedRegisteration = false;
     }
@@ -68,20 +65,12 @@ public class TaramtiDamUser {
         this.fullName = fullName;
     }
 
-    public String getAddress1() {
-        return address1;
+    public String getAddress() {
+        return address;
     }
 
-    public String getAddress2() {
-        return address2;
-    }
-
-    public void setAddress1(String address) {
-        this.address1 = address;
-    }
-
-    public void setAddress2(String address) {
-        this.address2 = address;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getBloodType() {
