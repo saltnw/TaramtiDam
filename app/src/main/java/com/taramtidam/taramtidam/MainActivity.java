@@ -7,10 +7,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (mAuth.getCurrentUser() != null) {
             // already signed in
 
-            infotv.setText("welcome back " + mAuth.getCurrentUser().getDisplayName());  // update the TextView text
+            infotv.setText("Welcome back");  // update the TextView text
         } else {
             //not sigen in
             //infotv.setText("welcome guest!" );                  // update the TextView text
@@ -101,7 +103,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
-                    infotv.setText("Hello, \nPlease sign in to continue");                  // update the TextView text
+
+                    infotv.setText("Welcome\n\t\t\tGuest" );                  // update the TextView text
+                    AppCompatImageView rankCartoon = (AppCompatImageView)(findViewById(R.id.RankImageView));
+                    rankCartoon.setImageResource(R.drawable.guestdonor);
+
                     findViewById(R.id.logoutButton).setEnabled(false);
                     findViewById(R.id.logoutButton).setVisibility(View.INVISIBLE);
                     findViewById(R.id.EditProfileButton).setEnabled(false);
@@ -255,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
          FirebaseDatabase database = FirebaseDatabase.getInstance();
          DatabaseReference usersDatabase = database.getReference("users");
 
-        ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.VISIBLE); //display the progress bar
+       // ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.VISIBLE); //display the progress bar
 
 
         //using listener get all the users with the same uid
@@ -272,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     currentLoggedUser = snapshot.child(mAuth.getCurrentUser().getUid()).getValue(TaramtiDamUser.class); //get an object of the user
                     Log.d(TAG,"currentLoggedUser now contain the logged user profile: "+currentLoggedUser.getFullName());
                     displayProfileAfterLoadingfromDtabase();
-                    ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
+                   // ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
 
                 }
                 else{
@@ -286,7 +292,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Log.d(TAG, "new user was created in database");
 
                     displayProfileAfterLoadingfromDtabase();
-                    ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
+                   // ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
                     Toast.makeText(MainActivity.this, R.string.auth_registration_completed,
                             Toast.LENGTH_SHORT).show();  // display message
 
@@ -316,6 +322,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //
         // add here for more things to do with profile
         //
+        AppCompatImageView rankCartoon = (AppCompatImageView)(findViewById(R.id.RankImageView));
+        rankCartoon.setVisibility(View.VISIBLE);
+        rankCartoon.setImageResource(R.drawable.level0donor);
 
     }
 
@@ -327,7 +336,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void loadUserProfileFromDatabase(final String uid){
 
         //set progress bar next to profile
-        ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.VISIBLE);
+        //((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.VISIBLE);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference usersDatabase = database.getReference("users");
 
@@ -345,12 +354,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Log.d(TAG,"currentLoggedUser now contain the logged user profile: "+currentLoggedUser.getFullName());
                     //after loading from datatbase, set the TextView with the user pofile data
                     displayProfileAfterLoadingfromDtabase();
-                    ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar = finished loading
+                  //  ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar = finished loading
                 }
                 else{
                     //user is not in datatbase
                     Log.d(TAG,"could not find user in database");
-                    ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar = finished loading
+                  //  ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar = finished loading
 
 
                 }
