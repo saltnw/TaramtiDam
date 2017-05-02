@@ -1,5 +1,6 @@
 package com.taramtidam.taramtidam;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -121,6 +122,8 @@ public class ProfileActivity extends AppCompatActivity {
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         bloodSpinner.setAdapter(dataAdapter);
+
     }
 }
