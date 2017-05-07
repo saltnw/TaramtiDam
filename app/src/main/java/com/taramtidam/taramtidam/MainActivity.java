@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();                               // get the shared instance of the FirebaseAuth object:
@@ -70,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (mAuth.getCurrentUser() != null) {
             // already signed in
 
-            infotv.setText("Welcome back");  // update the TextView text
+            infotv.setText("");  // update the TextView text
         } else {
             //not sigen in
             //infotv.setText("welcome guest!" );                  // update the TextView text
@@ -104,9 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
 
-                    infotv.setText("Welcome\n\t\t\tGuest" );                  // update the TextView text
-                    AppCompatImageView rankCartoon = (AppCompatImageView)(findViewById(R.id.RankImageView));
-                    rankCartoon.setImageResource(R.drawable.guestdonor);
+                    infotv.setText("" );                  // update the TextView text
 
                     findViewById(R.id.logoutButton).setEnabled(false);
                     findViewById(R.id.logoutButton).setVisibility(View.INVISIBLE);
@@ -239,6 +239,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAuth.addAuthStateListener(mAuthListener);
 
 
+
+
+
     }
 
     @Override
@@ -318,13 +321,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void displayProfileAfterLoadingfromDtabase (){
         TextView infotv = ((TextView)(findViewById(R.id.infoTextView)));
 
-        infotv.setText("Welcome\n"+"\t\t\t"+currentLoggedUser.getFullName() );     // update the TextView text
+        infotv.setText("\t\t\t"+currentLoggedUser.getFullName() );     // update the TextView text
         //
         // add here for more things to do with profile
         //
-        AppCompatImageView rankCartoon = (AppCompatImageView)(findViewById(R.id.RankImageView));
-        rankCartoon.setVisibility(View.VISIBLE);
-        rankCartoon.setImageResource(R.drawable.level0donor);
 
     }
 

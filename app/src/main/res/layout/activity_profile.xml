@@ -15,13 +15,14 @@
         android:layout_height="48dp"
         android:ems="10"
         android:textSize="14sp"
+        android:textColor="#000000"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.677"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.791" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_bias="0.284"
+        app:layout_constraintVertical_bias="0.593" />
 
     <EditText
         android:id="@+id/editAddress1"
@@ -29,13 +30,13 @@
         android:layout_height="43dp"
         android:ems="10"
         android:textSize="14sp"
+        android:textColor="#000000"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.674"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.702" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_bias="0.282" />
 
     <TextView
         android:id="@+id/bloodTextView"
@@ -44,40 +45,43 @@
         android:text="Blood Type"
         android:textStyle="bold"
         android:textSize="16sp"
+        android:textColor="#000000"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.614"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.054" />
+        app:layout_constraintHorizontal_bias="0.871"
+        app:layout_constraintVertical_bias="0.428" />
 
     <TextView
         android:id="@+id/Address1TextView"
         android:layout_width="71dp"
         android:layout_height="26dp"
-        android:text="Address"
+        android:text="Home"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintHorizontal_bias="0.055"
+        android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.711" />
+        app:layout_constraintVertical_bias="0.521"
+        app:layout_constraintHorizontal_bias="0.875" />
 
     <TextView
         android:id="@+id/Address2TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Another adress"
+        android:text="Work"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.06"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.776" />
+        app:layout_constraintHorizontal_bias="0.887"
+        app:layout_constraintVertical_bias="0.614" />
 
     <TextView
         android:id="@+id/NameTextView"
@@ -88,11 +92,11 @@
         android:textSize="24sp"
         android:textColor="#c00000"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.129"
-        app:layout_constraintVertical_bias="0.452" />
+        app:layout_constraintHorizontal_bias="0.826"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.18" />
 
     <TextView
         android:id="@+id/EmailTextView"
@@ -100,12 +104,13 @@
         android:layout_height="24dp"
         android:text="Email Text View"
         android:textSize="16sp"
+        android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.541"
-        android:layout_marginLeft="40dp" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_bias="0.179"
+        app:layout_constraintVertical_bias="0.335" />
 
     <Spinner
         android:id="@+id/bloodSpinner"
@@ -113,12 +118,13 @@
         android:layout_height="34dp"
         android:entries="@array/blood_types"
         android:prompt="@string/blood_type_prompt"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.059"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.626" />
+        app:layout_constraintVertical_bias="0.969" />
 
     <TextView
         android:id="@+id/DateTextView"
@@ -126,21 +132,25 @@
         android:layout_height="wrap_content"
         android:text="Last donation"
         android:textStyle="bold"
+        android:textColor="#000000"
         android:textSize="16sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.058"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.854" />
+        app:layout_constraintHorizontal_bias="0.866"
+        app:layout_constraintVertical_bias="0.687" />
 
     <Button
         android:id="@+id/SubmitButton"
         android:layout_width="144dp"
         android:layout_height="48dp"
-        android:layout_marginBottom="16dp"
-        android:text="Update Profile"
+        android:layout_marginBottom="77dp"
+        android:background="@drawable/updatebtnbackground"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.837"
+        style="?android:attr/borderlessButtonStyle"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
@@ -148,14 +158,42 @@
         android:id="@+id/EmailTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="12/4/2017"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.687" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AB+"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.575"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.428" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Email"
+        android:textColor="#000000"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintHorizontal_bias="0.052"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.886"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.536" />
+        app:layout_constraintVertical_bias="0.341" />
 
 </android.support.constraint.ConstraintLayout>
