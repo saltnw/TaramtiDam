@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private static final int PERMISSIONS_REQUEST_FINE_LOCATION = 111;
     private GoogleApiClient mClient;
     private Geofencing mGeofencing;
-    List<MDAMobile> mobiles =new ArrayList<>();
+    public static List<MDAMobile> mobiles =new ArrayList<>();
     private boolean isFinished = false;
 
     /* UI vars */
@@ -82,12 +82,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private FragmentDrawer drawerFragment;
 
 
-    public static String testString = "helloFromMainActiviy!!!"; // TODO delete!
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AuthUI.getInstance().signOut(this);   // logout
+
+
+
 
         setContentView(R.layout.activity_main);
 
@@ -101,6 +103,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
         drawerFragment.setDrawerListener(this);
+
+
 
         displayView(0);         // display the first navigation drawer view on app launch
 
@@ -179,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         Log.d("FENCE","Get reference to Firebase Database at MDA");
         // Get a reference to our MDA mobiles
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("MDA");
+        DatabaseReference ref = database.getReference("MDA").child("Today");
 
         // Attach a listener to read the data at our posts reference
         ref.addValueEventListener(new ValueEventListener() {
@@ -233,6 +237,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     }
 
+
     @Override
     protected void onStart(){
         Log.d("FENCE","Connecting Google API Client");
@@ -248,11 +253,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     @Override
     public void onStop() {
         super.onStop();
-
     }
 
-
-
+    @Override
+    public void onResume(){
+        super.onResume();
+    }
 
 
 
