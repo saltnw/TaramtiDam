@@ -71,6 +71,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
         // Create an explicit content Intent that starts the main Activity.
         Intent notificationIntent = new Intent(context, MainActivity.class);
 
+
         // Construct a task stack.
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
 

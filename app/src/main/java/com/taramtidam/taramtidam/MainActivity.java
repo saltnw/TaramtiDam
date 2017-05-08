@@ -5,10 +5,17 @@ import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -27,7 +34,12 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FacebookAuthCredential;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -36,69 +48,95 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.taramtidam.taramtidam.activity.EmptyFragment;
+import com.taramtidam.taramtidam.activity.FragmentDrawer;
+import com.taramtidam.taramtidam.activity.HomeFragment;
+import com.taramtidam.taramtidam.activity.MyProfileFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+
+    /* login and firebase auth vars*/
     public static final String TAG ="Main activity" ;
-    private FirebaseAuth mAuth;                             // firebase auth object
+    private static FirebaseAuth mAuth;                             // firebase auth object
     private FirebaseAuth.AuthStateListener mAuthListener;   // firebase auth listener
 
-    private static final int RC_SIGN_IN = 12;               // return code from firebase UI
-
-    TaramtiDamUser currentLoggedUser = null ;// holds the current logged user
+    public static TaramtiDamUser currentLoggedUser = null ;               // holds the current logged user
 
     public static final String EXTRA_ID = "com.taramtidam.user_id";
-    //Geofencing
+    private static final int RC_SIGN_IN = 12;               // return code from firebase UI
+
+    /* Geofencing */
     private static final int PERMISSIONS_REQUEST_FINE_LOCATION = 111;
     private GoogleApiClient mClient;
     private Geofencing mGeofencing;
-    List<MDAMobile> mobiles =new ArrayList<>();
+    public static List<MDAMobile> mobiles =new ArrayList<>();
     private boolean isFinished = false;
+
+    /* UI vars */
+    private Toolbar mToolbar; // main upper toolbar
+    private FragmentDrawer drawerFragment;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AuthUI.getInstance().signOut(this);   // logout
+
+
+
 
         setContentView(R.layout.activity_main);
 
-        mAuth = FirebaseAuth.getInstance();                               // get the shared instance of the FirebaseAuth object:
-        TextView infotv = (TextView) findViewById(R.id.infoTextView);    // get a reference to the infoTextView
+        /* set upper toolbar - UI */
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        //check if the user is already sigen in or not
-        if (mAuth.getCurrentUser() != null) {
+        /* set up drawer fragment */
+        drawerFragment = (FragmentDrawer)
+                getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+        drawerFragment.setDrawerListener(this);
+
+
+
+        displayView(0);         // display the first navigation drawer view on app launch
+
+
+
+        /* ---> Firebase-AUTH STUFF GOES HERE < --- */
+        mAuth = FirebaseAuth.getInstance();                    // get the shared instance of the FirebaseAuth object:
+
+        if (mAuth.getCurrentUser() != null) {                //check if the user is already sigen in or not
+
             // already signed in
 
-            infotv.setText("");  // update the TextView text
         } else {
             //not sigen in
             //infotv.setText("welcome guest!" );                  // update the TextView text
         }
-
-        /* set listeners to the buttons in the view */
-        findViewById(R.id.loginButton).setOnClickListener(this);
-        findViewById(R.id.logoutButton).setOnClickListener(this);
-        findViewById(R.id.EditProfileButton).setOnClickListener(this);
-
         /* define a listener for changing the auth state  */
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user;                          // current user
                 user = firebaseAuth.getCurrentUser();
-                TextView infotv = (TextView) findViewById(R.id.infoTextView);    // get a reference to the infoTextView
+                //TextView infotv = (TextView) findViewById(R.id.infoTextView);    // get a reference to the infoTextView
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    findViewById(R.id.logoutButton).setEnabled(true);
-                    findViewById(R.id.logoutButton).setVisibility(View.VISIBLE);
-                    findViewById(R.id.EditProfileButton).setEnabled(true);
-                    findViewById(R.id.EditProfileButton).setVisibility(View.VISIBLE);
-                    findViewById(R.id.loginButton).setEnabled(false);
-                    findViewById(R.id.loginButton).setVisibility(View.INVISIBLE);
+                    //findViewById(R.id.logoutButton).setEnabled(true);
+                    //findViewById(R.id.logoutButton).setVisibility(View.VISIBLE);
+                    //findViewById(R.id.EditProfileButton).setEnabled(true);
+                    //findViewById(R.id.EditProfileButton).setVisibility(View.VISIBLE);
+                    //findViewById(R.id.loginButton).setEnabled(false);
+                    //findViewById(R.id.loginButton).setVisibility(View.INVISIBLE);
 
                     finishLoginAndRegistration();
 
@@ -106,14 +144,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
 
-                    infotv.setText("" );                  // update the TextView text
+                    //infotv.setText("" );                  // update the TextView text
 
-                    findViewById(R.id.logoutButton).setEnabled(false);
-                    findViewById(R.id.logoutButton).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.EditProfileButton).setEnabled(false);
-                    findViewById(R.id.EditProfileButton).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.loginButton).setEnabled(true);
-                    findViewById(R.id.loginButton).setVisibility(View.VISIBLE);
+                    //findViewById(R.id.logoutButton).setEnabled(false);
+                    //findViewById(R.id.logoutButton).setVisibility(View.INVISIBLE);
+                    //findViewById(R.id.EditProfileButton).setEnabled(false);
+                    //findViewById(R.id.EditProfileButton).setVisibility(View.INVISIBLE);
+                   // findViewById(R.id.loginButton).setEnabled(true);
+                    //findViewById(R.id.loginButton).setVisibility(View.VISIBLE);
 
                     currentLoggedUser = null;
 
@@ -121,6 +159,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // ...
             }
         };
+
+
+
+        /* MDA STUFF GOES HERE */
+
         if (ActivityCompat.checkSelfPermission(MainActivity.this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                  ActivityCompat.requestPermissions(MainActivity.this,
@@ -140,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d("FENCE","Get reference to Firebase Database at MDA");
         // Get a reference to our MDA mobiles
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("MDA");
+        DatabaseReference ref = database.getReference("MDA").child("Today");
 
         // Attach a listener to read the data at our posts reference
         ref.addValueEventListener(new ValueEventListener() {
@@ -191,43 +234,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         int i = arg0.getId();
         // login button was pressed
-        if ( i == R.id.loginButton){
 
-            Log.i(TAG, "login btn was pressed;");
-            //Button btn = (Button)arg0;                                       // cast view to a button
-            TextView infotv = (TextView) findViewById(R.id.infoTextView);    // get a reference to the infoTextView
-
-            /* run firebaseUI login screen, with mail and facebook options */
-            startActivityForResult(
-                    AuthUI.getInstance()
-                            .createSignInIntentBuilder()
-                            .setIsSmartLockEnabled(false)
-                            .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                                    new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()))
-                            .build(),
-                    RC_SIGN_IN);
-
-            //firebaseUI finished!
-
-        }
-        //logout button was pressed
-        if ( i == R.id.logoutButton){
-            Log.i(TAG, "logout btn was pressed;");
-            mAuth.signOut();
-            AuthUI.getInstance().signOut(this);   // logout
-            LoginManager.getInstance().logOut();  // clear facebook login also
-            Toast.makeText(MainActivity.this, R.string.auth_signout_success,
-                    Toast.LENGTH_SHORT).show();  // display message
-        }
-
-        //Edit Profile button was pressed
-        if ( i == R.id.EditProfileButton){
-            Log.i(TAG, "edit profile btn was pressed;");
-            Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-            intent.putExtra(EXTRA_ID, mAuth.getCurrentUser().getUid());
-            startActivity(intent);
-        }
     }
+
 
     @Override
     protected void onStart(){
@@ -239,140 +248,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAuth.addAuthStateListener(mAuthListener);
 
 
-
-
-
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
-    }
-    private void finishLoginAndRegistration() {
-
-        //check if the user really completed the login using FirebaseUI
-        if (mAuth.getCurrentUser() == null){
-            Log.d("Login", "the user closed firbaseUI and didnt login / register" );
-            return;
-
-        }
-
-        //now lets check if the user is already in our database
-         FirebaseDatabase database = FirebaseDatabase.getInstance();
-         DatabaseReference usersDatabase = database.getReference("users");
-
-       // ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.VISIBLE); //display the progress bar
-
-
-        //using listener get all the users with the same uid
-        usersDatabase.orderByKey().equalTo(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener(){
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                DatabaseReference mDatabase;
-
-                //check if the snapshot we got back is not empty (meaning there is no user with uid like this)
-                if (snapshot.hasChild(mAuth.getCurrentUser().getUid())){
-                    //we found the user in the database
-
-                    // set the current user to the user we found
-                    currentLoggedUser = snapshot.child(mAuth.getCurrentUser().getUid()).getValue(TaramtiDamUser.class); //get an object of the user
-                    Log.d(TAG,"currentLoggedUser now contain the logged user profile: "+currentLoggedUser.getFullName());
-                    displayProfileAfterLoadingfromDtabase();
-                   // ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
-
-                }
-                else{
-                    //user is not in database -> so do  a registration
-                    Log.d(TAG,"user was not found in datatbase");
-
-                    // create the user a new profile and insert him to the database
-                    currentLoggedUser = new TaramtiDamUser(mAuth.getCurrentUser().getUid(), mAuth.getCurrentUser().getDisplayName(), mAuth.getCurrentUser().getEmail() , "Tel Aviv", "a+" );
-                    mDatabase = FirebaseDatabase.getInstance().getReference();
-                    mDatabase.child("users").child(currentLoggedUser.getuid()).setValue(currentLoggedUser);
-                    Log.d(TAG, "new user was created in database");
-
-                    displayProfileAfterLoadingfromDtabase();
-                   // ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
-                    Toast.makeText(MainActivity.this, R.string.auth_registration_completed,
-                            Toast.LENGTH_SHORT).show();  // display message
-
-                }
-
-            }
-            @Override public void onCancelled(DatabaseError error) { }
-
-
-        });
-
-
-
-
     }
 
-    /*
-    this method take the data that is currently stored on 'currentLoggedUser' and display it
-
-    call this method to display the profile after it was loaded from database to "currentLoggedUser" var
-    make sure that you call this function only from a firebase database listener, otherwise it is not guaranteed that "currentLoggedUser" contain data at all
-    */
-    private void displayProfileAfterLoadingfromDtabase (){
-        TextView infotv = ((TextView)(findViewById(R.id.infoTextView)));
-
-        infotv.setText("\t\t\t"+currentLoggedUser.getFullName() );     // update the TextView text
-        //
-        // add here for more things to do with profile
-        //
-
+    @Override
+    public void onResume(){
+        super.onResume();
     }
 
 
-    /*
-    this function receives a 'uid' and set a listener that retrieve a profile to 'currentLoggedUser' and display it on screen
-    used for example when the user exit the app return after a while. that user may be still logged in, we need to load the profile again
-     */
-    private void loadUserProfileFromDatabase(final String uid){
-
-        //set progress bar next to profile
-        //((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.VISIBLE);
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference usersDatabase = database.getReference("users");
-
-        usersDatabase.orderByKey().equalTo(uid).addListenerForSingleValueEvent(new ValueEventListener(){
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                DatabaseReference mDatabase;
-
-                //check if the sanpshot we got back is not empty (meaning there is no user with uid like this)
-                if (snapshot.hasChild(uid)){
-                    //we found the user in the database
-
-                    // set the current user to the user we found
-                    currentLoggedUser = snapshot.child(uid).getValue(TaramtiDamUser.class); //get an object of the user
-                    Log.d(TAG,"currentLoggedUser now contain the logged user profile: "+currentLoggedUser.getFullName());
-                    //after loading from datatbase, set the TextView with the user pofile data
-                    displayProfileAfterLoadingfromDtabase();
-                  //  ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar = finished loading
-                }
-                else{
-                    //user is not in datatbase
-                    Log.d(TAG,"could not find user in database");
-                  //  ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar = finished loading
-
-
-                }
-
-            }
-            @Override public void onCancelled(DatabaseError error) { }
-
-
-        });
 
 
 
-    }
+
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -392,29 +284,138 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    //function for custom email + password login. CAN BE DELETED
-   /*
-    private void signIn(String email, String password) {
+    /* UI function */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
 
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
+    /* UI function */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
 
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "signInWithEmail:failed", task.getException());
-                            Toast.makeText(MainActivity.this, R.string.auth_failed,
-                                    Toast.LENGTH_SHORT).show();
-                        }
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
 
-                        // ...
-                    }
-                });
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onDrawerItemSelected(View view, int position) {
+        displayView(position);
 
     }
-    */
+
+    private void displayView(int position) {
+        Fragment fragment = null;
+        String title = getString(R.string.app_name);
+        switch (position) {
+            case 0:
+                fragment = new HomeFragment();
+                title = getString(R.string.title_home);
+                break;
+            case 1:
+                fragment = new MyProfileFragment();
+                title = getString(R.string.title_myprofile);
+                break;
+            case 2:
+                fragment = new EmptyFragment();
+                title = getString(R.string.title_messages);
+                break;
+            default:
+                break;
+        }
+
+        if (fragment != null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container_body, fragment);
+            fragmentTransaction.commit();
+
+            // set the toolbar title
+            getSupportActionBar().setTitle(title);
+        }
+    }
+
+
+
+    private void finishLoginAndRegistration() {
+
+        //check if the user really completed the login using FirebaseUI
+        if (mAuth.getCurrentUser() == null){
+            Log.d("Login", "the user closed firbaseUI and didnt login / register" );
+            return;
+
+        }
+
+        //now lets check if the user is already in our database
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference usersDatabase = database.getReference("users");
+
+        // ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.VISIBLE); //display the progress bar
+
+
+        //using listener get all the users with the same uid
+        usersDatabase.orderByKey().equalTo(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener(){
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                DatabaseReference mDatabase;
+
+                //check if the snapshot we got back is not empty (meaning there is no user with uid like this)
+                if (snapshot.hasChild(mAuth.getCurrentUser().getUid())){
+                    //we found the user in the database
+
+                    // set the current user to the user we found
+                    currentLoggedUser = snapshot.child(mAuth.getCurrentUser().getUid()).getValue(TaramtiDamUser.class); //get an object of the user
+                    Log.d(TAG,"currentLoggedUser now contain the logged user profile: "+currentLoggedUser.getFullName());
+                    Log.d(TAG,"currentLoggedUser now contain the logged user profile: "+currentLoggedUser.getEmail());
+                    //displayProfileAfterLoadingfromDtabase();
+                    // ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
+
+                }
+                else{
+                    //user is not in database -> so do  a registration
+                    Log.d(TAG,"user was not found in datatbase");
+
+                    // create the user a new profile and insert him to the database
+
+                    currentLoggedUser = new TaramtiDamUser(mAuth.getCurrentUser().getUid(), mAuth.getCurrentUser().getDisplayName(), mAuth.getCurrentUser().getEmail() , "", "A+" );
+                    mDatabase = FirebaseDatabase.getInstance().getReference();
+                    mDatabase.child("users").child(currentLoggedUser.getuid()).setValue(currentLoggedUser);
+                    Log.d(TAG, "new user was created in database");
+
+                    //displayProfileAfterLoadingfromDtabase();
+                    // ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
+                    Toast.makeText(MainActivity.this, R.string.auth_registration_completed,
+                            Toast.LENGTH_SHORT).show();  // display message
+
+                }
+
+            }
+            @Override public void onCancelled(DatabaseError error) { }
+
+
+        });
+
+
+    }
+
+    public static void signOutFromOurApplication(){
+
+        mAuth.signOut();
+
+        //AuthUI.getInstance().signOut(this);   // logout
+        LoginManager.getInstance().logOut();  // clear facebook login also
+
+    }
+
 }
