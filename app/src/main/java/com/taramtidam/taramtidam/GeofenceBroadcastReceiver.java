@@ -23,6 +23,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -68,6 +69,28 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
      */
     private void sendNotification(Context context, String msg) {
         Log.d("NOTI", "notification should be sent now!");
+
+        String notifyMsg = msg;
+        msg.replaceAll(" ","+");
+
+
+        // Create a Uri from an intent string. Use the result to create an Intent.
+        Uri intentUri = Uri.parse("google.navigation:q="+msg+"&mode=w");
+
+        // Create an Intent from intentUri. Set the action to ACTION_VIEW
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, intentUri);
+
+        // Make the Intent explicit by setting the Google Maps package
+        mapIntent.setPackage("com.google.android.apps.maps");
+
+        // Attempt to start an activity that can handle the Intent
+//        startActivity(mapIntent);
+
+
+
+
+
+
         // Create an explicit content Intent that starts the main Activity.
         Intent notificationIntent = new Intent(context, MainActivity.class);
 
@@ -79,7 +102,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
         stackBuilder.addParentStack(MainActivity.class);
 
         // Push the content Intent onto the stack.
-        stackBuilder.addNextIntent(notificationIntent);
+        stackBuilder.addNextIntent(mapIntent);
 
         // Get a PendingIntent containing the entire back stack.
         PendingIntent notificationPendingIntent =
@@ -97,7 +120,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
 
         // Continue building the notification
-        builder.setContentText(msg);
+        builder.setContentText(notifyMsg);
         builder.setContentIntent(notificationPendingIntent);
 
         // Dismiss notification once the user touches it.
