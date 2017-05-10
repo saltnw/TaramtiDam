@@ -32,15 +32,24 @@
     <string name="nav_item_home">Home</string>
     <string name="nav_item_myprofile">My Profile</string>
     <string name="nav_item_notifications">Messages</string>
+    <string name="nav_item_Navigation">Navigation</string>
+    <string name="nav_item_just_donated">Just Donated</string>
+    <string name="nav_item_donate_now">Donate Now</string>
 
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>
         <item>@string/nav_item_myprofile</item>
         <item>@string/nav_item_notifications</item>
+        <item>@string/nav_item_Navigation</item>
+        <item>@string/nav_item_just_donated</item>
+        <item>@string/nav_item_donate_now</item>
     </string-array>
 
     <string name="title_messages">Messages</string>
+    <string name="title_navigation">Navigation</string>
+    <string name="title_donate_now">Donate Now</string>
+    <string name="title_just_donated">Just Donated</string>
     <string name="title_myprofile">My Profile</string>
     <string name="title_home">Home</string>
 

@@ -11,20 +11,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.content.Intent;
 
 import com.facebook.login.LoginManager;
 import com.firebase.ui.auth.AuthUI;
@@ -32,29 +24,22 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Places;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.EmailAuthCredential;
-import com.google.firebase.auth.EmailAuthProvider;
-import com.google.firebase.auth.FacebookAuthCredential;
-import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.taramtidam.taramtidam.activity.DonateNowFragment;
 import com.taramtidam.taramtidam.activity.EmptyFragment;
 import com.taramtidam.taramtidam.activity.FragmentDrawer;
 import com.taramtidam.taramtidam.activity.HomeFragment;
+import com.taramtidam.taramtidam.activity.JustDonatedFragment;
 import com.taramtidam.taramtidam.activity.MyProfileFragment;
+import com.taramtidam.taramtidam.activity.NavigationFragment;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -330,6 +315,18 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             case 2:
                 fragment = new EmptyFragment();
                 title = getString(R.string.title_messages);
+                break;
+            case 3:
+                fragment = new NavigationFragment();
+                title = getString(R.string.title_navigation);
+                break;
+            case 4:
+                fragment = new JustDonatedFragment();
+                title = getString(R.string.title_just_donated);
+                break;
+            case 5:
+                fragment = new DonateNowFragment();
+                title = getString(R.string.title_donate_now);
                 break;
             default:
                 break;
