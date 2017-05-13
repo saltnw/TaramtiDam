@@ -28,7 +28,6 @@ public class TaramtiDamUser {
     private String bloodType;
     private int rankLevel;
     private Date lastDonation;
-    private Date lastPosition;
 
     public TaramtiDamUser(){}
 
@@ -40,6 +39,7 @@ public class TaramtiDamUser {
         this.address2 = "";
         this.bloodType = "";
         this.completedRegisteration = false;
+        this.lastDonation = null;
     }
 
     public TaramtiDamUser(String uid, String fullName,String email) {
@@ -50,6 +50,7 @@ public class TaramtiDamUser {
         this.address2 = "";
         this.bloodType = "";
         this.completedRegisteration = false;
+        this.lastDonation = null;
     }
 
     public boolean isCompletedRegisteration() {
@@ -114,13 +115,6 @@ public class TaramtiDamUser {
         this.lastDonation = lastDonation;
     }
 
-    public Date getLastPosition() {
-        return lastPosition;
-    }
-
-    public void setLastPosition(Date lastPosition) {
-        this.lastPosition = lastPosition;
-    }
 
     public String getEmail() {
         return email;
@@ -128,5 +122,17 @@ public class TaramtiDamUser {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+
+    public void increaseRankByOne (){
+
+        if (this.rankLevel <= 3){
+            this.rankLevel++;
+        }
+    }
+
+    public void SetLastDonationDateToToday(){
+        this.lastDonation = new Date();
     }
 }
