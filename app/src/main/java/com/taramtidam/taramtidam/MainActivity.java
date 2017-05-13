@@ -301,35 +301,55 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     }
 
     private void displayView(int position) {
+
+
+
         Fragment fragment = null;
         String title = getString(R.string.app_name);
-        switch (position) {
-            case 0:
-                fragment = new HomeFragment();
-                title = getString(R.string.title_home);
-                break;
-            case 1:
-                fragment = new MyProfileFragment();
-                title = getString(R.string.title_myprofile);
-                break;
-            case 2:
-                fragment = new EmptyFragment();
-                title = getString(R.string.title_messages);
-                break;
-            case 3:
-                fragment = new NavigationFragment();
-                title = getString(R.string.title_navigation);
-                break;
-            case 4:
-                fragment = new JustDonatedFragment();
-                title = getString(R.string.title_just_donated);
-                break;
-            case 5:
-                fragment = new DonateNowFragment();
-                title = getString(R.string.title_donate_now);
-                break;
-            default:
-                break;
+
+        if (currentLoggedUser == null){
+            fragment = new HomeFragment();
+            title = getString(R.string.title_home);
+
+        }
+        else {
+
+
+            switch (position) {
+                case 0:
+                    fragment = new HomeFragment();
+                    title = getString(R.string.title_home);
+                    break;
+                case 1:
+                    fragment = new MyProfileFragment();
+                    title = getString(R.string.title_myprofile);
+                    break;
+                case 2:
+                    fragment = new EmptyFragment();
+                    title = getString(R.string.title_messages);
+                    break;
+                case 3:
+                    fragment = new NavigationFragment();
+                    title = getString(R.string.title_navigation);
+                    break;
+                case 4:
+                    if (JustDonatedFragment.isLegalDonatoin()) {
+                        fragment = new JustDonatedFragment();
+                        title = getString(R.string.title_just_donated);
+                    }
+                    else{
+                        Toast.makeText(MainActivity.this, R.string.ilegallDonation, Toast.LENGTH_LONG).show();  // display message
+
+                    }
+                    break;
+
+                case 5:
+                    fragment = new DonateNowFragment();
+                    title = getString(R.string.title_donate_now);
+                    break;
+                default:
+                    break;
+            }
         }
 
         if (fragment != null) {
@@ -392,8 +412,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
                     //displayProfileAfterLoadingfromDtabase();
                     // ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
-                    Toast.makeText(MainActivity.this, R.string.auth_registration_completed,
-                            Toast.LENGTH_SHORT).show();  // display message
+                    Toast.makeText(MainActivity.this, R.string.auth_registration_completed, Toast.LENGTH_SHORT).show();  // display message
 
                 }
 

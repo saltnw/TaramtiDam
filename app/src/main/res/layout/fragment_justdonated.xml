@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,47 +10,77 @@
 
     <TextView
         android:id="@+id/label"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="100dp"
-        android:layout_width="fill_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
         android:gravity="center_horizontal"
+        android:text="Thank You"
+        android:textColor="@color/colorPrimary"
         android:textSize="45dp"
-        android:text="JustDonated LAYOUT!"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1"
+        app:layout_constraintHorizontal_bias="0.0" />
 
     <TextView
-        android:layout_below="@id/label"
-        android:layout_centerInParent="true"
-        android:layout_width="fill_parent"
+        android:id="@+id/textView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="12dp"
         android:layout_marginTop="10dp"
         android:gravity="center_horizontal"
-        android:text="כדי לשנות את המראה תערכו את fragment_justdonated.xml"
-        android:id="@+id/textView" />
+        android:text="For your Donation"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView"
-        android:layout_marginLeft="77dp"
+        android:text="TextView"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintBottom_creator="1"
         android:layout_marginStart="77dp"
-        android:layout_marginTop="46dp"
-        android:text="TextView" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="77dp" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textView2"
-        android:layout_marginLeft="81dp"
-        android:layout_marginStart="81dp"
-        android:layout_toEndOf="@+id/textView2"
-        android:layout_toRightOf="@+id/textView2"
-        android:text="TextView" />
+        android:text="TextView"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="110dp"
+        app:layout_constraintRight_toRightOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="110dp" />
 
-</RelativeLayout>
+    <ImageView
+        android:id="@+id/rankImageView"
+        android:layout_width="117dp"
+        android:layout_height="105dp"
+        android:layout_marginTop="45dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:srcCompat="@drawable/blooddrop"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1" />
+
+</android.support.constraint.ConstraintLayout>
