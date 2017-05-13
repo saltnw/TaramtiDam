@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AuthUI.getInstance().signOut(this);   // logout
+        //AuthUI.getInstance().signOut(this);   // logout
 
 
 
@@ -101,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         if (mAuth.getCurrentUser() != null) {                //check if the user is already sigen in or not
 
             // already signed in
+            Log.d("Main Activity", "User is already looged in...");
 
         } else {
             //not sigen in
@@ -139,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     //findViewById(R.id.loginButton).setVisibility(View.VISIBLE);
 
                     currentLoggedUser = null;
+                    doThingsAfterLogout();
 
                 }
                 // ...
@@ -310,6 +313,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         if (currentLoggedUser == null){
             fragment = new HomeFragment();
             title = getString(R.string.title_home);
+            //Toast.makeText(MainActivity.this, R.string.auth_must_login_first, Toast.LENGTH_SHORT).show();  // display message
+
 
         }
         else {
@@ -397,6 +402,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     Log.d(TAG,"currentLoggedUser now contain the logged user profile: "+currentLoggedUser.getEmail());
                     //displayProfileAfterLoadingfromDtabase();
                     // ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
+                    doThingsAfterLogin();
 
                 }
                 else{
@@ -411,6 +417,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     Log.d(TAG, "new user was created in database");
 
                     //displayProfileAfterLoadingfromDtabase();
+                    doThingsAfterLogin();
                     // ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
                     Toast.makeText(MainActivity.this, R.string.auth_registration_completed, Toast.LENGTH_SHORT).show();  // display message
 
@@ -425,12 +432,31 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     }
 
+    private void doThingsAfterLogin(){
+        ((Button) findViewById(R.id.loginButton)).setVisibility(View.INVISIBLE);
+        ((Button) findViewById(R.id.loginButton)).setEnabled(false);
+
+        ((Button) findViewById(R.id.logoutButton)).setVisibility(View.VISIBLE);
+        ((Button) findViewById(R.id.logoutButton)).setEnabled(true);
+
+    }
+    private void doThingsAfterLogout(){
+        ((Button) findViewById(R.id.loginButton)).setVisibility(View.VISIBLE);
+        ((Button) findViewById(R.id.loginButton)).setEnabled(true);
+
+        ((Button) findViewById(R.id.logoutButton)).setVisibility(View.INVISIBLE);
+        ((Button) findViewById(R.id.logoutButton)).setEnabled(false);
+
+
+    }
+
     public static void signOutFromOurApplication(){
 
         mAuth.signOut();
-
-        //AuthUI.getInstance().signOut(this);   // logout
+        //AuthUI.getInstance().signOut();
+        //FirebaseAuth.getInstance().getCurrentUser().
         LoginManager.getInstance().logOut();  // clear facebook login also
+
 
     }
 

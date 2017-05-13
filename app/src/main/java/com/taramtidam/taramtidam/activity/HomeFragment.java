@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.firebase.ui.auth.AuthUI;
@@ -21,10 +22,13 @@ import com.taramtidam.taramtidam.R;
 
 import java.util.Arrays;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
     Button loginBtn;
+    Button logoutbtn;
     private static final int RC_SIGN_IN = 12;               // return code from firebase UI
 
 
@@ -43,9 +47,30 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        //set onCliclListener
+        //set login button onCliclListener
         loginBtn = (Button) rootView.findViewById(R.id.loginButton);
+
         loginBtn.setOnClickListener(this);
+        //set logout button onCliclListener
+        logoutbtn = (Button) rootView.findViewById(R.id.logoutButton);
+        logoutbtn.setOnClickListener(this);
+
+        if (MainActivity.currentLoggedUser == null){
+
+            loginBtn.setVisibility(View.VISIBLE);
+            loginBtn.setEnabled(true);
+
+            logoutbtn.setVisibility(View.INVISIBLE);
+            logoutbtn.setEnabled(false);
+        }
+        else{
+            loginBtn.setVisibility(View.INVISIBLE);
+            loginBtn.setEnabled(false);
+
+            logoutbtn.setVisibility(View.VISIBLE);
+            logoutbtn.setEnabled(true);
+
+        }
 
         // Inflate the layout for this fragment
         return rootView;
@@ -64,19 +89,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     public void onClick(View arg0) {
 
+        int buttonId = arg0.getId();
 
-        MainActivity.signOutFromOurApplication();
-        //AuthUI.getInstance().signOut();
-        Log.d("HOME_FREAMENT","login btn click!");
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setIsSmartLockEnabled(false)
-                        .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                                new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()))
-                        .setTheme(R.style.MyMaterialTheme)
-                        .build(),
-                RC_SIGN_IN);
+        if (buttonId == R.id.loginButton) {
+            Log.d("HOME_FREAMENT", "login btn click!");
+            startActivityForResult(
+                    AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setIsSmartLockEnabled(false)
+                            .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
+                                    new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()))
+                            .setTheme(R.style.MyMaterialTheme)
+                            .build(),
+                    RC_SIGN_IN);
+        }
+        if (buttonId == R.id.logoutButton){
+            Log.d("HOME_FREAMENT", "logout btn click!");
+            MainActivity.signOutFromOurApplication();
+            Toast.makeText(getApplicationContext(), R.string.auth_signout_success, Toast.LENGTH_SHORT).show();
+
+        }
 
 
     }
