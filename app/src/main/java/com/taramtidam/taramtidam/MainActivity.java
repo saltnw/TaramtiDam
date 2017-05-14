@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 Log.d("FENCE","Updating MDA mobiles from the database");
                 Iterable<DataSnapshot> locations= dataSnapshot.getChildren();
                 int i=0;
-                while (locations.iterator().hasNext() && i<10) {
+                while (locations.iterator().hasNext()) {
                     MDAMobile currMda = new MDAMobile();
                     DataSnapshot nextMDALoc =locations.iterator().next();
                  //   String nextMDALoc = String.valueOf(locations.iterator().next());

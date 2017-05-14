@@ -1,12 +1,14 @@
 package com.taramtidam.taramtidam.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -14,6 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.taramtidam.taramtidam.MainActivity;
 import com.taramtidam.taramtidam.R;
+import com.taramtidam.taramtidam.model.ShareOnFacebook;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -22,8 +25,9 @@ import java.util.Date;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 
-public class JustDonatedFragment extends Fragment {
+public class JustDonatedFragment extends Fragment implements View.OnClickListener {
 
+    Button facebookBtn;
 
 
     @Override
@@ -64,7 +68,9 @@ public class JustDonatedFragment extends Fragment {
 
         // Inflate the layout for this fragment
 
-
+        //set facebook share button onCliclListener
+        facebookBtn = (Button) rootView.findViewById(R.id.facebookButton);
+        facebookBtn.setOnClickListener(this);
 
         Integer images[] = {R.drawable.rank0,R.drawable.rank1,R.drawable.rank2,R.drawable.rank3,R.drawable.rank4};
         int user_rank = MainActivity.currentLoggedUser.getRankLevel();
@@ -103,6 +109,7 @@ public class JustDonatedFragment extends Fragment {
 
     }
 
+
     public static boolean isLegalDonatoin(){
 
         // check date margin
@@ -116,6 +123,18 @@ public class JustDonatedFragment extends Fragment {
 
     }
 
+    public void onClick(View arg0) {
+
+        int buttonId = arg0.getId();
+
+        if (buttonId == R.id.facebookButton) {
+
+            Log.d("Just Donated FRAGMENT","facebook button pressed");
+            Intent facebook_share_intent = new Intent(getActivity(), ShareOnFacebook.class);
+            getActivity().startActivity(facebook_share_intent);
+
+        }
+    }
 
 
     @Override

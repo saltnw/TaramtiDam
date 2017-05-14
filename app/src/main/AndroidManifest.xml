@@ -33,6 +33,7 @@
     <activity android:name=".ProfileActivity"
         android:parentActivityName=".MainActivity">
         </activity>
+        <activity android:name=".model.ShareOnFacebook"></activity>
     <receiver android:name=".GeofenceBroadcastReceiver" />
 </application>
 <uses-permission android:name="android.permission.INTERNET" />
