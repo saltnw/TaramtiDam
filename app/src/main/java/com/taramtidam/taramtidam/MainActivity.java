@@ -43,7 +43,7 @@ import com.taramtidam.taramtidam.activity.NavigationFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class  MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
 
     /* login and firebase auth vars*/
@@ -433,19 +433,30 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     }
 
     private void doThingsAfterLogin(){
-        ((Button) findViewById(R.id.loginButton)).setVisibility(View.INVISIBLE);
-        ((Button) findViewById(R.id.loginButton)).setEnabled(false);
 
-        ((Button) findViewById(R.id.logoutButton)).setVisibility(View.VISIBLE);
-        ((Button) findViewById(R.id.logoutButton)).setEnabled(true);
+        try {
 
+            ((Button) findViewById(R.id.loginButton)).setVisibility(View.INVISIBLE);
+            ((Button) findViewById(R.id.loginButton)).setEnabled(false);
+
+            ((Button) findViewById(R.id.logoutButton)).setVisibility(View.VISIBLE);
+            ((Button) findViewById(R.id.logoutButton)).setEnabled(true);
+        }
+        catch (NullPointerException e) {
+
+        }
     }
     private void doThingsAfterLogout(){
-        ((Button) findViewById(R.id.loginButton)).setVisibility(View.VISIBLE);
-        ((Button) findViewById(R.id.loginButton)).setEnabled(true);
+        try {
+            ((Button) findViewById(R.id.loginButton)).setVisibility(View.VISIBLE);
+            ((Button) findViewById(R.id.loginButton)).setEnabled(true);
 
-        ((Button) findViewById(R.id.logoutButton)).setVisibility(View.INVISIBLE);
-        ((Button) findViewById(R.id.logoutButton)).setEnabled(false);
+            ((Button) findViewById(R.id.logoutButton)).setVisibility(View.INVISIBLE);
+            ((Button) findViewById(R.id.logoutButton)).setEnabled(false);
+        }
+        catch (NullPointerException e) {
+
+        }
 
 
     }
