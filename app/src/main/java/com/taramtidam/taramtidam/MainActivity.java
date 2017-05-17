@@ -186,7 +186,7 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                  //   String nextMDALoc = String.valueOf(locations.iterator().next());
                    // System.out.println(nextMDALoc);
                     currMda.setCity(nextMDALoc.child("city").getValue().toString());
-                    currMda.setAddress(nextMDALoc.child("description").getValue().toString());
+                    currMda.setAddress(nextMDALoc.child("address").getValue().toString());
                     currMda.setLongitude(Double.parseDouble(nextMDALoc.child("longitude").getValue().toString()));
                     currMda.setLatitude(Double.parseDouble(nextMDALoc.child("latitude").getValue().toString()));
                     currMda.setTime(nextMDALoc.child("start time").getValue().toString());
