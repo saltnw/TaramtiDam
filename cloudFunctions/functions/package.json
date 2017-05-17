@@ -7,7 +7,10 @@
     "firebase-admin": "^4.1.2",
     "firebase-functions": "^0.5",
     "geofire": "^4.1.2",
+    "google-distance": "^1.0.1",
+    "moment": "^2.18.1",
     "node-geocoder": "^3.16.0",
+    "nodemailer": "^4.0.1",
     "unirest": "^0.5.1"
   },
   "private": true

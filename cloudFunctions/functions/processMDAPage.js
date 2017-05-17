@@ -1,10 +1,10 @@
 //in order to get the location coordinantes
-var NodeGeocoder = require('node-geocoder');
+var NodeGeocoder = require("node-geocoder");
 var options = {
-provider: 'google',
+provider: "google",
 };
 var geocoder = NodeGeocoder(options);
-
+var moment = require("moment")
 //for the databse push
 var functions = require('firebase-functions');
 var admin = require("firebase-admin");
@@ -12,8 +12,16 @@ admin.initializeApp(functions.config().firebase);
 var db = admin.database();
 var ref = db.ref();
 ref.child("MDA").remove();
-var nodeRef = ref.child("MDA");
+//ref.child("testShoshan").remove();
+//var mdaRef = ref.child("testShoshan");
+var mdaRef = ref.child("MDA");
+var todayRef = mdaRef.child("Today")
+var tommorowRef = mdaRef.child("Tommorow")
 var GeoFire = require("geofire");
+var today = moment();
+var tommorow = moment().add("1", "days");
+
+var sendNotifications = require("./sendNotifications.js");
 
 function onDonationPageReceived(page)
 {
@@ -25,11 +33,8 @@ function onDonationPageReceived(page)
      var children = $(this).children();
      var dateItem = children.eq(0);
      var cityItem = children.eq(1);
-     var addressItem = children.eq(3);
-     var descriptionItem = children.eq(2);
-     //var secondAddressItem = children.eq(4).children().eq(0)[0];
-     //console.log("AAAAAAAAAAAAAAAAAAAAAAa");
-     //console.log(secondAddressItem)
+     var addressItem = children.eq(2);
+     var descriptionItem = children.eq(3);
      var startTimeItem = children.eq(5);
      var endTimeItem = children.eq(6);
      if (i==0 || !dateItem.text().trim()) return;
@@ -42,11 +47,10 @@ function onDonationPageReceived(page)
          "start time": startTimeItem.text(),
          "end time": endTimeItem.text(),
       };
-      //data.push(row);
       var currPromise = getGeoLocationAndPush(row, i);
       promiseArray.push(currPromise);
     });
-    return Promise.all(promiseArray);
+    return Promise.all(promiseArray).then(() => sendNotifications(ref, tommorowRef));
   } )
 }
 
@@ -76,7 +80,20 @@ function getGeoLocationAndPush(row, timeout)
           }
           row["latitude"] = res[0].latitude;
           row["longitude"] = res[0].longitude;
-          var newMobileRef =  nodeRef.push(row);
+          var newMobileRef = null;
+          if (moment(row["date"], "DD-MM-YYYY").isSame(today, "day"))
+          {
+            newMobileRef =  todayRef.push(row);
+          }
+          else if (moment(row["date"], "DD-MM-YYYY").isSame(tommorow, "day"))
+          {
+            newMobileRef =  tommorowRef.push(row);
+          }
+          else //we don't want future dates in the db
+          {
+              resolve("done");
+              return;
+          }
           var geoFire = new GeoFire(newMobileRef);
           geoFire.set("geoLoc", [res[0].latitude, res[0].longitude]).then(function() {
               resolve("done");
