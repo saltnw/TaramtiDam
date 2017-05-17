@@ -61,9 +61,10 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
         // Send the notification
         String MDANear = geofencingEvent.getTriggeringGeofences().get(0).getRequestId();
-        MDAMobile alertingMDA = MainActivity.mobiles.get(Integer.parseInt(MDANear));
-        String startTime = alertingMDA.getTime();
-        String endTime = alertingMDA.getEndTime();
+        String[] details= MDANear.split("@");
+//        MDAMobile alertingMDA = MainActivity.mobiles.get(Integer.parseInt(MDANear));
+        String startTime = details[1];
+        String endTime = details[2];
         DateFormat date = new SimpleDateFormat("HH:mm");
         Date start = null;
         Date end = null;
@@ -92,7 +93,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
         System.out.println(localTime);
 
         if(local.getTime()>start.getTime() && local.getTime()<end.getTime()) {
-            sendNotification(context, alertingMDA.getAddress() + ", " + alertingMDA.getCity());
+            sendNotification(context, details[0]);
             Log.d("FENCE","Notification was sent");
         }
         else {
