@@ -114,13 +114,13 @@ public class Geofencing implements ResultCallback {
     public void updateGeofencesList(List<MDAMobile> mobiles) {
         mGeofenceList = new ArrayList<>();
         if (mobiles == null || mobiles.isEmpty()) return;
+        int i=0;
         for (MDAMobile mobile : mobiles) {
-            String mobileID = mobile.getAddress()+", "+mobile.getCity();
             double placeLat = mobile.getLatitude();
             double placeLng = mobile.getLongitude();
             // Build a Geofence object for the MDAMobile
             Geofence geofence = new Geofence.Builder()
-                    .setRequestId(mobileID)
+                    .setRequestId(String.valueOf(i))
                     .setExpirationDuration(GEOFENCE_TIMEOUT)
                     .setCircularRegion(placeLat, placeLng, GEOFENCE_RADIUS)
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_DWELL)
@@ -128,6 +128,7 @@ public class Geofencing implements ResultCallback {
                     .build();
             // Add the MDAMobile Geofence to the list
             mGeofenceList.add(geofence);
+            i++;
         }
         Log.d("FENCE"," Geofences list was successfully updated");
     }

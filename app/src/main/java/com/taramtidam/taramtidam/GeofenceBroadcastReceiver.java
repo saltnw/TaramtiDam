@@ -27,7 +27,14 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+
 import com.google.android.gms.location.GeofencingEvent;
+import java.text.ParseException;
 
 public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
@@ -54,8 +61,41 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
         // Send the notification
         String MDANear = geofencingEvent.getTriggeringGeofences().get(0).getRequestId();
-        sendNotification(context, MDANear);
-        Log.d("FENCE","Notification was sent");
+        MDAMobile alertingMDA = MainActivity.mobiles.get(Integer.parseInt(MDANear));
+        String startTime = alertingMDA.getTime();
+        String endTime = alertingMDA.getEndTime();
+        DateFormat date = new SimpleDateFormat("HH:mm");
+        Date start = null;
+        Date end = null;
+
+        try {
+            start = date.parse(startTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        try {
+            end = date.parse(endTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Jerusalem"));
+        Date currentLocalTime = cal.getTime();
+
+        date.setTimeZone(TimeZone.getTimeZone("Asia/Jerusalem"));
+        String localTime = date.format(currentLocalTime);
+        Date local = null;
+        try {
+             local = date.parse(localTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        System.out.println(localTime);
+
+        if(local.getTime()>start.getTime() && local.getTime()<end.getTime()) {
+            sendNotification(context, alertingMDA.getAddress() + ", " + alertingMDA.getCity());
+            Log.d("FENCE","Notification was sent");
+        }
+        Log.d("FENCE","Not in operating hours. Notification was sent");
     }
 
 
