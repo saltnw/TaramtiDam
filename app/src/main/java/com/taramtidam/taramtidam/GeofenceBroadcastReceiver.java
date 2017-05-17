@@ -95,7 +95,9 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
             sendNotification(context, alertingMDA.getAddress() + ", " + alertingMDA.getCity());
             Log.d("FENCE","Notification was sent");
         }
-        Log.d("FENCE","Not in operating hours. Notification was sent");
+        else {
+            Log.d("FENCE", "Not in operating hours. Notification was not sent");
+        }
     }
 
 
