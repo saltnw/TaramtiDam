@@ -1,6 +1,8 @@
 package com.taramtidam.taramtidam;
 
+import android.app.Dialog;
 import android.app.NotificationManager;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
@@ -66,6 +70,9 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
     /* UI vars */
     private Toolbar mToolbar; // main upper toolbar
     private FragmentDrawer drawerFragment;
+
+    Fragment fragment = null;
+    String title;
 
 
 
@@ -307,8 +314,9 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
 
 
-        Fragment fragment = null;
-        String title = getString(R.string.app_name);
+        //Fragment fragment = null;
+        //String title = getString(R.string.app_name);
+        title = getString(R.string.app_name);
 
         if (currentLoggedUser == null){
             fragment = new HomeFragment();
@@ -339,8 +347,9 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                     break;
                 case 4:
                     if (JustDonatedFragment.isLegalDonatoin()) {
-                        fragment = new JustDonatedFragment();
-                        title = getString(R.string.title_just_donated);
+                        //fragment = new JustDonatedFragment();
+                        //title = getString(R.string.title_just_donated);
+                        showBloodDonationCinfirmDialog().show();
                     }
                     else{
                         Toast.makeText(MainActivity.this, R.string.ilegallDonation, Toast.LENGTH_LONG).show();  // display message
@@ -383,7 +392,7 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference usersDatabase = database.getReference("users");
 
-        // ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.VISIBLE); //display the progress bar
+        ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.VISIBLE); //display the progress bar
 
 
         //using listener get all the users with the same uid
@@ -401,7 +410,8 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                     Log.d(TAG,"currentLoggedUser now contain the logged user profile: "+currentLoggedUser.getFullName());
                     Log.d(TAG,"currentLoggedUser now contain the logged user profile: "+currentLoggedUser.getEmail());
                     //displayProfileAfterLoadingfromDtabase();
-                    // ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
+
+                    ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
                     doThingsAfterLogin();
 
                 }
@@ -418,7 +428,7 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
                     //displayProfileAfterLoadingfromDtabase();
                     doThingsAfterLogin();
-                    // ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
+                    ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
                     Toast.makeText(MainActivity.this, R.string.auth_registration_completed, Toast.LENGTH_SHORT).show();  // display message
 
                 }
@@ -467,6 +477,43 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
         //AuthUI.getInstance().signOut();
         //FirebaseAuth.getInstance().getCurrentUser().
         LoginManager.getInstance().logOut();  // clear facebook login also
+
+
+    }
+
+    public Dialog showBloodDonationCinfirmDialog(){
+
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        adb.setTitle("Confirm Blood Donation");
+        adb.setMessage("Do you wish to continue?");
+        adb.setIcon(R.drawable.donationdialod);
+        adb.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    //User confirmed the donation
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        fragment = new JustDonatedFragment();
+                        title = getString(R.string.title_just_donated);
+                        if (fragment != null) {
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.container_body, fragment);
+                            fragmentTransaction.commit();
+
+                            // set the toolbar title
+                            getSupportActionBar().setTitle(title);
+                        }
+
+                    }});
+        adb.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+
+            //user canceled the Dialog
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+                //Do Nothing
+            }});
+
+        return adb.create();
+
 
 
     }

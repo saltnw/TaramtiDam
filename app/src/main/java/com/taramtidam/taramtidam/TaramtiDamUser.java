@@ -4,6 +4,8 @@ package com.taramtidam.taramtidam;
  * Created by Asaf on 21/04/2017.
  */
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
         import android.os.Bundle;
@@ -28,6 +30,7 @@ public class TaramtiDamUser {
     private String bloodType;
     private int rankLevel;
     private Date lastDonation;
+    private int donationsCounter;
 
     public TaramtiDamUser(){}
 
@@ -40,6 +43,7 @@ public class TaramtiDamUser {
         this.bloodType = "";
         this.completedRegisteration = false;
         this.lastDonation = null;
+        this.donationsCounter = 0;
     }
 
     public TaramtiDamUser(String uid, String fullName,String email) {
@@ -51,6 +55,7 @@ public class TaramtiDamUser {
         this.bloodType = "";
         this.completedRegisteration = false;
         this.lastDonation = null;
+        this.donationsCounter = 0;
     }
 
     public boolean isCompletedRegisteration() {
@@ -131,8 +136,41 @@ public class TaramtiDamUser {
             this.rankLevel++;
         }
     }
+    public int getDonationsCounter() {
+        return donationsCounter;
+    }
+
+    public void setDonationsCounter(int donationsCounter) {
+        this.donationsCounter = donationsCounter;
+    }
 
     public void SetLastDonationDateToToday(){
         this.lastDonation = new Date();
     }
+
+    public String getLastDonationInString (){
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        return df.format(this.lastDonation);
+
+    }
+    /*
+    returns the number of days from the user's last donation
+    returns -1 if the users didn't donated yet
+     */
+    public long daysFromLastDonation(){
+        if (donationsCounter == 0){
+            return -1;
+        }
+
+        Date user_last_donation = this.lastDonation;
+        Date today_date = new Date();
+        long diff, diffDays;
+
+        diff =  today_date.getTime() -  user_last_donation.getTime();
+        diffDays = diff / (24*60*60*1000);
+
+        return diffDays;
+    }
+
+
 }
