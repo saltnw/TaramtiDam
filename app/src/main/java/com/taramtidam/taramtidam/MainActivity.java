@@ -190,6 +190,7 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                     currMda.setLongitude(Double.parseDouble(nextMDALoc.child("longitude").getValue().toString()));
                     currMda.setLatitude(Double.parseDouble(nextMDALoc.child("latitude").getValue().toString()));
                     currMda.setTime(nextMDALoc.child("start time").getValue().toString());
+                    currMda.setEndTime(nextMDALoc.child("end time").getValue().toString());
                     currMda.setDate(nextMDALoc.child("date").getValue().toString());
                     currMda.setId(String.valueOf(i));
 
@@ -201,7 +202,6 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                 }
                 Log.d("FENCE", "Done updating mobiles");
                 System.out.println("done");
-//                mobiles.add(new MDAMobile(32.0852,34.7818,"54"));
                 Log.d("FENCE","Going to update geofences list to match new MDA mobiles list");
                 mGeofencing.updateGeofencesList(mobiles);
                 Log.d("FENCE","Going to register all geofences per all MDA mobiles");
