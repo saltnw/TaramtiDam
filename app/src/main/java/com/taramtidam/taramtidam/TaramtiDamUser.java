@@ -149,8 +149,13 @@ public class TaramtiDamUser {
     }
 
     public String getLastDonationInString (){
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        return df.format(this.lastDonation);
+        if(donationsCounter==0) {
+            return "";
+        }
+        else {
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            return df.format(this.lastDonation);
+        }
 
     }
     /*

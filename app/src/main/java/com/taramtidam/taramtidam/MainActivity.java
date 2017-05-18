@@ -424,6 +424,7 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                     currentLoggedUser = new TaramtiDamUser(mAuth.getCurrentUser().getUid(), mAuth.getCurrentUser().getDisplayName(), mAuth.getCurrentUser().getEmail() , "", "A+" );
                     mDatabase = FirebaseDatabase.getInstance().getReference();
                     mDatabase.child("users").child(currentLoggedUser.getuid()).setValue(currentLoggedUser);
+
                     Log.d(TAG, "new user was created in database");
 
                     //displayProfileAfterLoadingfromDtabase();
