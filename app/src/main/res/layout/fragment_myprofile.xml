@@ -52,7 +52,7 @@
         android:id="@+id/fullnameLabel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="8dp"
         android:gravity="center_horizontal"
         android:text="Full Name"
         android:textColor="@color/colorPrimary"
@@ -63,7 +63,8 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1" />
+        tools:layout_constraintTop_creator="1"
+        app:layout_constraintHorizontal_bias="0.0" />
 
     <TextView
         android:id="@+id/textView8"
@@ -99,6 +100,7 @@
         android:id="@+id/emailTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
         android:text="Email Address"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView13"
@@ -110,16 +112,16 @@
         android:id="@+id/workEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
         android:ems="10"
+        android:hint="Work Address"
         android:inputType="textPostalAddress"
-        android:text="Work Address"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView8"
-        app:layout_constraintTop_toTopOf="@+id/textView8"
-        tools:layout_constraintRight_creator="1"
-        android:layout_marginEnd="24dp"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginRight="24dp" />
+        app:layout_constraintTop_toTopOf="@+id/textView8"
+        tools:layout_constraintRight_creator="1" />
 
     <EditText
         android:id="@+id/homeEditText"
@@ -127,14 +129,14 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPostalAddress"
-        android:text="Home Address"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView11"
-        app:layout_constraintTop_toTopOf="@+id/textView11"
-        tools:layout_constraintRight_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/workEditText"
         app:layout_constraintRight_toRightOf="@+id/workEditText"
+
+        app:layout_constraintTop_toTopOf="@+id/textView11"
         tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="@+id/workEditText" />
+        tools:layout_constraintRight_creator="1" />
 
     <TextView
         android:id="@+id/textView14"
@@ -149,15 +151,31 @@
         app:layout_constraintLeft_toLeftOf="@+id/workEditText" />
 
     <Button
-        android:id="@+id/updateButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Update"
-        tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintTop_creator="1"
-        android:layout_marginTop="20dp"
+        android:id="@+id/saveProfileButton"
+        android:layout_width="113dp"
+        android:layout_height="59dp"
+        android:layout_marginTop="18dp"
+        android:drawableLeft="@android:drawable/ic_menu_save"
+        android:gravity="left|center_vertical"
+        android:onClick="onClick_SaveButton"
+        android:text=" Save"
+        app:layout_constraintLeft_toRightOf="@+id/textView12"
         app:layout_constraintTop_toBottomOf="@+id/textView12"
-        app:layout_constraintLeft_toRightOf="@+id/textView12" />
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintTop_creator="1" />
+
+    <Button
+        android:id="@+id/editProfileButton"
+        android:layout_width="113dp"
+        android:layout_height="59dp"
+        android:layout_marginTop="18dp"
+        android:drawableLeft="@android:drawable/ic_menu_edit"
+        android:gravity="left|center_vertical"
+        android:text=" Edit"
+        app:layout_constraintLeft_toRightOf="@+id/textView12"
+        app:layout_constraintTop_toBottomOf="@+id/textView12"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintTop_creator="1" />
 
     <Spinner
         android:id="@+id/bloodSpinner"
@@ -167,6 +185,50 @@
         app:layout_constraintTop_toTopOf="@+id/textView10"
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="@+id/homeEditText" />
+
+    <ImageView
+        android:id="@+id/imageUploaded"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="132dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/emailTextView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/fullnameLabel"
+        app:layout_constraintVertical_bias="0.447" />
+
+    <!--<fragment-->
+        <!--android:id="@+id/place_autocomplete_fragment_home"-->
+        <!--android:layout_width="244dp"-->
+        <!--android:layout_height="32dp"-->
+        <!--android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/homeEditText"-->
+        <!--android:layout_marginTop="0dp"-->
+        <!--android:layout_marginLeft="120dp"-->
+
+        <!--app:layout_constraintLeft_toLeftOf="parent" />-->
+
+    <!--<fragment-->
+        <!--android:id="@+id/place_autocomplete_fragment_work"-->
+        <!--android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"-->
+        <!--android:layout_width="244dp"-->
+        <!--android:layout_height="32dp"-->
+        <!--android:layout_marginLeft="120dp"-->
+        <!--android:layout_marginTop="42dp"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+
+        <!--app:layout_constraintTop_toTopOf="@+id/homeEditText" />-->
+
+    <!--<ImageButton-->
+        <!--android:id="@+id/imageButton"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:srcCompat="@android:drawable/ic_menu_edit"-->
+        <!--tools:layout_editor_absoluteX="293dp"-->
+        <!--tools:layout_editor_absoluteY="475dp" />-->
 
 
 </android.support.constraint.ConstraintLayout>
