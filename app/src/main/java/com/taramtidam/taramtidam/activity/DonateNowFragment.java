@@ -93,7 +93,7 @@ public class DonateNowFragment extends Fragment implements GoogleApiClient.Conne
             Log.d("Donate Now Fragment", "The closest station index is: "+ Integer.toString(nearsetStationIndex) );
             Log.d("Donate Now Fragment","The Closest station is: "+ MainActivity.mobiles.get(nearsetStationIndex).getAddress() +", " +MainActivity.mobiles.get(nearsetStationIndex).getCity());
             //((TextView) getView().findViewById(R.id.nearsetStationTextView)).setText("Right Now the Nearset Station is located at: "+ MainActivity.mobiles.get(nearsetStationIndex).getAddress() +", "  +MainActivity.mobiles.get(nearsetStationIndex).getCity());
-            address = MainActivity.mobiles.get(nearsetStationIndex).getAddress() +"\n"+MainActivity.mobiles.get(nearsetStationIndex).getAddress();
+            address = MainActivity.mobiles.get(nearsetStationIndex).getAddress() +"\n"+MainActivity.mobiles.get(nearsetStationIndex).getCity();
             addressTV.setText(address);
             openings_hours = "From: "+(MainActivity.mobiles.get(nearsetStationIndex).getTime()) + " To: "+ (MainActivity.mobiles.get(nearsetStationIndex).getEndTime());
             hoursTV.setText(openings_hours);

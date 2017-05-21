@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/windowBackground"
-    tools:context="com.taramtidam.taramtidam.activity.MyProfileFragment">
-
+    tools:context="com.taramtidam.taramtidam.activity.MyProfileFragment"
+    android:focusableInTouchMode="true" >
 
     <TextView
         android:id="@+id/textView11"
@@ -108,8 +108,9 @@
         app:layout_constraintTop_toTopOf="@+id/textView13"
         app:layout_constraintVertical_bias="0.0" />
 
-    <EditText
+    <com.seatgeek.placesautocomplete.PlacesAutocompleteTextView
         android:id="@+id/workEditText"
+        android:completionThreshold="2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
@@ -120,10 +121,15 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView8"
         app:layout_constraintRight_toRightOf="parent"
+        android:dropDownWidth="300dp"
+        android:dropDownVerticalOffset="10dp"
+        app:pacv_historyFile="@null"
+        android:imeOptions="actionDone"
+        app:pacv_googleMapsApiKey="AIzaSyDt3us1woaV17XP3O9mRrkpEx-_IDhssU4"/>
         app:layout_constraintTop_toTopOf="@+id/textView8"
         tools:layout_constraintRight_creator="1" />
 
-    <EditText
+    <com.seatgeek.placesautocomplete.PlacesAutocompleteTextView
         android:id="@+id/homeEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -133,10 +139,14 @@
         app:layout_constraintBottom_toBottomOf="@+id/textView11"
         app:layout_constraintLeft_toLeftOf="@+id/workEditText"
         app:layout_constraintRight_toRightOf="@+id/workEditText"
-
         app:layout_constraintTop_toTopOf="@+id/textView11"
         tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintRight_creator="1" />
+        tools:layout_constraintRight_creator="1"
+        android:dropDownWidth="300dp"
+        android:dropDownVerticalOffset="10dp"
+        app:pacv_historyFile="@null"
+        android:imeOptions="actionDone"
+        app:pacv_googleMapsApiKey="AIzaSyDt3us1woaV17XP3O9mRrkpEx-_IDhssU4"/>
 
     <TextView
         android:id="@+id/textView14"

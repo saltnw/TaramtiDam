@@ -20,6 +20,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,18 +28,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.taramtidam.taramtidam.MainActivity;
 import com.taramtidam.taramtidam.R;
 
-import com.google.android.gms.location.places.AutocompleteFilter;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,11 +49,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
     private TextView mail;
     private Button saveBtn;
     private Button editBtn;
-    private PlaceAutocompleteFragment autocompleteFragment_home;
-    private PlaceAutocompleteFragment autocompleteFragment_work;
-    private int autocomplete_caller = 0;
     private ImageView imageToUpload;
-    private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 123;
     private static final int RESULT_LOAD_IMAGE = 124;
     //private FragmentManager fm;
     public MyProfileFragment() {
@@ -68,6 +59,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
     }
 
@@ -94,8 +86,8 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         if (MainActivity.currentLoggedUser != null) {
             ((TextView) rootView.findViewById(R.id.emailTextView)).setText(MainActivity.currentLoggedUser.getEmail());
             ((TextView) rootView.findViewById(R.id.fullnameLabel)).setText(MainActivity.currentLoggedUser.getFullName());
-            ((EditText) rootView.findViewById(R.id.homeEditText)).setText(MainActivity.currentLoggedUser.getAddress1());
-            ((EditText) rootView.findViewById(R.id.workEditText)).setText(MainActivity.currentLoggedUser.getAddress2());
+            ((AutoCompleteTextView) rootView.findViewById(R.id.homeEditText)).setText(MainActivity.currentLoggedUser.getAddress1());
+            ((AutoCompleteTextView) rootView.findViewById(R.id.workEditText)).setText(MainActivity.currentLoggedUser.getAddress2());
 
             if(MainActivity.currentLoggedUser.getUserImage()!="") {
                 byte[] decodedString = Base64.decode(MainActivity.currentLoggedUser.getUserImage(), Base64.DEFAULT);
@@ -103,89 +95,13 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
                 imageToUpload.setImageBitmap(decodedByte);
             }
         }
-        ((EditText) rootView.findViewById(R.id.homeEditText)).setFocusable(false);
-        ((EditText) rootView.findViewById(R.id.workEditText)).setFocusable(false);
 
-        //set the listen of editText to call the autocomplete intent
-        ((EditText) rootView.findViewById(R.id.homeEditText)).setOnTouchListener(new View.OnTouchListener()
-        {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (saveBtn.getVisibility() == View.VISIBLE){
-                    autocomplete_caller = 1;
-                    //Toast.makeText(getApplicationContext(),  "workEditText", Toast.LENGTH_SHORT).show();
-                    callPlaceAutocompleteActivityIntent();
-                }
-                return false;
-            }
-
-        });
-
-        ((EditText) rootView.findViewById(R.id.workEditText)).setOnTouchListener(new View.OnTouchListener()
-        {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (saveBtn.getVisibility() == View.VISIBLE){
-                    autocomplete_caller = 2;
-                    //Toast.makeText(getApplicationContext(),  "workEditText", Toast.LENGTH_SHORT).show();
-                    callPlaceAutocompleteActivityIntent();
-                }
-                return false;
-            }
-
-        });
-        // end of listeners
+//        //set onClicklListener
+//        updateBtn = (Button) rootView.findViewById(R.id.updateButton);
+//          updateBtn.setOnClickListener(this);
 
         // Inflate the layout for this fragment
         return rootView;
-   }
-
-    AutocompleteFilter countryFilter = new AutocompleteFilter.Builder()
-            .setCountry("IL")
-            .build();
-
-//functions to handle the autocomplete
-
-    private void callPlaceAutocompleteActivityIntent() {
-        try {
-            Intent intent =
-                    new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
-                            .setFilter(countryFilter)
-                            .build(this.getActivity());
-            startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
-//PLACE_AUTOCOMPLETE_REQUEST_CODE is integer for request code
-        } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
-            // TODO: Handle the error.
-            return;
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                Place place = PlaceAutocomplete.getPlace(this.getActivity(), data);
-
-                if(autocomplete_caller==1){
-                    EditText homeAddressET = (EditText) (getView().findViewById(R.id.homeEditText));
-                    homeAddressET.setText(place.getName().toString());
-
-                }
-                else if(autocomplete_caller==2){
-                    EditText workAddressET = (EditText) (getView().findViewById(R.id.workEditText));
-                    workAddressET.setText(place.getName().toString());
-                }
-                return;
-            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
-                Status status = PlaceAutocomplete.getStatus(this.getActivity(), data);
-                return;
-            } else if (requestCode == Activity.RESULT_CANCELED) {
-                return;
-            }
-        }else if((requestCode == RESULT_LOAD_IMAGE) && (resultCode == Activity.RESULT_OK) && (data != null)){
-            Uri selectedImage = data.getData();
-            imageToUpload.setImageURI(selectedImage);
-        }
     }
 
     @Override
@@ -205,6 +121,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         if (MainActivity.currentLoggedUser != null) {
             addItemsOnSpinner();
         }
+
 
     }
 
@@ -232,11 +149,11 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
             saveBtn.setVisibility(View.INVISIBLE);
             editBtn.setVisibility(View.VISIBLE);
 
-            getView().findViewById(R.id.homeEditText).setFocusable(false);
-            getView().findViewById(R.id.workEditText).setFocusable(false);
+            //getView().findViewById(R.id.homeEditText).setFocusable(false);
+            //getView().findViewById(R.id.workEditText).setFocusable(false);
 
-            EditText homeAddressET = (EditText) (getView().findViewById(R.id.homeEditText));
-            EditText workAddressET = (EditText) (getView().findViewById(R.id.workEditText));
+            AutoCompleteTextView homeAddressET = (AutoCompleteTextView) (getView().findViewById(R.id.homeEditText));
+            AutoCompleteTextView workAddressET = (AutoCompleteTextView) (getView().findViewById(R.id.workEditText));
             Spinner bloodType = (Spinner) (getView().findViewById(R.id.bloodSpinner));
             //imageToUpload = (ImageView) (getView().findViewById(R.id.imageUploaded));
 
@@ -264,8 +181,8 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
             saveBtn.setVisibility(View.VISIBLE);
             editBtn.setVisibility(View.INVISIBLE);
 
-            getView().findViewById(R.id.homeEditText).setFocusableInTouchMode(true);
-            getView().findViewById(R.id.workEditText).setFocusableInTouchMode(true);
+            //getView().findViewById(R.id.homeEditText).setFocusableInTouchMode(true);
+            //getView().findViewById(R.id.workEditText).setFocusableInTouchMode(true);
 
         }else if(arg0 == getView().findViewById(R.id.imageUploaded)){
             if (saveBtn.getVisibility() == View.VISIBLE){
