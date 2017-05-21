@@ -72,8 +72,13 @@ public class DonateNowFragment extends Fragment implements GoogleApiClient.Conne
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        //TextView mLatitudeText = (TextView)getView().findViewById(R.id.textView3);
-        //TextView mLongitudeText = (TextView)getView().findViewById(R.id.textView2);
+        TextView addressTV = (TextView)getView().findViewById(R.id.addressTextView);
+        TextView hoursTV = (TextView)getView().findViewById(R.id.hoursTextView);
+        TextView informationTV = (TextView)getView().findViewById(R.id.infoTextView);
+        String openings_hours;
+        String info;
+        String address;
+
         int nearsetStationIndex;
         //Log.d("ASAF","google api connected!");
         Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient); //TODO to check it with lilach
@@ -87,7 +92,31 @@ public class DonateNowFragment extends Fragment implements GoogleApiClient.Conne
             nearsetStationIndex = Distances.findNearestBloodMobile(mLastLocation.getLatitude() ,mLastLocation.getLongitude(),MainActivity.mobiles );
             Log.d("Donate Now Fragment", "The closest station index is: "+ Integer.toString(nearsetStationIndex) );
             Log.d("Donate Now Fragment","The Closest station is: "+ MainActivity.mobiles.get(nearsetStationIndex).getAddress() +", " +MainActivity.mobiles.get(nearsetStationIndex).getCity());
-            ((TextView) getView().findViewById(R.id.nearsetStationTextView)).setText("Right Now the Nearset Station is located at: "+ MainActivity.mobiles.get(nearsetStationIndex).getAddress() +", "  +MainActivity.mobiles.get(nearsetStationIndex).getCity());
+            //((TextView) getView().findViewById(R.id.nearsetStationTextView)).setText("Right Now the Nearset Station is located at: "+ MainActivity.mobiles.get(nearsetStationIndex).getAddress() +", "  +MainActivity.mobiles.get(nearsetStationIndex).getCity());
+            address = MainActivity.mobiles.get(nearsetStationIndex).getAddress() +"\n"+MainActivity.mobiles.get(nearsetStationIndex).getAddress();
+            addressTV.setText(address);
+            openings_hours = "From: "+(MainActivity.mobiles.get(nearsetStationIndex).getTime()) + " To: "+ (MainActivity.mobiles.get(nearsetStationIndex).getEndTime());
+            hoursTV.setText(openings_hours);
+
+            if (MainActivity.currentLoggedUser.getDonationsCounter() == 0){
+                info = "You still haven't donated yet. Go for it!";
+            }
+            else{
+                info = "Your last donation was at: "+MainActivity.currentLoggedUser.getLastDonationInString();
+                info += "\n";
+                if (MainActivity.currentLoggedUser.daysFromLastDonation() > 90){
+                    info += "Seems like you haven't donated for a while\nGo for it!";
+                }
+                else{
+                    info+= "For your safety, it is recommanded to\nwait at least 3 monthes between donations ";
+                }
+
+            }
+            informationTV.setText(info);
+
+
+
+
         }
 
 

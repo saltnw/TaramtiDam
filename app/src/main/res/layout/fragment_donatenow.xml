@@ -5,79 +5,164 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.taramtidam.taramtidam.activity.DonateNowFragment">
+    android:background="@color/windowBackground"
+    tools:context="com.taramtidam.taramtidam.activity.DonateNowFragment"
+    tools:layout_editor_absoluteY="25dp"
+    tools:layout_editor_absoluteX="0dp">
 
 
     <TextView
-        android:id="@+id/label"
+        android:id="@+id/titleTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="28dp"
         android:gravity="center_horizontal"
-        android:textSize="45dp"
-        android:text="DonateNow LAYOUT!"
+        android:text="The nearest station"
+        android:textColor="@color/colorProfileTitle"
+        android:textSize="20sp"
         android:textStyle="bold"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="100dp"
-        tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textSize="12dp"
-        android:gravity="center_horizontal"
-        android:text="כדי לשנות את המראה תערכו את fragment_donatenow.xml"
-        android:id="@+id/textView"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
+    <ImageView
+        android:id="@+id/addressView"
+        android:layout_width="359dp"
+        android:layout_height="97dp"
+        android:src="@drawable/rectangleview"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/label"
-        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintHorizontal_bias="0.6"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView"></ImageView>
+
+    <ImageView
+        android:id="@+id/inforamtionView"
+        android:layout_width="359dp"
+        android:layout_height="97dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/rectangleview"
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toBottomOf="@+id/hoursView"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.555"></ImageView>
+
+    <ImageView
+        android:id="@+id/hoursView"
+        android:layout_width="359dp"
+        android:layout_height="97dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/rectangleview"
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toBottomOf="@+id/addressView"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.555"></ImageView>
+
+    <ImageView
+        android:id="@+id/hoursIcon"
+        android:layout_width="51dp"
+        android:layout_height="44dp"
+        app:srcCompat="@drawable/hoursicon"
+        app:layout_constraintBottom_toBottomOf="@+id/hoursView"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintTop_toTopOf="@+id/hoursView"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="20dp"
+        app:layout_constraintVertical_bias="0.513"
+        app:layout_constraintRight_toRightOf="@+id/hoursView" />
+
+    <ImageView
+        android:id="@+id/infoIcon"
+        android:layout_width="51dp"
+        android:layout_height="44dp"
+        app:srcCompat="@drawable/sakitdamicon"
+        app:layout_constraintTop_toTopOf="@+id/inforamtionView"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/inforamtionView"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="20dp"
+        app:layout_constraintVertical_bias="0.513"
+        app:layout_constraintRight_toRightOf="@+id/inforamtionView" />
+
+
+    <ImageView
+        android:id="@+id/adressIcon"
+        android:layout_width="51dp"
+        android:layout_height="44dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/addressView"
+        app:layout_constraintTop_toTopOf="@+id/addressView"
+        app:srcCompat="@drawable/locationicon"
+        app:layout_constraintVertical_bias="0.513"
+        android:layout_marginRight="20dp"
+        app:layout_constraintRight_toRightOf="@+id/addressView" />
+
+
+    <TextView
+        android:id="@+id/addressTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/addressView"
+        app:layout_constraintLeft_toLeftOf="@+id/addressView"
+        app:layout_constraintTop_toTopOf="@+id/addressView"
+        app:layout_constraintVertical_bias="0.515" />
+
+    <TextView
+        android:id="@+id/hoursTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/hoursView"
+        app:layout_constraintTop_toTopOf="@+id/hoursView"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintLeft_toLeftOf="@+id/hoursView" />
+
+    <TextView
+        android:id="@+id/infoTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="8dp"
+        android:text="information"
+        app:layout_constraintBottom_toBottomOf="@+id/inforamtionView"
+        app:layout_constraintLeft_toLeftOf="@+id/inforamtionView"
+        app:layout_constraintTop_toTopOf="@+id/inforamtionView"
+        app:layout_constraintVertical_bias="0.531" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="166dp"
+        android:layout_height="63dp"
+        style="?android:attr/borderlessButtonStyle"
+
+        android:layout_marginTop="30dp"
+        android:background="@drawable/navigatebtnbackground"
+        app:layout_constraintTop_toBottomOf="@+id/inforamtionView"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        android:layout_marginStart="77dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView3"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView3"
-        android:layout_marginLeft="77dp" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:layout_constraintTop_creator="1"
-        android:layout_marginStart="81dp"
-        android:layout_marginTop="46dp"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toRightOf="@+id/textView2"
-        android:layout_marginLeft="81dp" />
-
-    <TextView
-        android:id="@+id/nearsetStationTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="94dp"
-        android:text="TextView"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
-        tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1"
-        tools:text="Show the Nearset MDA station" />
 
 </android.support.constraint.ConstraintLayout>
