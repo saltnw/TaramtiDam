@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +29,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class JustDonatedFragment extends Fragment implements View.OnClickListener {
 
     Button facebookBtn;
+    int prevRank;
 
 
     @Override
@@ -37,8 +39,14 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
         /* increase the rank of the user */
 
         if (isLegalDonatoin()){
+            //save the new rank
+            prevRank = MainActivity.currentLoggedUser.getRankLevel();
+
             //update the rank
             MainActivity.currentLoggedUser.increaseRankByOne();
+
+            //update donations counter by one
+            MainActivity.currentLoggedUser.setDonationsCounter(MainActivity.currentLoggedUser.getDonationsCounter()+1);
 
             //update last donation date
             MainActivity.currentLoggedUser.SetLastDonationDateToToday();
@@ -74,9 +82,20 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
 
         Integer images[] = {R.drawable.rank0,R.drawable.rank1,R.drawable.rank2,R.drawable.rank3,R.drawable.rank4};
         int user_rank = MainActivity.currentLoggedUser.getRankLevel();
-
+        //display the correct rank image
         ImageView rank_image_view = (ImageView)rootView.findViewById(R.id.rankImageView);
         rank_image_view.setImageResource(images[user_rank]);
+
+        //display correct text above charcther image
+        if (prevRank < MainActivity.currentLoggedUser.getRankLevel()){
+            ((TextView)rootView.findViewById(R.id.newCharTextView)).setText("Your new level");
+        }
+        else{
+            ((TextView)rootView.findViewById(R.id.newCharTextView)).setText("You've reached top level");
+        }
+
+        //display the correct blood counter
+        ((TextView)rootView.findViewById(R.id.BloodcounterTextView)).setText(Integer.toString(MainActivity.currentLoggedUser.getDonationsCounter()));
 
 
         return rootView;
@@ -113,9 +132,8 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
     public static boolean isLegalDonatoin(){
 
         // check date margin
+        //
         return isLegalDate();
-
-
 
 
         //check distance
