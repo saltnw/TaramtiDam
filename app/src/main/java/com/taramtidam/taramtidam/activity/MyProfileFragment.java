@@ -48,7 +48,6 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
     private TextView full_name;
     private TextView mail;
     private Button saveBtn;
-    private Button editBtn;
     private ImageView imageToUpload;
     private static final int RESULT_LOAD_IMAGE = 124;
     //private FragmentManager fm;
@@ -72,16 +71,9 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         saveBtn = (Button) rootView.findViewById(R.id.saveProfileButton);
         saveBtn.setOnClickListener(this);
 
-        editBtn = (Button) rootView.findViewById(R.id.editProfileButton);
-        editBtn.setOnClickListener(this);
-
         imageToUpload = (ImageView)  rootView.findViewById(R.id.imageUploaded);
         imageToUpload.setOnClickListener(this);
-
-        saveBtn.setVisibility(View.INVISIBLE);
-        editBtn.setVisibility(View.VISIBLE);
-
-
+        rootView.setOnClickListener(this);
 
         if (MainActivity.currentLoggedUser != null) {
             ((TextView) rootView.findViewById(R.id.emailTextView)).setText(MainActivity.currentLoggedUser.getEmail());
@@ -89,7 +81,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
             ((AutoCompleteTextView) rootView.findViewById(R.id.homeEditText)).setText(MainActivity.currentLoggedUser.getAddress1());
             ((AutoCompleteTextView) rootView.findViewById(R.id.workEditText)).setText(MainActivity.currentLoggedUser.getAddress2());
 
-            if(MainActivity.currentLoggedUser.getUserImage()!="") {
+            if( (MainActivity.currentLoggedUser.getUserImage()!=null) && (!MainActivity.currentLoggedUser.getUserImage().equals("")) ) {
                 byte[] decodedString = Base64.decode(MainActivity.currentLoggedUser.getUserImage(), Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                 imageToUpload.setImageBitmap(decodedByte);
@@ -121,8 +113,6 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         if (MainActivity.currentLoggedUser != null) {
             addItemsOnSpinner();
         }
-
-
     }
 
     public void addItemsOnSpinner() {
@@ -144,26 +134,22 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
     }
 
     public void onClick(View arg0) {
+        getView().findViewById(R.id.homeEditText).setFocusable(false);
+        getView().findViewById(R.id.workEditText).setFocusable(false);
+
         if (arg0 == getView().findViewById(R.id.saveProfileButton)) {
-            //save button pressed : switch button to edit and disable textbox edit
-            saveBtn.setVisibility(View.INVISIBLE);
-            editBtn.setVisibility(View.VISIBLE);
-
-            //getView().findViewById(R.id.homeEditText).setFocusable(false);
-            //getView().findViewById(R.id.workEditText).setFocusable(false);
-
-            AutoCompleteTextView homeAddressET = (AutoCompleteTextView) (getView().findViewById(R.id.homeEditText));
-            AutoCompleteTextView workAddressET = (AutoCompleteTextView) (getView().findViewById(R.id.workEditText));
+            //save button pressed :
             Spinner bloodType = (Spinner) (getView().findViewById(R.id.bloodSpinner));
-            //imageToUpload = (ImageView) (getView().findViewById(R.id.imageUploaded));
 
             //encode the user picture
             Bitmap bm = ((BitmapDrawable) imageToUpload.getDrawable()).getBitmap();
-            //Bitmap bm = imageToUpload.getDrawingCache();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
             byte[] byteArrayImage = baos.toByteArray();
             String encodedImage = Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
+
+            AutoCompleteTextView homeAddressET = (AutoCompleteTextView) (getView().findViewById(R.id.homeEditText));
+            AutoCompleteTextView workAddressET = (AutoCompleteTextView) (getView().findViewById(R.id.workEditText));
 
             //update currentLoggedUser
             MainActivity.currentLoggedUser.setAddress1(homeAddressET.getText().toString());
@@ -171,32 +157,22 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
             MainActivity.currentLoggedUser.setBloodType(bloodType.getSelectedItem().toString());
             MainActivity.currentLoggedUser.setUserImage(encodedImage);
 
-
             //update database
             DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
             mDatabase.child("users").child(MainActivity.currentLoggedUser.getuid()).setValue(MainActivity.currentLoggedUser);
             Toast.makeText(getApplicationContext(), R.string.profileUpdateSucess, Toast.LENGTH_SHORT).show();
-        }else if(arg0 == getView().findViewById(R.id.editProfileButton)){
-            //edit button pressed : switch button to save and allow textbox edit
-            saveBtn.setVisibility(View.VISIBLE);
-            editBtn.setVisibility(View.INVISIBLE);
-
-            //getView().findViewById(R.id.homeEditText).setFocusableInTouchMode(true);
-            //getView().findViewById(R.id.workEditText).setFocusableInTouchMode(true);
 
         }else if(arg0 == getView().findViewById(R.id.imageUploaded)){
-            if (saveBtn.getVisibility() == View.VISIBLE){
                 Intent gallaryIntetnt = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(gallaryIntetnt,RESULT_LOAD_IMAGE);
-            }
-
-
-
-
         }
-
-
     }
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if((requestCode == RESULT_LOAD_IMAGE) && (resultCode == Activity.RESULT_OK) && (data != null)){
+            Uri selectedImage = data.getData();
+            imageToUpload.setImageURI(selectedImage);
+        }
+    }
 }
