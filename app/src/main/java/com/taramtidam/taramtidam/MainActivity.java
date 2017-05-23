@@ -391,8 +391,12 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
         //now lets check if the user is already in our database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference usersDatabase = database.getReference("users");
+        try{
+            ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.VISIBLE); //display the progress bar
 
-        ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.VISIBLE); //display the progress bar
+        }catch (NullPointerException e){
+            //could not load the progress bar. probably was logged in not through home fragment
+        }
 
 
         //using listener get all the users with the same uid
@@ -410,8 +414,12 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                     Log.d(TAG,"currentLoggedUser now contain the logged user profile: "+currentLoggedUser.getFullName());
                     Log.d(TAG,"currentLoggedUser now contain the logged user profile: "+currentLoggedUser.getEmail());
                     //displayProfileAfterLoadingfromDtabase();
+                    try{
+                        ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
 
-                    ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
+                    }catch (NullPointerException e){
+                        //could not load the progress bar. probably was logged in not through home fragment
+                    }
                     doThingsAfterLogin();
 
                 }
@@ -429,7 +437,12 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
                     //displayProfileAfterLoadingfromDtabase();
                     doThingsAfterLogin();
-                    ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
+                    try{
+                        ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
+
+                    }catch (NullPointerException e){
+                        //could not load the progress bar. probably was logged in not through home fragment
+                    }
                     Toast.makeText(MainActivity.this, R.string.auth_registration_completed, Toast.LENGTH_SHORT).show();  // display message
 
                 }

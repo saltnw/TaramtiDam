@@ -6,17 +6,26 @@ package com.taramtidam.taramtidam.activity;
 
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 
@@ -25,6 +34,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.taramtidam.taramtidam.MainActivity;
 import com.taramtidam.taramtidam.R;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,8 +47,10 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
     private EditText address2;
     private TextView full_name;
     private TextView mail;
-    private Button updateBtn;
-
+    private Button saveBtn;
+    private ImageView imageToUpload;
+    private static final int RESULT_LOAD_IMAGE = 124;
+    //private FragmentManager fm;
     public MyProfileFragment() {
         // Required empty public constructor
     }
@@ -55,16 +67,30 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_myprofile, container, false);
 
+        //set onClicklListener
+        saveBtn = (Button) rootView.findViewById(R.id.saveProfileButton);
+        saveBtn.setOnClickListener(this);
+
+        imageToUpload = (ImageView)  rootView.findViewById(R.id.imageUploaded);
+        imageToUpload.setOnClickListener(this);
+        rootView.setOnClickListener(this);
+
         if (MainActivity.currentLoggedUser != null) {
             ((TextView) rootView.findViewById(R.id.emailTextView)).setText(MainActivity.currentLoggedUser.getEmail());
             ((TextView) rootView.findViewById(R.id.fullnameLabel)).setText(MainActivity.currentLoggedUser.getFullName());
-            ((EditText) rootView.findViewById(R.id.homeEditText)).setText(MainActivity.currentLoggedUser.getAddress1());
-            ((EditText) rootView.findViewById(R.id.workEditText)).setText(MainActivity.currentLoggedUser.getAddress2());
+            ((AutoCompleteTextView) rootView.findViewById(R.id.homeEditText)).setText(MainActivity.currentLoggedUser.getAddress1());
+            ((AutoCompleteTextView) rootView.findViewById(R.id.workEditText)).setText(MainActivity.currentLoggedUser.getAddress2());
+
+            if( (MainActivity.currentLoggedUser.getUserImage()!=null) && (!MainActivity.currentLoggedUser.getUserImage().equals("")) ) {
+                byte[] decodedString = Base64.decode(MainActivity.currentLoggedUser.getUserImage(), Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                imageToUpload.setImageBitmap(decodedByte);
+            }
         }
 
-        //set onClicklListener
-        updateBtn = (Button) rootView.findViewById(R.id.updateButton);
-        updateBtn.setOnClickListener(this);
+//        //set onClicklListener
+//        updateBtn = (Button) rootView.findViewById(R.id.updateButton);
+//          updateBtn.setOnClickListener(this);
 
         // Inflate the layout for this fragment
         return rootView;
@@ -87,8 +113,6 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         if (MainActivity.currentLoggedUser != null) {
             addItemsOnSpinner();
         }
-
-
     }
 
     public void addItemsOnSpinner() {
@@ -110,21 +134,45 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
     }
 
     public void onClick(View arg0) {
-        EditText homeAddressET = (EditText)(getView().findViewById(R.id.homeEditText));
-        EditText workAddressET = (EditText)(getView().findViewById(R.id.workEditText));
-        Spinner bloodType = (Spinner) (getView().findViewById(R.id.bloodSpinner));
+        getView().findViewById(R.id.homeEditText).setFocusable(false);
+        getView().findViewById(R.id.workEditText).setFocusable(false);
 
-        //update currentLoggedUser
-        MainActivity.currentLoggedUser.setAddress1(homeAddressET.getText().toString());
-        MainActivity.currentLoggedUser.setAddress2(workAddressET.getText().toString());
-        MainActivity.currentLoggedUser.setBloodType(bloodType.getSelectedItem().toString());
+        if (arg0 == getView().findViewById(R.id.saveProfileButton)) {
+            //save button pressed :
+            Spinner bloodType = (Spinner) (getView().findViewById(R.id.bloodSpinner));
 
-        //update database
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("users").child(MainActivity.currentLoggedUser.getuid()).setValue(MainActivity.currentLoggedUser);
-        Toast.makeText(getApplicationContext(), R.string.profileUpdateSucess, Toast.LENGTH_SHORT).show();
+            //encode the user picture
+            Bitmap bm = ((BitmapDrawable) imageToUpload.getDrawable()).getBitmap();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+            byte[] byteArrayImage = baos.toByteArray();
+            String encodedImage = Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
 
+            AutoCompleteTextView homeAddressET = (AutoCompleteTextView) (getView().findViewById(R.id.homeEditText));
+            AutoCompleteTextView workAddressET = (AutoCompleteTextView) (getView().findViewById(R.id.workEditText));
 
+            //update currentLoggedUser
+            MainActivity.currentLoggedUser.setAddress1(homeAddressET.getText().toString());
+            MainActivity.currentLoggedUser.setAddress2(workAddressET.getText().toString());
+            MainActivity.currentLoggedUser.setBloodType(bloodType.getSelectedItem().toString());
+            MainActivity.currentLoggedUser.setUserImage(encodedImage);
 
+            //update database
+            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+            mDatabase.child("users").child(MainActivity.currentLoggedUser.getuid()).setValue(MainActivity.currentLoggedUser);
+            Toast.makeText(getApplicationContext(), R.string.profileUpdateSucess, Toast.LENGTH_SHORT).show();
+
+        }else if(arg0 == getView().findViewById(R.id.imageUploaded)){
+                Intent gallaryIntetnt = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(gallaryIntetnt,RESULT_LOAD_IMAGE);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if((requestCode == RESULT_LOAD_IMAGE) && (resultCode == Activity.RESULT_OK) && (data != null)){
+            Uri selectedImage = data.getData();
+            imageToUpload.setImageURI(selectedImage);
+        }
     }
 }

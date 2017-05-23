@@ -30,6 +30,7 @@ public class TaramtiDamUser {
     private String bloodType;
     private int rankLevel;
     private Date lastDonation;
+    private String imagestring;
     private int donationsCounter;
 
     public TaramtiDamUser(){}
@@ -43,6 +44,7 @@ public class TaramtiDamUser {
         this.bloodType = "";
         this.completedRegisteration = false;
         this.lastDonation = null;
+        this.imagestring = "";
         this.donationsCounter = 0;
     }
 
@@ -55,6 +57,7 @@ public class TaramtiDamUser {
         this.bloodType = "";
         this.completedRegisteration = false;
         this.lastDonation = null;
+        this.imagestring = "";
         this.donationsCounter = 0;
     }
 
@@ -89,6 +92,9 @@ public class TaramtiDamUser {
     public void setAddress2(String address) {
         this.address2 = address;
     }
+
+    public void setUserImage(String strimg) { this.imagestring = strimg;}
+    public String getUserImage(){return imagestring;}
 
     public String getBloodType() {
         return bloodType;
