@@ -4,6 +4,8 @@
 
     <color name="colorPrimary">#F44336</color>
     <color name="colorPrimaryDark">#D32F2F</color>
+    <color name="colorPrimarylight">#22356e</color>
+
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground2">#fef9f6</color>
     <color name="windowBackground">#eceff8</color>

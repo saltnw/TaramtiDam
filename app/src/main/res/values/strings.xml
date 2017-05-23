@@ -41,10 +41,10 @@
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>
         <item>@string/nav_item_myprofile</item>
-        <item>@string/nav_item_notifications</item>
-        <item>@string/nav_item_Navigation</item>
         <item>@string/nav_item_just_donated</item>
         <item>@string/nav_item_donate_now</item>
+        <!--<item>@string/nav_item_notifications</item>-->
+        <!--<item>@string/nav_item_Navigation</item>-->
     </string-array>
 
     <string name="title_messages">Messages</string>

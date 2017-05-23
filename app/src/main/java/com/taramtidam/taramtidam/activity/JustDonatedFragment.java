@@ -2,6 +2,7 @@ package com.taramtidam.taramtidam.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -25,10 +26,18 @@ import java.util.Date;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
+//twitter share
+import io.fabric.sdk.android.Fabric;
+import com.twitter.sdk.android.tweetcomposer.TweetComposer;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.tweetcomposer.TweetComposer;
+
 
 public class JustDonatedFragment extends Fragment implements View.OnClickListener {
 
     Button facebookBtn;
+    Button twitterBtn;
     int prevRank;
 
 
@@ -60,6 +69,10 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
 
         }
 
+        //twitter share
+        TwitterAuthConfig authConfig =  new TwitterAuthConfig("consumerKey", "consumerSecret");
+        Fabric.with(getActivity(), new TwitterCore(authConfig), new TweetComposer());
+
 
         //Date d = MainActivity.currentLoggedUser.getLastDonation();
         //DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
@@ -79,6 +92,10 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
         //set facebook share button onCliclListener
         facebookBtn = (Button) rootView.findViewById(R.id.facebookButton);
         facebookBtn.setOnClickListener(this);
+
+        //set facebook share button onCliclListener
+        twitterBtn = (Button) rootView.findViewById(R.id.twitterButton);
+        twitterBtn.setOnClickListener(this);
 
         Integer images[] = {R.drawable.rank0,R.drawable.rank1,R.drawable.rank2,R.drawable.rank3,R.drawable.rank4};
         int user_rank = MainActivity.currentLoggedUser.getRankLevel();
@@ -130,10 +147,10 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
 
 
     public static boolean isLegalDonatoin(){
-
+        return true;
         // check date margin
         //
-        return isLegalDate();
+        //return isLegalDate();
 
 
         //check distance
@@ -143,6 +160,7 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
 
     public void onClick(View arg0) {
 
+
         int buttonId = arg0.getId();
 
         if (buttonId == R.id.facebookButton) {
@@ -151,6 +169,18 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
             Intent facebook_share_intent = new Intent(getActivity(), ShareOnFacebook.class);
             getActivity().startActivity(facebook_share_intent);
 
+        }
+
+        if (buttonId == R.id.twitterButton){
+            Log.d("Just Donated FRAGMENT","twitter button pressed");
+            //String twitterUri = "http://m.twitter.com/?status=";
+            //String marketUri = Uri.encode("I have just donated blood using TarmatiDam App");
+            //Intent shareOnTwitterIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(twitterUri + marketUri));
+            //startActivity(shareOnTwitterIntent);
+
+            TweetComposer.Builder builder = new TweetComposer.Builder(getActivity())
+                    .text("I just donated blood using TarmtiDam app. Go Get It!");
+            builder.show();
         }
     }
 

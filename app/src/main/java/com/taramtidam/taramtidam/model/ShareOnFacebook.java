@@ -39,25 +39,29 @@ public class ShareOnFacebook extends Activity {
                     @Override
                     public void onSuccess(Sharer.Result result) {
                         Log.d(TAG, "onSuccess: ");
-                        Toast.makeText(ShareOnFacebook.this, "onSuccess", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ShareOnFacebook.this, "Posted Successfully", Toast.LENGTH_SHORT).show();
+                        finish();
                     }
 
                     @Override
                     public void onCancel() {
                         Log.d(TAG, "onCancel: ");
-                        Toast.makeText(ShareOnFacebook.this, "onCancel", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(ShareOnFacebook.this, "", Toast.LENGTH_SHORT).show();
+                        finish();
                     }
 
                     @Override
                     public void onError(FacebookException error) {
                         Log.d(TAG, "onError: ");
                         Toast.makeText(ShareOnFacebook.this, "onError" + error.toString(), Toast.LENGTH_SHORT).show();
+                        finish();
+
                     }
                 });
 
         if (ShareDialog.canShow(ShareLinkContent.class)) {
             ShareLinkContent linkContent = new ShareLinkContent.Builder()
-                    .setContentTitle("Get Tarmati ")
+                    .setContentTitle("Get Tarmati Dam App")
                     .setContentDescription("תרמתי דם! כל תרומת דם מצילה חיים")
                     .setContentUrl(Uri.parse("https://www.mdais.org"))
                     .build();
