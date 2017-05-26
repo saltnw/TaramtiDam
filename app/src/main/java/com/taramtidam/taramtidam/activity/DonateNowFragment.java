@@ -1,7 +1,9 @@
 package com.taramtidam.taramtidam.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,13 +23,17 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.taramtidam.taramtidam.R;
 
-public class DonateNowFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class DonateNowFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
     GoogleApiClient mGoogleApiClient;
+    TextView addressTV;
+    TextView hoursTV;
+    TextView informationTV;
 
 
     @Override
@@ -60,6 +66,7 @@ public class DonateNowFragment extends Fragment implements GoogleApiClient.Conne
     public void onStart(){
         mGoogleApiClient.connect();
         super.onStart();
+        ((Button) getView().findViewById(R.id.naviagteButton)).setOnClickListener(this);
 
     }
 
@@ -70,11 +77,27 @@ public class DonateNowFragment extends Fragment implements GoogleApiClient.Conne
 
     }
 
-    @Override
+    public void onClick(View arg0) {
+
+        // Create a Uri from an intent string. Use the result to create an Intent.
+        Uri intentUri = Uri.parse("google.navigation:q="+addressTV.getText()+"&mode=w");
+
+        // Create an Intent from intentUri. Set the action to ACTION_VIEW
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, intentUri);
+
+        // Make the Intent explicit by setting the Google Maps package
+        mapIntent.setPackage("com.google.android.apps.maps");
+
+        // Attempt to start an activity that can handle the Intent
+        startActivity(mapIntent);
+
+    }
+
+        @Override
     public void onConnected(Bundle connectionHint) {
-        TextView addressTV = (TextView)getView().findViewById(R.id.addressTextView);
-        TextView hoursTV = (TextView)getView().findViewById(R.id.hoursTextView);
-        TextView informationTV = (TextView)getView().findViewById(R.id.infoTextView);
+        addressTV = (TextView)getView().findViewById(R.id.addressTextView);
+        hoursTV = (TextView)getView().findViewById(R.id.hoursTextView);
+        informationTV = (TextView)getView().findViewById(R.id.infoTextView);
         String openings_hours;
         String info;
         String address;

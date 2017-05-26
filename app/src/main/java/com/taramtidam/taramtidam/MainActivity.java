@@ -300,6 +300,11 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
             return true;
         }
 
+        if(id == R.id.action_search){
+            Toast.makeText(getApplicationContext(), "settings action is selected!", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -338,14 +343,6 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                     title = getString(R.string.title_myprofile);
                     break;
                 case 2:
-                    fragment = new EmptyFragment();
-                    title = getString(R.string.title_messages);
-                    break;
-                case 3:
-                    fragment = new NavigationFragment();
-                    title = getString(R.string.title_navigation);
-                    break;
-                case 4:
                     if (JustDonatedFragment.isLegalDonatoin()) {
                         //fragment = new JustDonatedFragment();
                         //title = getString(R.string.title_just_donated);
@@ -357,9 +354,18 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                     }
                     break;
 
-                case 5:
+                case 3:
                     fragment = new DonateNowFragment();
                     title = getString(R.string.title_donate_now);
+                    break;
+
+                case 4:
+                    fragment = new EmptyFragment();
+                    title = getString(R.string.title_messages);
+                    break;
+                case 5:
+                    fragment = new NavigationFragment();
+                    title = getString(R.string.title_navigation);
                     break;
                 default:
                     break;

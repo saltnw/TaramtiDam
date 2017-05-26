@@ -151,18 +151,18 @@
         app:layout_constraintVertical_bias="0.531" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/naviagteButton"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="166dp"
         android:layout_height="63dp"
-        style="?android:attr/borderlessButtonStyle"
 
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="30dp"
         android:background="@drawable/navigatebtnbackground"
-        app:layout_constraintTop_toBottomOf="@+id/inforamtionView"
-        android:layout_marginRight="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/inforamtionView" />
 
 
 </android.support.constraint.ConstraintLayout>
