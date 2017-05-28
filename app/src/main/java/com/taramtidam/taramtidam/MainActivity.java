@@ -374,6 +374,8 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container_body, fragment);
             fragmentTransaction.commit();

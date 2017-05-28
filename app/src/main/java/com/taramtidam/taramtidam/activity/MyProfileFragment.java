@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -34,7 +35,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.taramtidam.taramtidam.MainActivity;
 import com.taramtidam.taramtidam.R;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,9 +77,29 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         saveBtn = (Button) rootView.findViewById(R.id.saveProfileButton);
         saveBtn.setOnClickListener(this);
 
+        CheckBox CB = (CheckBox) rootView.findViewById(R.id.sendMailCB);
+        CB.setOnClickListener(this);
+
         //imageToUpload = (ImageView)  rootView.findViewById(R.id.imageUploaded);
         //imageToUpload.setOnClickListener(this);
         rootView.setOnClickListener(this);
+
+        //read file
+        try {
+            FileInputStream fis = getApplicationContext().openFileInput("user data");
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader bufferedReader = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+            Toast.makeText(getApplicationContext(), sb.toString(), Toast.LENGTH_SHORT).show();    //TODO remove toast before release
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();    //TODO remove toast before release
+            // e.printStackTrace();
+        }
+
 
         //update view with ther user info(profile)
         if (MainActivity.currentLoggedUser != null) {
@@ -81,21 +107,20 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
             ((TextView) rootView.findViewById(R.id.fullnameLabel)).setText(MainActivity.currentLoggedUser.getFullName());
             ((AutoCompleteTextView) rootView.findViewById(R.id.homeEditText)).setText(MainActivity.currentLoggedUser.getAddress1());
             ((AutoCompleteTextView) rootView.findViewById(R.id.workEditText)).setText(MainActivity.currentLoggedUser.getAddress2());
-
+            ((CheckBox) rootView.findViewById(R.id.sendMailCB)).setChecked((MainActivity.currentLoggedUser.getMailingBool()));
             //set last donation text accroding to the user
-            if (MainActivity.currentLoggedUser.getDonationsCounter() != 0){
-                ((TextView)rootView.findViewById(R.id.lastDonationTextView)).setText(MainActivity.currentLoggedUser.getLastDonationInString());
-            }
-            else{
-                ((TextView)rootView.findViewById(R.id.lastDonationTextView)).setText("no donation yet");
+            if (MainActivity.currentLoggedUser.getDonationsCounter() != 0) {
+                ((TextView) rootView.findViewById(R.id.lastDonationTextView)).setText(MainActivity.currentLoggedUser.getLastDonationInString());
+            } else {
+                ((TextView) rootView.findViewById(R.id.lastDonationTextView)).setText("no donation yet");
 
             }
 
             //load imgae accroding to to the user
-            Integer images[] = {R.drawable.rank0,R.drawable.rank1,R.drawable.rank2,R.drawable.rank3,R.drawable.rank4};
+            Integer images[] = {R.drawable.rank0, R.drawable.rank1, R.drawable.rank2, R.drawable.rank3, R.drawable.rank4};
             int user_rank = MainActivity.currentLoggedUser.getRankLevel();
             //display the correct rank image
-            ImageView rank_image_view = (ImageView)rootView.findViewById(R.id.rankImageProfile);
+            ImageView rank_image_view = (ImageView) rootView.findViewById(R.id.rankImageProfile);
             rank_image_view.setImageResource(images[user_rank]);
 
            /* if( (MainActivity.currentLoggedUser.getUserImage()!=null) && (!MainActivity.currentLoggedUser.getUserImage().equals("")) ) {
@@ -104,7 +129,6 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
                 imageToUpload.setImageBitmap(decodedByte);
             }*/
         }
-
 //        //set onClicklListener
 //        updateBtn = (Button) rootView.findViewById(R.id.updateButton);
 //          updateBtn.setOnClickListener(this);
@@ -113,6 +137,11 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         return rootView;
     }
 
+    public void selectItem(View view){
+        if (MainActivity.currentLoggedUser != null) {
+            MainActivity.currentLoggedUser.setMailingBool(((CheckBox) view).isChecked());
+        }
+    }
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -131,6 +160,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
             addItemsOnSpinner();
         }
     }
+
 
     public void addItemsOnSpinner() {
         bloodSpinner = (Spinner) getView().findViewById(R.id.bloodSpinner);
@@ -151,8 +181,8 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
     }
 
     public void onClick(View arg0) {
-        getView().findViewById(R.id.homeEditText).setFocusable(false);
-        getView().findViewById(R.id.workEditText).setFocusable(false);
+        //getView().findViewById(R.id.homeEditText).setFocusable(false);
+        //getView().findViewById(R.id.workEditText).setFocusable(false);
 
         if (arg0 == getView().findViewById(R.id.saveProfileButton)) {
             //save button pressed :
@@ -182,12 +212,30 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
             mDatabase.child("users").child(MainActivity.currentLoggedUser.getuid()).setValue(MainActivity.currentLoggedUser);
             Toast.makeText(getApplicationContext(), R.string.profileUpdateSucess, Toast.LENGTH_SHORT).show();
 
-             }
-            // else if(arg0 == getView().findViewById(R.id.imageUploaded)){
-            //         Intent gallaryIntetnt = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            //         startActivityForResult(gallaryIntetnt,RESULT_LOAD_IMAGE);
-            // }
+            //write to file
+            //File file = new File(getApplicationContext().getFilesDir(), "userdata");
+            String filename = "user data";
+            String string = homeAddressET.getText().toString() + "\n" + workAddressET.getText().toString() + "\n" + bloodType.getSelectedItem().toString() + "\n";
+            FileOutputStream outputStream;
+            try {
+                outputStream = getApplicationContext().openFileOutput(filename, getApplicationContext().MODE_PRIVATE);
+                outputStream.write(string.getBytes());
+                outputStream.close();
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_SHORT).show();    //TODO remove toast before release
+               // e.printStackTrace();
+            }
+            //
         }
+        else if (arg0 == getView().findViewById(R.id.sendMailCB)) {
+            //update currentLoggedUser
+            MainActivity.currentLoggedUser.setMailingBool(((CheckBox) arg0).isChecked());
+            //update database
+            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+            mDatabase.child("users").child(MainActivity.currentLoggedUser.getuid()).setValue(MainActivity.currentLoggedUser);
+        }
+
+    }
 
 
     //@Override
