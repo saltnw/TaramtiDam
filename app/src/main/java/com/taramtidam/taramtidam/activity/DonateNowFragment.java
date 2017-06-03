@@ -1,10 +1,13 @@
 package com.taramtidam.taramtidam.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,7 +66,7 @@ public class DonateNowFragment extends Fragment implements GoogleApiClient.Conne
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         mGoogleApiClient.connect();
         super.onStart();
         ((Button) getView().findViewById(R.id.naviagteButton)).setOnClickListener(this);
@@ -71,7 +74,7 @@ public class DonateNowFragment extends Fragment implements GoogleApiClient.Conne
     }
 
     @Override
-    public void onStop(){
+    public void onStop() {
         mGoogleApiClient.disconnect();
         super.onStop();
 
@@ -80,7 +83,7 @@ public class DonateNowFragment extends Fragment implements GoogleApiClient.Conne
     public void onClick(View arg0) {
 
         // Create a Uri from an intent string. Use the result to create an Intent.
-        Uri intentUri = Uri.parse("google.navigation:q="+addressTV.getText()+"&mode=w");
+        Uri intentUri = Uri.parse("google.navigation:q=" + addressTV.getText() + "&mode=w");
 
         // Create an Intent from intentUri. Set the action to ACTION_VIEW
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, intentUri);
@@ -93,17 +96,27 @@ public class DonateNowFragment extends Fragment implements GoogleApiClient.Conne
 
     }
 
-        @Override
+    @Override
     public void onConnected(Bundle connectionHint) {
-        addressTV = (TextView)getView().findViewById(R.id.addressTextView);
-        hoursTV = (TextView)getView().findViewById(R.id.hoursTextView);
-        informationTV = (TextView)getView().findViewById(R.id.infoTextView);
+        addressTV = (TextView) getView().findViewById(R.id.addressTextView);
+        hoursTV = (TextView) getView().findViewById(R.id.hoursTextView);
+        informationTV = (TextView) getView().findViewById(R.id.infoTextView);
         String openings_hours;
         String info;
         String address;
 
         int nearsetStationIndex;
         //Log.d("ASAF","google api connected!");
+        if (ActivityCompat.checkSelfPermission(this.getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getActivity().getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient); //TODO to check it with lilach
         if (mLastLocation != null) {
             Log.d("Donate Now Fragment","mLastLocation != NULL");
@@ -111,7 +124,12 @@ public class DonateNowFragment extends Fragment implements GoogleApiClient.Conne
             //mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
             //mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
             //Log.d("ASAF", "the are :"+Integer.toString(MainActivity.mobiles.size()) + " mobiles");
-
+            if(Distances.findNearestBloodMobile(mLastLocation.getLatitude() ,mLastLocation.getLongitude(),MainActivity.mobiles )==0){
+                addressTV.setText("No Active Station Available");
+                hoursTV.setText("N/A");
+                informationTV.setText("N/A");
+                return;
+            }
             nearsetStationIndex = Distances.findNearestBloodMobile(mLastLocation.getLatitude() ,mLastLocation.getLongitude(),MainActivity.mobiles );
             Log.d("Donate Now Fragment", "The closest station index is: "+ Integer.toString(nearsetStationIndex) );
             Log.d("Donate Now Fragment","The Closest station is: "+ MainActivity.mobiles.get(nearsetStationIndex).getAddress() +", " +MainActivity.mobiles.get(nearsetStationIndex).getCity());
