@@ -8,16 +8,16 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-        import android.os.Bundle;
-        import android.support.annotation.NonNull;
-        import android.support.v7.app.AppCompatActivity;
-        import android.util.Log;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
-        import android.widget.Toast;
+import android.widget.Toast;
 
 
-        import java.util.Arrays;
-        import java.util.Date;
+import java.util.Arrays;
+import java.util.Date;
 
 public class TaramtiDamUser {
 
@@ -32,6 +32,7 @@ public class TaramtiDamUser {
     private Date lastDonation;
     private String imagestring;
     private int donationsCounter;
+    private boolean sendMails;
 
     public TaramtiDamUser(){}
 
@@ -46,6 +47,7 @@ public class TaramtiDamUser {
         this.lastDonation = null;
         this.imagestring = "";
         this.donationsCounter = 0;
+        this.sendMails = true;
     }
 
     public TaramtiDamUser(String uid, String fullName,String email) {
@@ -59,6 +61,7 @@ public class TaramtiDamUser {
         this.lastDonation = null;
         this.imagestring = "";
         this.donationsCounter = 0;
+        this.sendMails = true;
     }
 
     public boolean isCompletedRegisteration() {
@@ -126,6 +129,14 @@ public class TaramtiDamUser {
         this.lastDonation = lastDonation;
     }
 
+
+    public boolean getMailingBool() {
+        return sendMails;
+    }
+
+    public void setMailingBool(boolean send) {
+        this.sendMails = send;
+    }
 
     public String getEmail() {
         return email;
