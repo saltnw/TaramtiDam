@@ -3,6 +3,7 @@ package com.taramtidam.taramtidam.activity;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
@@ -13,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -27,6 +30,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import com.bumptech.glide.module.*;
+import com.bumptech.glide.*;
+import android.graphics.drawable.Drawable;
+import  android.content.Context;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.text.Html;
+import android.view.View;
 import android.widget.TextView;
 
 import com.taramtidam.taramtidam.R;
@@ -37,6 +51,10 @@ public class DonateNowFragment extends Fragment implements GoogleApiClient.Conne
     TextView addressTV;
     TextView hoursTV;
     TextView informationTV;
+    ImageView addressIV;
+    ImageView hoursIV;
+    ImageView informationIV;
+
 
 
     @Override
@@ -60,13 +78,30 @@ public class DonateNowFragment extends Fragment implements GoogleApiClient.Conne
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_donatenow, container, false);
 
+        addressIV = (ImageView)rootView.findViewById(R.id.adressIcon);
+        hoursIV = (ImageView)rootView.findViewById(R.id.hoursIcon);
+        informationIV = (ImageView)rootView.findViewById(R.id.infoIcon);
+
+        Glide.with(getContext()).load(R.drawable.locationicon).into(addressIV);
+        Glide.with(getContext()).load(R.drawable.hoursicon).into(hoursIV);
+        Glide.with(getContext()).load(R.drawable.sakitdamicon).into(informationIV);
+
+       /* Button a = (Button) rootView.findViewById(R.id.naviagteButton);
+        Glide.with(getContext()).load(R.drawable.navigatebtnbackground).into(new SimpleTarget<Bitmap>(200, 200) {
+            @Override
+            public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
+                // Do something with bitmap here.
+            }
+        });*/
+
+
 
         // Inflate the layout for this fragment
         return rootView;
     }
 
     @Override
-    public void onStart() {
+    public void onStart(){
         mGoogleApiClient.connect();
         super.onStart();
         ((Button) getView().findViewById(R.id.naviagteButton)).setOnClickListener(this);
@@ -74,7 +109,7 @@ public class DonateNowFragment extends Fragment implements GoogleApiClient.Conne
     }
 
     @Override
-    public void onStop() {
+    public void onStop(){
         mGoogleApiClient.disconnect();
         super.onStop();
 
@@ -83,7 +118,7 @@ public class DonateNowFragment extends Fragment implements GoogleApiClient.Conne
     public void onClick(View arg0) {
 
         // Create a Uri from an intent string. Use the result to create an Intent.
-        Uri intentUri = Uri.parse("google.navigation:q=" + addressTV.getText() + "&mode=w");
+        Uri intentUri = Uri.parse("google.navigation:q="+addressTV.getText()+"&mode=w");
 
         // Create an Intent from intentUri. Set the action to ACTION_VIEW
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, intentUri);
@@ -96,7 +131,7 @@ public class DonateNowFragment extends Fragment implements GoogleApiClient.Conne
 
     }
 
-    @Override
+        @Override
     public void onConnected(Bundle connectionHint) {
         addressTV = (TextView) getView().findViewById(R.id.addressTextView);
         hoursTV = (TextView) getView().findViewById(R.id.hoursTextView);
