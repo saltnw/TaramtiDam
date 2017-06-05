@@ -2,6 +2,7 @@
 var NodeGeocoder = require("node-geocoder");
 var options = {
 provider: "google",
+ apiKey: "AIzaSyBOlPRJ_fid7C11EUcwxSggWn3lprjcOP0"
 };
 var geocoder = NodeGeocoder(options);
 var moment = require("moment")
@@ -33,8 +34,8 @@ function onDonationPageReceived(page)
      var children = $(this).children();
      var dateItem = children.eq(0);
      var cityItem = children.eq(1);
-     var addressItem = children.eq(2);
-     var descriptionItem = children.eq(3);
+     var addressItem = children.eq(3);
+     var descriptionItem = children.eq(2);
      var startTimeItem = children.eq(5);
      var endTimeItem = children.eq(6);
      if (i==0 || !dateItem.text().trim()) return;

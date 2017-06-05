@@ -26,8 +26,9 @@ public class Distances {
         if (mobilesList == null){
             return -1;
         }
-
-        minDistance = distanceBetweenTwoCords(myLatitude, mobilesList.get(0).getLatitude(), myLongitude, mobilesList.get(0).getLongitude(), 0.0, 0.0);
+        if(!(mobilesList.isEmpty())){
+            minDistance = distanceBetweenTwoCords(myLatitude, mobilesList.get(0).getLatitude(), myLongitude, mobilesList.get(0).getLongitude(), 0.0, 0.0);
+        }
         nearestBloodMobileIndex = 0;
 
         for (int i=0; i<mobilesList.size(); i++){

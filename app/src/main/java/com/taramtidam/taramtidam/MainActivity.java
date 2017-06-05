@@ -3,6 +3,8 @@ package com.taramtidam.taramtidam;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -62,10 +65,9 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
     /* Geofencing */
     private static final int PERMISSIONS_REQUEST_FINE_LOCATION = 111;
-    private GoogleApiClient mClient;
-    private Geofencing mGeofencing;
+    //private GoogleApiClient mClient;
+    //private Geofencing mGeofencing;
     public static List<MDAMobile> mobiles =new ArrayList<>();
-    private boolean isFinished = false;
 
     /* UI vars */
     private Toolbar mToolbar; // main upper toolbar
@@ -73,16 +75,13 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
     Fragment fragment = null;
     String title;
-
+    private Intent mServiceIntent;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //AuthUI.getInstance().signOut(this);   // logout
-
-
-
 
         setContentView(R.layout.activity_main);
 
@@ -165,15 +164,15 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_REQUEST_FINE_LOCATION);
         }
-        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        Log.d("FENCE","Initializing Google API Client");
+        //NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        /*Log.d("FENCE","Initializing Google API Client");
         mClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .addApi(Places.GEO_DATA_API)//todo remove?
                 .enableAutoManage(this, this)
-                .build();
+                .build();*/
 
         Log.d("FENCE","Get reference to Firebase Database at MDA");
         // Get a reference to our MDA mobiles
@@ -199,8 +198,8 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                     currMda.setTime(nextMDALoc.child("start time").getValue().toString());
                     currMda.setEndTime(nextMDALoc.child("end time").getValue().toString());
                     currMda.setDate(nextMDALoc.child("date").getValue().toString());
+                    currMda.setDescription(nextMDALoc.child("description").getValue().toString());
                     currMda.setId(String.valueOf(i));
-
                     mobiles.add(currMda);
 
                     System.out.println("\n");
@@ -208,11 +207,10 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                     i++;
                 }
                 Log.d("FENCE", "Done updating mobiles");
-                System.out.println("done");
-                Log.d("FENCE","Going to update geofences list to match new MDA mobiles list");
-                mGeofencing.updateGeofencesList(mobiles);
-                Log.d("FENCE","Going to register all geofences per all MDA mobiles");
-                mGeofencing.registerAllGeofences();
+                //Log.d("FENCE","Going to update geofences list to match new MDA mobiles list");
+                //mGeofencing.updateGeofencesList(mobiles);
+                //Log.d("FENCE","Going to register all geofences per all MDA mobiles");
+                //mGeofencing.registerAllGeofences();
 
             }
 
@@ -235,14 +233,15 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
     @Override
     protected void onStart(){
-        Log.d("FENCE","Connecting Google API Client");
-        mClient.connect();//TODO put it here for now. dosent help
-        Log.d("FENCE","Initialize Geofencing object");
-        mGeofencing = new Geofencing(this, mClient);
+        //Log.d("FENCE","Connecting Google API Client");
+        //mClient.connect();//TODO put it here for now. dosent help
+        //Log.d("FENCE","Initialize Geofencing object");
+        //mGeofencing = new Geofencing(this, mClient);
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
-
-
+      //  LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(ourReceiver, new IntentFilter(Constants.BROADCAST_ACTION));
+        mServiceIntent = new Intent(this, OurPullService.class);
+        this.startService(mServiceIntent);
     }
 
     @Override
