@@ -198,8 +198,8 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                     currMda.setTime(nextMDALoc.child("start time").getValue().toString());
                     currMda.setEndTime(nextMDALoc.child("end time").getValue().toString());
                     currMda.setDate(nextMDALoc.child("date").getValue().toString());
+                    currMda.setDescription(nextMDALoc.child("description").getValue().toString());
                     currMda.setId(String.valueOf(i));
-
                     mobiles.add(currMda);
 
                     System.out.println("\n");

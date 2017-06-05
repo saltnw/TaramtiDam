@@ -13,6 +13,7 @@ public class MDAMobile {
     private String date;
     private String time;
     private String endTime;
+    private String description;
 
     public MDAMobile(double latitude, double longitude, String id) {
         this.latitude = latitude;
@@ -20,7 +21,7 @@ public class MDAMobile {
         this.id = id;
     }
 
-    public MDAMobile(double latitude, double longitude, String id, String address, String city, String date, String time, String endTime) {
+    public MDAMobile(double latitude, double longitude, String id, String address, String city, String date, String time, String endTime, String description) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.id = id;
@@ -29,6 +30,7 @@ public class MDAMobile {
         this.date = date;
         this.time = time;
         this.endTime = endTime;
+        this.description = description;
     }
 
     public MDAMobile() {
@@ -92,6 +94,14 @@ public class MDAMobile {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
