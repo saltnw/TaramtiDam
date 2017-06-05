@@ -124,7 +124,7 @@ public class DonateNowFragment extends Fragment implements GoogleApiClient.Conne
             //mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
             //mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
             //Log.d("ASAF", "the are :"+Integer.toString(MainActivity.mobiles.size()) + " mobiles");
-            if(Distances.findNearestBloodMobile(mLastLocation.getLatitude() ,mLastLocation.getLongitude(),MainActivity.mobiles )==0){
+            if(Distances.findNearestBloodMobile(mLastLocation.getLatitude() ,mLastLocation.getLongitude(),MainActivity.mobiles )==-1){
                 addressTV.setText("No Active Station Available");
                 hoursTV.setText("N/A");
                 informationTV.setText("N/A");

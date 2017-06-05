@@ -29,11 +29,15 @@ import android.util.Log;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import com.google.android.gms.location.GeofencingEvent;
+import com.google.android.gms.location.LocationServices;
+
 import java.text.ParseException;
 
 public class GeofenceBroadcastReceiver extends BroadcastReceiver {
@@ -95,6 +99,10 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
         if(local.getTime()>start.getTime() && local.getTime()<end.getTime()) {
             sendNotification(context, details[0]);
             Log.d("FENCE","Notification was sent");
+//            List toRemove= new ArrayList();//TODO remove and handle double notifications
+//            toRemove.add(MDANear);
+        //    LocationServices.GeofencingApi.removeGeofences(Geofencing.getmGoogleApiClient() , toRemove);
+           // Log.d("FENCE", "Removed");
         }
         else {
             Log.d("FENCE", "Not in operating hours. Notification was not sent");
