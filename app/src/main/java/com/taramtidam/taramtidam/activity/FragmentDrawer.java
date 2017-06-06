@@ -13,7 +13,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.taramtidam.taramtidam.R;
 import com.taramtidam.taramtidam.adapter.NavigationDrawerAdapter;
 import com.taramtidam.taramtidam.model.NavDrawerItem;
@@ -113,6 +115,10 @@ public class FragmentDrawer extends Fragment {
                 toolbar.setAlpha(1 - slideOffset / 2);
             }
         };
+
+        //load the image im the drawer
+        ImageView tipat_dam_image_view2 = (ImageView)getView().findViewById(R.id.drawerImageView);
+        Glide.with(getContext()).load(R.drawable.blooddrop).into(tipat_dam_image_view2);
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerLayout.post(new Runnable() {

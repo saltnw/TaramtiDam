@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -17,8 +18,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,6 +50,11 @@ import com.taramtidam.taramtidam.activity.JustDonatedFragment;
 import com.taramtidam.taramtidam.activity.MyProfileFragment;
 import com.taramtidam.taramtidam.activity.NavigationFragment;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +77,9 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
     //private Geofencing mGeofencing;
     public static List<MDAMobile> mobiles =new ArrayList<>();
 
+    /* Notification flag on/off */
+    private boolean geofencesNoticiationOn;
+
     /* UI vars */
     private Toolbar mToolbar; // main upper toolbar
     private FragmentDrawer drawerFragment;
@@ -76,6 +87,8 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
     Fragment fragment = null;
     String title;
     private Intent mServiceIntent;
+
+
 
 
     @Override
@@ -100,6 +113,40 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
         displayView(0);         // display the first navigation drawer view on app launch
 
+        //read notification settings from file to geofenceNotification
+        try {
+            FileInputStream fis = getApplicationContext().openFileInput("geofencesNotification");
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader bufferedReader = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            //Log.d("NotificationFlag", bufferedReader.readLine());
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+            Log.d("NotificationFlag", "File content: "+sb.toString());
+
+            if (sb.toString().contains("OFF")){
+                geofencesNoticiationOn = false;
+                Log.d("NotificationFlag", "Notification settings read from file and now set to OFF");
+
+
+            }
+            else{
+                geofencesNoticiationOn = true;
+                Log.d("NotificationFlag", "Notification settings read from file and now set to ON");
+
+            }
+
+        }
+        catch (FileNotFoundException e){
+            geofencesNoticiationOn = true;
+            Log.d("NotificationFlag", "Notification settings read from file and now set to ON");
+        }
+        catch (Exception e) {
+            Log.d("NotificationFlag", "Error reading from file"+e.toString());
+
+        }
 
 
         /* ---> Firebase-AUTH STUFF GOES HERE < --- */
@@ -242,6 +289,10 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
       //  LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(ourReceiver, new IntentFilter(Constants.BROADCAST_ACTION));
         mServiceIntent = new Intent(this, OurPullService.class);
         this.startService(mServiceIntent);
+
+
+
+
     }
 
     @Override
@@ -283,7 +334,10 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         return true;
+
+
     }
 
     /* UI function */
@@ -300,7 +354,71 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
         }
 
         if(id == R.id.action_search){
-            Toast.makeText(getApplicationContext(), "settings action is selected!", Toast.LENGTH_SHORT).show();
+            //noticiationon or off button was pressed
+
+            if (geofencesNoticiationOn == true){
+                // change flag
+                geofencesNoticiationOn = false;
+
+                //write settings to file
+                String filename = "geofencesNotification";
+                String string = "OFF";
+                FileOutputStream outputStream;
+                try {
+                    outputStream = getApplicationContext().openFileOutput(filename, getApplicationContext().MODE_PRIVATE);
+                    outputStream.write(string.getBytes());
+                    outputStream.close();
+                } catch (Exception e) {
+                    // e.printStackTrace();
+                    Log.d("NotificationFlag", "Erroe writing notification setting to file");
+                }
+
+
+                //change image
+                ActionMenuItemView notificationIcon = (ActionMenuItemView)findViewById(R.id.action_search);
+                Drawable myIcon = getResources().getDrawable( R.drawable.ic_action_notificationoff);
+                notificationIcon.setIcon(myIcon);
+
+                //show message to user
+                Toast t = Toast.makeText(getApplicationContext(), "notification are off", Toast.LENGTH_SHORT);
+                t.setGravity(Gravity.TOP, 0, 0);
+                t.show();
+
+                Log.d("NotificationFlag", "Notification set to off");
+
+            }
+            else{
+                //change flag
+                geofencesNoticiationOn = true;
+
+                //write settings to file
+                String filename = "geofencesNotification";
+                String string = "ON";
+                FileOutputStream outputStream;
+                try {
+                    outputStream = getApplicationContext().openFileOutput(filename, getApplicationContext().MODE_PRIVATE);
+                    outputStream.write(string.getBytes());
+                    outputStream.close();
+                } catch (Exception e) {
+                    // e.printStackTrace();
+                    Log.d("NotificationFlag", "Erroe writing notification setting to file");
+                }
+
+                //change image
+                ActionMenuItemView notificationIcon = (ActionMenuItemView)findViewById(R.id.action_search);
+                Drawable myIcon = getResources().getDrawable( R.drawable.ic_action_notificationon);
+                notificationIcon.setIcon(myIcon);
+
+                //show message to user
+                Toast t = Toast.makeText(getApplicationContext(), "notification are on", Toast.LENGTH_SHORT);
+                t.setGravity(Gravity.TOP, 0, 0);
+                t.show();
+
+                Log.d("NotificationFlag", "Notification set to on");
+
+
+            }
+
             return true;
         }
 

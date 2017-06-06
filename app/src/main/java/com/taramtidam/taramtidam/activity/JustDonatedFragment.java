@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.taramtidam.taramtidam.MainActivity;
@@ -97,11 +98,15 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
         twitterBtn = (Button) rootView.findViewById(R.id.twitterButton);
         twitterBtn.setOnClickListener(this);
 
+        //load blood bag image
+        ImageView sakit_dam_image_view = (ImageView)rootView.findViewById(R.id.bloodCounterImgaeView);
+        Glide.with(getContext()).load(R.drawable.sakitdamicon).into(sakit_dam_image_view);
+
+        //display the correct rank image
         Integer images[] = {R.drawable.rank0,R.drawable.rank1,R.drawable.rank2,R.drawable.rank3,R.drawable.rank4};
         int user_rank = MainActivity.currentLoggedUser.getRankLevel();
-        //display the correct rank image
         ImageView rank_image_view = (ImageView)rootView.findViewById(R.id.rankImageView);
-        rank_image_view.setImageResource(images[user_rank]);
+        Glide.with(getContext()).load(images[user_rank]).into(rank_image_view);
 
         //display correct text above charcther image
         if (prevRank < MainActivity.currentLoggedUser.getRankLevel()){
@@ -116,6 +121,8 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
 
 
         return rootView;
+
+
     }
 
 
