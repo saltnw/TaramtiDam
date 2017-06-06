@@ -118,7 +118,7 @@ public class FragmentDrawer extends Fragment {
 
         //load the image im the drawer
         ImageView tipat_dam_image_view2 = (ImageView)getView().findViewById(R.id.drawerImageView);
-        Glide.with(getContext()).load(R.drawable.blooddrop).into(tipat_dam_image_view2);
+        Glide.with(getContext()).load(R.drawable.tddrawerlogo).into(tipat_dam_image_view2);
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerLayout.post(new Runnable() {
