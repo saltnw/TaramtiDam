@@ -57,6 +57,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="ilegallDonation">Unfortunately you are not legal to donate again right now</string>
-    <string name="auth_must_login_first">Please login to view this section</string>
+    <string name="auth_must_login_first">Please login</string>
 
 </resources>

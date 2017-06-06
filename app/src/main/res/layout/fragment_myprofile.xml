@@ -12,19 +12,20 @@
     tools:layout_editor_absoluteY="25dp"
     tools:layout_editor_absoluteX="0dp">
 
-    <!--<ImageView-->
-        <!--android:id="@+id/topPanelimageView"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="140dp"-->
-        <!--android:layout_marginEnd="8dp"-->
-        <!--android:layout_marginLeft="0dp"-->
-        <!--android:layout_marginRight="0dp"-->
-        <!--android:layout_marginStart="8dp"-->
-        <!--android:src="@drawable/rectangleviewprofile"-->
-        <!--app:layout_constraintHorizontal_bias="0.0"-->
-        <!--app:layout_constraintLeft_toLeftOf="parent"-->
-        <!--app:layout_constraintRight_toRightOf="parent"-->
-        <!--tools:layout_editor_absoluteY="0dp"></ImageView>-->
+    <ImageView
+        android:id="@+id/topPanelimageView"
+        android:layout_width="0dp"
+        android:layout_height="140dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/rectangleviewprofile"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="0dp"></ImageView>
 
     <TextView
         android:id="@+id/fullnameLabel"
@@ -73,8 +74,8 @@
         app:layout_constraintTop_toTopOf="@+id/imageView4"
         app:pacv_googleMapsApiKey="AIzaSyDt3us1woaV17XP3O9mRrkpEx-_IDhssU4"
         app:pacv_historyFile="@null" />
-        <!--app:layout_constraintTop_toTopOf="@+id/textView8"-->
-        <!--tools:layout_constraintRight_creator="1" />-->
+    <!--app:layout_constraintTop_toTopOf="@+id/textView8"-->
+    <!--tools:layout_constraintRight_creator="1" />-->
 
     <com.seatgeek.placesautocomplete.PlacesAutocompleteTextView
         android:id="@+id/homeEditText"

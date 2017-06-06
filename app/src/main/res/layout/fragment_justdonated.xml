@@ -86,15 +86,14 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginBottom="15dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageRatingView"
-        app:srcCompat="@drawable/blooddrop"
+        app:layout_constraintLeft_toLeftOf="@+id/imageRatingView"
+        app:layout_constraintRight_toRightOf="@+id/imageRatingView"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="@+id/imageRatingView"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="@+id/imageRatingView" />
+        tools:layout_constraintTop_creator="1" />
 
     <Button
         android:id="@+id/twitterButton"
@@ -136,11 +135,10 @@
         android:id="@+id/bloodCounterImgaeView"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginRight="40dp"
-        app:layout_constraintRight_toRightOf="@+id/GroupStateView"
-        app:srcCompat="@drawable/bloodcounter"
         app:layout_constraintBottom_toBottomOf="@+id/GroupStateView"
-        android:layout_marginBottom="10dp" />
+        app:layout_constraintRight_toRightOf="@+id/GroupStateView" />
 
     <TextView
         android:id="@+id/textView7"

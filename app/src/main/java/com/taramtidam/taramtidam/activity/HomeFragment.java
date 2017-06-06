@@ -5,16 +5,20 @@ package com.taramtidam.taramtidam.activity;
  */
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.view.menu.ActionMenuItemView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
 import com.firebase.ui.auth.AuthUI;
 import com.taramtidam.taramtidam.MainActivity;
@@ -39,6 +43,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
     }
 
@@ -72,6 +77,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             logoutbtn.setEnabled(true);
 
         }
+
+        //load tipat dam image
+        ImageView tipat_dam_image_view = (ImageView)rootView.findViewById(R.id.tipatDamImgaeView);
+        Glide.with(getContext()).load(R.drawable.blooddrop).into(tipat_dam_image_view);
+
+
+
+
 
         // Inflate the layout for this fragment
         return rootView;

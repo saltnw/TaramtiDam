@@ -82,6 +82,7 @@ public class DonateNowFragment extends Fragment implements GoogleApiClient.Conne
         hoursIV = (ImageView)rootView.findViewById(R.id.hoursIcon);
         informationIV = (ImageView)rootView.findViewById(R.id.infoIcon);
 
+        //load images
         Glide.with(getContext()).load(R.drawable.locationicon).into(addressIV);
         Glide.with(getContext()).load(R.drawable.hoursicon).into(hoursIV);
         Glide.with(getContext()).load(R.drawable.sakitdamicon).into(informationIV);
