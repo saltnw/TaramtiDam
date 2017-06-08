@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.taramtidam.taramtidam.MainActivity;
@@ -96,7 +97,31 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
             int user_rank = MainActivity.currentLoggedUser.getRankLevel();
             //display the correct rank image
             ImageView rank_image_view = (ImageView)rootView.findViewById(R.id.rankImageProfile);
-            rank_image_view.setImageResource(images[user_rank]);
+            //rank_image_view.setImageResource(images[user_rank]);
+            Glide.with(getContext()).load(images[user_rank]).into(rank_image_view);
+
+            /* load all the profile icon images: */
+            //Email icon
+            ImageView email_image_view = (ImageView)rootView.findViewById(R.id.emailImageView);
+            Glide.with(getContext()).load(R.drawable.emailicon).into(email_image_view);
+
+            //Blood type icon
+            ImageView blood_type_image_view = (ImageView)rootView.findViewById(R.id.bloddtypeImageView);
+            Glide.with(getContext()).load(R.drawable.bloodicon).into(blood_type_image_view);
+
+            //Home icon
+            ImageView home_address_image_view = (ImageView)rootView.findViewById(R.id.homeaddressImageView);
+            Glide.with(getContext()).load(R.drawable.homeicon).into(home_address_image_view);
+
+            //Work icon
+            ImageView work_address_image_view = (ImageView)rootView.findViewById(R.id.workaddressImageView);
+            Glide.with(getContext()).load(R.drawable.workicon).into(work_address_image_view);
+
+            //Last Donation icon
+            ImageView Last_donation_image_view = (ImageView)rootView.findViewById(R.id.lastdonationImageView);
+            Glide.with(getContext()).load(R.drawable.lastdonationicon).into(Last_donation_image_view);
+
+
 
            /* if( (MainActivity.currentLoggedUser.getUserImage()!=null) && (!MainActivity.currentLoggedUser.getUserImage().equals("")) ) {
                 byte[] decodedString = Base64.decode(MainActivity.currentLoggedUser.getUserImage(), Base64.DEFAULT);
