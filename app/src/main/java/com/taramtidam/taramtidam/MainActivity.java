@@ -652,6 +652,8 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
     }
 
+
+
     public Dialog showBloodDonationCinfirmDialog(){
 
         AlertDialog.Builder adb = new AlertDialog.Builder(this);
@@ -688,5 +690,19 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
 
     }
+
+
+   /* @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        Log.d("Home Fragment", "on activity result called");
+
+        if (requestCode == 11){
+            if (resultCode == RESULT_OK){
+                Log.d("Home Fragment", data.getDataString());
+            }
+        }
+
+    }
+    */
 
 }
