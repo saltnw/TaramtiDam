@@ -4,10 +4,13 @@ import android.app.IntentService;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Places;
@@ -24,9 +27,9 @@ import java.util.List;
  * Created by Lilach Fishman on 26/05/2017.
  */
 
-public class OurPullService extends IntentService {
+public class OurPullService extends IntentService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private Context context;
-    private GoogleApiClient mClient;
+    public static GoogleApiClient mClient;
     private Geofencing mGeofencing;
     public static List<MDAMobile> mobiles = new ArrayList<>();
 
@@ -54,8 +57,8 @@ public class OurPullService extends IntentService {
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Log.d("FENCE", "Initializing Google API Client");
         mClient = new GoogleApiClient.Builder(this)
-                // .addConnectionCallbacks(this)
-                //.addOnConnectionFailedListener(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .addApi(Places.GEO_DATA_API)//todo remove?
                 //.enableAutoManage(this, this)
@@ -76,8 +79,6 @@ public class OurPullService extends IntentService {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String value =  dataSnapshot.getValue().toString();
-
-
             }
 
             @Override
@@ -86,9 +87,6 @@ public class OurPullService extends IntentService {
             }
 
         });
-
-
-
 
         // Attach a listener to read the data at our posts reference
         ref.addValueEventListener(new ValueEventListener() {
@@ -134,5 +132,25 @@ public class OurPullService extends IntentService {
             }
         });
 
+    }
+
+
+
+
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Log.i("FENCE", "API Client Connection Successful!");
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+        Log.i("FENCE", "API Client Connection Suspended!");
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.e("FENCE", "API Client Connection Failed!");
     }
 }
