@@ -24,9 +24,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,14 +40,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Places;
 
 import java.text.ParseException;
 
-public class GeofenceBroadcastReceiver extends BroadcastReceiver {
+import static com.facebook.FacebookSdk.getApplicationContext;
+
+public class GeofenceBroadcastReceiver extends BroadcastReceiver implements GoogleApiClient.ConnectionCallbacks {
 
     public static final String TAG = GeofenceBroadcastReceiver.class.getSimpleName();
+    private GoogleApiClient mClient;
+    private String MDANear;
 
     /***
      * Handles the Broadcast message sent when the Geofence Transition is triggered
@@ -54,6 +66,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
      */
     @Override
     public void onReceive(Context context, Intent intent) {
+
         Log.d("FENCE","Received location in broadcast receiver");
         // Get the Geofence Event from the Intent sent through
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
@@ -62,50 +75,82 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
             return;
         }
 
-
-        // Send the notification
-        String MDANear = geofencingEvent.getTriggeringGeofences().get(0).getRequestId();
-        String[] details= MDANear.split("@");
-//        MDAMobile alertingMDA = MainActivity.mobiles.get(Integer.parseInt(MDANear));
-        String startTime = details[1];
-        String endTime = details[2];
-        DateFormat date = new SimpleDateFormat("HH:mm");
-        Date start = null;
-        Date end = null;
-
+        boolean isNotificationOn = true;
+        //read the value for the notification flag from file
         try {
-            start = date.parse(startTime);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        try {
-            end = date.parse(endTime);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Jerusalem"));
-        Date currentLocalTime = cal.getTime();
+            FileInputStream fis = getApplicationContext().openFileInput("geofencesNotification");
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader bufferedReader = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+            Log.d("FENCE", "File content: "+sb.toString());
 
-        date.setTimeZone(TimeZone.getTimeZone("Asia/Jerusalem"));
-        String localTime = date.format(currentLocalTime);
-        Date local = null;
-        try {
-             local = date.parse(localTime);
-        } catch (ParseException e) {
-            e.printStackTrace();
+            if (sb.toString().contains("OFF")){
+                isNotificationOn = false;
+                Log.d("FENCE", "Notification settings read from file and now set to OFF");
+            }
         }
-        System.out.println(localTime);
+        catch (Exception e) {
+            Log.d("FENCE", "Error reading from file"+e.toString());
+        }
 
-        if(local.getTime()>start.getTime() && local.getTime()<end.getTime()) {
-            sendNotification(context, details[0]);
-            Log.d("FENCE","Notification was sent");
-//            List toRemove= new ArrayList();//TODO remove and handle double notifications
-//            toRemove.add(MDANear);
-        //    LocationServices.GeofencingApi.removeGeofences(Geofencing.getmGoogleApiClient() , toRemove);
-           // Log.d("FENCE", "Removed");
+        if (isNotificationOn) {
+            // Send the notification
+            Geofence geofence = geofencingEvent.getTriggeringGeofences().get(0);
+            MDANear = geofence.getRequestId();
+            String[] details = MDANear.split("@");
+            String startTime = details[1];
+            String endTime = details[2];
+            DateFormat date = new SimpleDateFormat("HH:mm");
+            Date start = null;
+            Date end = null;
+
+            try {
+                start = date.parse(startTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            try {
+                end = date.parse(endTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Jerusalem"));
+            Date currentLocalTime = cal.getTime();
+
+            date.setTimeZone(TimeZone.getTimeZone("Asia/Jerusalem"));
+            String localTime = date.format(currentLocalTime);
+            Date local = null;
+            try {
+                local = date.parse(localTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            if (local.getTime() > start.getTime() && local.getTime() < end.getTime()) {
+                sendNotification(context, details[0]);
+                Log.d("FENCE", "Notification was sent");
+                Log.d("FENCE", "BroadcastReceiver: Initializing Google API Client ");
+                mClient = new GoogleApiClient.Builder(getApplicationContext())
+                         .addConnectionCallbacks(this)
+                        //.addOnConnectionFailedListener(this)
+                        .addApi(LocationServices.API)
+                        .addApi(Places.GEO_DATA_API)//todo remove?
+                        //.enableAutoManage(this, this)
+                        .build();
+                Log.d("FENCE","BroadcastReceiver: Connecting Google API Client");
+                mClient.connect();
+                Log.d("FENCE", (mClient.isConnected()) ? ("CONNECTED") : ("NOT CONNECTED"));
+                
+            } else {
+                Log.d("FENCE", "Not in operating hours. Notification was not sent");
+            }
         }
         else {
-            Log.d("FENCE", "Not in operating hours. Notification was not sent");
+            Log.d("FENCE", "Notifications are muted");
         }
     }
 
@@ -136,10 +181,6 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
         // Attempt to start an activity that can handle the Intent
 //        startActivity(mapIntent);
-
-
-
-
 
 
         // Create an explicit content Intent that starts the main Activity.
@@ -185,4 +226,19 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
         mNotificationManager.notify(0, builder.build());
     }
 
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        List toRemove= new ArrayList();//TODO remove and handle double notifications
+        toRemove.add(MDANear);
+        if (mClient != null)
+        {
+            LocationServices.GeofencingApi.removeGeofences(mClient , toRemove);
+        }
+        Log.d("FENCE", "Notification was send and geofence removed");
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
 }

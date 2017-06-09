@@ -58,7 +58,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class  MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class  MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener, View.OnClickListener {
 
 
     /* login and firebase auth vars*/
@@ -171,7 +171,6 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
         };
 
 
-
         /* MDA STUFF GOES HERE */
 
         if (ActivityCompat.checkSelfPermission(MainActivity.this,
@@ -180,15 +179,6 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_REQUEST_FINE_LOCATION);
         }
-        //NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        /*Log.d("FENCE","Initializing Google API Client");
-        mClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .addApi(Places.GEO_DATA_API)//todo remove?
-                .enableAutoManage(this, this)
-                .build();*/
 
         Log.d("FENCE","Get reference to Firebase Database at MDA");
         // Get a reference to our MDA mobiles
@@ -223,11 +213,6 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                     i++;
                 }
                 Log.d("FENCE", "Done updating mobiles");
-                //Log.d("FENCE","Going to update geofences list to match new MDA mobiles list");
-                //mGeofencing.updateGeofencesList(mobiles);
-                //Log.d("FENCE","Going to register all geofences per all MDA mobiles");
-                //mGeofencing.registerAllGeofences();
-
             }
 
             @Override
@@ -236,6 +221,9 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
             }
         });
 
+        /*start the background location services*/
+        mServiceIntent = new Intent(this, OurPullService.class);
+        this.startService(mServiceIntent);
     }
 
     /* define behavior to the buttons on the view  */
@@ -249,18 +237,9 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
     @Override
     protected void onStart(){
-        //Log.d("FENCE","Connecting Google API Client");
-        //mClient.connect();//TODO put it here for now. dosent help
-        //Log.d("FENCE","Initialize Geofencing object");
-        //mGeofencing = new Geofencing(this, mClient);
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
       //  LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(ourReceiver, new IntentFilter(Constants.BROADCAST_ACTION));
-        mServiceIntent = new Intent(this, OurPullService.class);
-        this.startService(mServiceIntent);
-
-
-
 
     }
 
@@ -278,29 +257,10 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
 
 
-
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-        Log.i("FENCE", "API Client Connection Successful!");
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-        Log.i("FENCE", "API Client Connection Suspended!");
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.e("FENCE", "API Client Connection Failed!");
-    }
     @Override
     public boolean onPrepareOptionsMenu (Menu menu){
 
         //change notification image according to flag
-
 
         //read notification settings from file to geofenceNotification
         try {
@@ -308,7 +268,6 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader bufferedReader = new BufferedReader(isr);
             StringBuilder sb = new StringBuilder();
-            //Log.d("NotificationFlag", bufferedReader.readLine());
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 sb.append(line + "\n");
