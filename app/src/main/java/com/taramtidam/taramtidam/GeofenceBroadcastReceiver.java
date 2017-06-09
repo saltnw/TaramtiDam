@@ -50,10 +50,9 @@ import java.text.ParseException;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class GeofenceBroadcastReceiver extends BroadcastReceiver implements GoogleApiClient.ConnectionCallbacks {
+public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
     public static final String TAG = GeofenceBroadcastReceiver.class.getSimpleName();
-    private GoogleApiClient mClient;
     private String MDANear;
 
     /***
@@ -133,18 +132,10 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver implements Goog
             if (local.getTime() > start.getTime() && local.getTime() < end.getTime()) {
                 sendNotification(context, details[0]);
                 Log.d("FENCE", "Notification was sent");
-                Log.d("FENCE", "BroadcastReceiver: Initializing Google API Client ");
-                mClient = new GoogleApiClient.Builder(getApplicationContext())
-                         .addConnectionCallbacks(this)
-                        //.addOnConnectionFailedListener(this)
-                        .addApi(LocationServices.API)
-                        .addApi(Places.GEO_DATA_API)//todo remove?
-                        //.enableAutoManage(this, this)
-                        .build();
-                Log.d("FENCE","BroadcastReceiver: Connecting Google API Client");
-                mClient.connect();
-                Log.d("FENCE", (mClient.isConnected()) ? ("CONNECTED") : ("NOT CONNECTED"));
-                
+                List toRemove= new ArrayList();//TODO remove and handle double notifications
+                toRemove.add(MDANear);
+                LocationServices.GeofencingApi.removeGeofences(OurPullService.mClient , toRemove);
+
             } else {
                 Log.d("FENCE", "Not in operating hours. Notification was not sent");
             }
@@ -226,19 +217,4 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver implements Goog
         mNotificationManager.notify(0, builder.build());
     }
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        List toRemove= new ArrayList();//TODO remove and handle double notifications
-        toRemove.add(MDANear);
-        if (mClient != null)
-        {
-            LocationServices.GeofencingApi.removeGeofences(mClient , toRemove);
-        }
-        Log.d("FENCE", "Notification was send and geofence removed");
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
 }

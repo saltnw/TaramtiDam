@@ -29,7 +29,7 @@ import java.util.List;
 
 public class OurPullService extends IntentService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private Context context;
-    private GoogleApiClient mClient;
+    public static GoogleApiClient mClient;
     private Geofencing mGeofencing;
     public static List<MDAMobile> mobiles = new ArrayList<>();
 
