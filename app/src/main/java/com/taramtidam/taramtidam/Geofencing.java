@@ -43,13 +43,9 @@ public class Geofencing implements ResultCallback {
 
     private List<Geofence> mGeofenceList;
     private PendingIntent mGeofencePendingIntent;
-    //private static GoogleApiClient mGoogleApiClient;
     private GoogleApiClient mGoogleApiClient;
     private Context mContext;
 
-//    public static GoogleApiClient getmGoogleApiClient() {
-     //   return mGoogleApiClient;
-    //}
 
     public Geofencing(Context context, GoogleApiClient client) {
         mContext = context;
