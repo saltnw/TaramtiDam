@@ -113,18 +113,18 @@
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="120dp"
         android:layout_height="59dp"
-        android:layout_marginBottom="20dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:background="@drawable/updatebtn"
         android:gravity="left|center_vertical"
         android:onClick="onClick_SaveButton"
         android:text=" "
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp" />
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/lastDonationTextView" />
 
     <Spinner
         android:id="@+id/bloodSpinner"
