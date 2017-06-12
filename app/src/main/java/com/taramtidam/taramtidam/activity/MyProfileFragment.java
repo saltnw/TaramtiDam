@@ -125,9 +125,15 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
             ImageView work_address_image_view = (ImageView)rootView.findViewById(R.id.workaddressImageView);
             Glide.with(getContext()).load(R.drawable.workicon).into(work_address_image_view);
 
-            //end email icon
+            //send email icon
             ImageView send_email_image_view = (ImageView)rootView.findViewById(R.id.sendemailImageView);
-            Glide.with(getContext()).load(R.drawable.sendemailonicon).into(send_email_image_view);
+            if (MainActivity.currentLoggedUser.isSendMails()){
+                Glide.with(getContext()).load(R.drawable.sendemailson).into(send_email_image_view);
+            }
+            else{
+                Glide.with(getContext()).load(R.drawable.sendemailsoff).into(send_email_image_view);
+
+            }
 
             //Last Donation icon
             ImageView Last_donation_image_view = (ImageView)rootView.findViewById(R.id.lastdonationImageView);
@@ -226,6 +232,16 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
                 //update database
                 DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
                 mDatabase.child("users").child(MainActivity.currentLoggedUser.getuid()).setValue(MainActivity.currentLoggedUser);
+
+                //update send emails icon
+                ImageView send_email_image_view = (ImageView)getView().findViewById(R.id.sendemailImageView);
+                if (MainActivity.currentLoggedUser.isSendMails()){
+                    Glide.with(getContext()).load(R.drawable.sendemailson).into(send_email_image_view);
+                 }
+                else{
+                    Glide.with(getContext()).load(R.drawable.sendemailsoff).into(send_email_image_view);
+
+                    }
                 }
 
             // else if(arg0 == getView().findViewById(R.id.imageUploaded)){
