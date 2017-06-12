@@ -116,7 +116,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="8dp"
-        android:text="TextView"
+        android:text="No Avilable Data"
         app:layout_constraintBottom_toBottomOf="@+id/addressView"
         app:layout_constraintLeft_toLeftOf="@+id/addressView"
         app:layout_constraintTop_toTopOf="@+id/addressView"
@@ -127,12 +127,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="@+id/hoursView"
-        app:layout_constraintTop_toTopOf="@+id/hoursView"
         android:layout_marginLeft="20dp"
-        app:layout_constraintLeft_toLeftOf="@+id/hoursView" />
+        android:layout_marginTop="8dp"
+        android:text="No Avilable Data"
+        app:layout_constraintBottom_toBottomOf="@+id/hoursView"
+        app:layout_constraintLeft_toLeftOf="@+id/hoursView"
+        app:layout_constraintTop_toTopOf="@+id/hoursView" />
 
     <TextView
         android:id="@+id/infoTextView"
@@ -141,7 +141,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="8dp"
-        android:text="information"
+        android:text="No Avilable Data"
         app:layout_constraintBottom_toBottomOf="@+id/inforamtionView"
         app:layout_constraintLeft_toLeftOf="@+id/inforamtionView"
         app:layout_constraintTop_toTopOf="@+id/inforamtionView"
