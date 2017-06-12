@@ -240,6 +240,8 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
       //  LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(ourReceiver, new IntentFilter(Constants.BROADCAST_ACTION));
+        Log.d("asaf","MA the size is " +mobiles.size());
+
 
     }
 

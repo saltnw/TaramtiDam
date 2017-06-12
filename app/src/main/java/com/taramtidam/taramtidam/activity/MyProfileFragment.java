@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -49,6 +50,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
     private TextView full_name;
     private TextView mail;
     private Button saveBtn;
+    private CheckBox sendEmailCB;
     private ImageView imageToUpload;
     private static final int RESULT_LOAD_IMAGE = 124;
     //private FragmentManager fm;
@@ -72,6 +74,10 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         saveBtn = (Button) rootView.findViewById(R.id.saveProfileButton);
         saveBtn.setOnClickListener(this);
 
+        //set onClicklListener
+        sendEmailCB = (CheckBox) rootView.findViewById(R.id.sendemailCheckBox);
+        sendEmailCB.setOnClickListener(this);
+
         //imageToUpload = (ImageView)  rootView.findViewById(R.id.imageUploaded);
         //imageToUpload.setOnClickListener(this);
         rootView.setOnClickListener(this);
@@ -82,6 +88,8 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
             ((TextView) rootView.findViewById(R.id.fullnameLabel)).setText(MainActivity.currentLoggedUser.getFullName());
             ((AutoCompleteTextView) rootView.findViewById(R.id.homeEditText)).setText(MainActivity.currentLoggedUser.getAddress1());
             ((AutoCompleteTextView) rootView.findViewById(R.id.workEditText)).setText(MainActivity.currentLoggedUser.getAddress2());
+            ((CheckBox) rootView.findViewById(R.id.sendemailCheckBox)).setChecked((MainActivity.currentLoggedUser.isSendMails()));
+
 
             //set last donation text accroding to the user
             if (MainActivity.currentLoggedUser.getDonationsCounter() != 0){
@@ -116,6 +124,10 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
             //Work icon
             ImageView work_address_image_view = (ImageView)rootView.findViewById(R.id.workaddressImageView);
             Glide.with(getContext()).load(R.drawable.workicon).into(work_address_image_view);
+
+            //end email icon
+            ImageView send_email_image_view = (ImageView)rootView.findViewById(R.id.sendemailImageView);
+            Glide.with(getContext()).load(R.drawable.sendemailonicon).into(send_email_image_view);
 
             //Last Donation icon
             ImageView Last_donation_image_view = (ImageView)rootView.findViewById(R.id.lastdonationImageView);
@@ -208,6 +220,14 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
             Toast.makeText(getApplicationContext(), R.string.profileUpdateSucess, Toast.LENGTH_SHORT).show();
 
              }
+            else if (arg0 == getView().findViewById(R.id.sendemailCheckBox)) {
+                 //update currentLoggedUser
+                MainActivity.currentLoggedUser.setSendMails(((CheckBox) arg0).isChecked());
+                //update database
+                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+                mDatabase.child("users").child(MainActivity.currentLoggedUser.getuid()).setValue(MainActivity.currentLoggedUser);
+                }
+
             // else if(arg0 == getView().findViewById(R.id.imageUploaded)){
             //         Intent gallaryIntetnt = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             //         startActivityForResult(gallaryIntetnt,RESULT_LOAD_IMAGE);
