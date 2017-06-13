@@ -38,18 +38,14 @@ public class Geofencing implements ResultCallback {
 
     // Constants
     public static final String TAG = Geofencing.class.getSimpleName();
-    private static final float GEOFENCE_RADIUS =5000; // in meters(currently larger for the demonstration-so we have mobile in range)
+    private static final float GEOFENCE_RADIUS =2500; // in meters(currently larger for the demonstration-so we have mobile in range)
     private static final long GEOFENCE_TIMEOUT = 24 * 60 * 60 * 1000; // 24 hours
 
     private List<Geofence> mGeofenceList;
     private PendingIntent mGeofencePendingIntent;
-    //private static GoogleApiClient mGoogleApiClient;
     private GoogleApiClient mGoogleApiClient;
     private Context mContext;
 
-//    public static GoogleApiClient getmGoogleApiClient() {
-     //   return mGoogleApiClient;
-    //}
 
     public Geofencing(Context context, GoogleApiClient client) {
         mContext = context;

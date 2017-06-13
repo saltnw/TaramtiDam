@@ -50,6 +50,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Log.d("asaf","HF the size is " +MainActivity.mobiles.size());
 
     }
 

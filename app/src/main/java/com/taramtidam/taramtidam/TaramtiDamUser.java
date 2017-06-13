@@ -32,6 +32,8 @@ public class TaramtiDamUser {
     private Date lastDonation;
     private String imagestring;
     private int donationsCounter;
+    private boolean sendMails;
+
 
     public TaramtiDamUser(){}
 
@@ -46,6 +48,8 @@ public class TaramtiDamUser {
         this.lastDonation = null;
         this.imagestring = "";
         this.donationsCounter = 0;
+        this.sendMails = true;
+
     }
 
     public TaramtiDamUser(String uid, String fullName,String email) {
@@ -59,6 +63,8 @@ public class TaramtiDamUser {
         this.lastDonation = null;
         this.imagestring = "";
         this.donationsCounter = 0;
+        this.sendMails = true;
+
     }
 
     public boolean isCompletedRegisteration() {
@@ -142,6 +148,15 @@ public class TaramtiDamUser {
             this.rankLevel++;
         }
     }
+
+    public boolean isSendMails() {
+        return sendMails;
+    }
+
+    public void setSendMails(boolean sendMails) {
+        this.sendMails = sendMails;
+    }
+
     public int getDonationsCounter() {
         return donationsCounter;
     }

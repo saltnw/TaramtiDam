@@ -69,6 +69,9 @@ public class DonateNowFragment extends Fragment implements GoogleApiClient.Conne
                     .addApi(LocationServices.API)
                     .build();
         }
+        Log.d("asaf","DN the size is " +MainActivity.mobiles.size());
+
+
 
 
     }
@@ -168,6 +171,7 @@ public class DonateNowFragment extends Fragment implements GoogleApiClient.Conne
             }
             nearsetStationIndex = Distances.findNearestBloodMobile(mLastLocation.getLatitude() ,mLastLocation.getLongitude(),MainActivity.mobiles );
             Log.d("Donate Now Fragment", "The closest station index is: "+ Integer.toString(nearsetStationIndex) );
+            Log.d("Donate Now Fragment", "The numbers of stations is: "+MainActivity.mobiles.size());
             Log.d("Donate Now Fragment","The Closest station is: "+ MainActivity.mobiles.get(nearsetStationIndex).getAddress() +", " +MainActivity.mobiles.get(nearsetStationIndex).getCity());
             //((TextView) getView().findViewById(R.id.nearsetStationTextView)).setText("Right Now the Nearset Station is located at: "+ MainActivity.mobiles.get(nearsetStationIndex).getAddress() +", "  +MainActivity.mobiles.get(nearsetStationIndex).getCity());
             address = MainActivity.mobiles.get(nearsetStationIndex).getAddress() +"\n"+MainActivity.mobiles.get(nearsetStationIndex).getCity();
