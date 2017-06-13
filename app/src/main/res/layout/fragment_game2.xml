@@ -6,23 +6,80 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.taramtidam.taramtidam.Game2"
-    android:background="#ffffff">
-
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="226dp"
-        android:layout_height="23dp"
-        android:text="Game2"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+    android:background="@color/windowBackground">
 
     <Button
-        android:id="@+id/nextButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="next Button"
-        tools:layout_editor_absoluteX="135dp"
-        tools:layout_editor_absoluteY="385dp" />
+        android:id="@+id/mapsouthButton"
+        android:layout_width="88dp"
+        android:layout_height="149dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@android:color/transparent"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/mapChooseAreaImageView"
+        app:layout_constraintHorizontal_bias="0.392"
+        app:layout_constraintLeft_toLeftOf="@+id/mapChooseAreaImageView"
+        app:layout_constraintRight_toRightOf="@+id/mapChooseAreaImageView" />
+
+    <Button
+        android:id="@+id/mapwestButton"
+        android:layout_width="88dp"
+        android:layout_height="151dp"
+        android:layout_marginBottom="9dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginStart="8dp"
+        android:background="@android:color/transparent"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/mapsouthButton"
+        app:layout_constraintHorizontal_bias="0.277"
+        app:layout_constraintLeft_toLeftOf="@+id/mapChooseAreaImageView"
+        app:layout_constraintRight_toRightOf="@+id/mapChooseAreaImageView"
+        android:layout_marginEnd="40dp" />
+
+    <Button
+        android:id="@+id/mapeastButton"
+        android:layout_width="88dp"
+        android:layout_height="163dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@android:color/transparent"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/mapwestButton"
+        app:layout_constraintLeft_toRightOf="@+id/mapwestButton" />
+
+    <Button
+        android:id="@+id/mapnorthButton"
+        android:layout_width="92dp"
+        android:layout_height="116dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@android:color/transparent"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/mapeastButton"
+        app:layout_constraintLeft_toLeftOf="@+id/mapeastButton" />
+
+    <ImageView
+        android:id="@+id/mapChooseAreaImageView"
+        android:layout_width="267dp"
+        android:layout_height="512dp"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/selectareatitleImageView" />
+
+    <ImageView
+        android:id="@+id/selectareatitleImageView"
+        android:layout_width="304dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </android.support.constraint.ConstraintLayout>
