@@ -1,4 +1,6 @@
 var distance = require("google-distance");
+var moment = require("moment")
+
 distance.apiKey = "AIzaSyAYeIfHqg3oAgUqQgJT0Xz2ojY1moqLAXg";
 
 const nodemailer = require('nodemailer');
@@ -37,6 +39,22 @@ function sendNotifications(ref, tommorowRef)
     usersRef.once("value")
       .then(function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
+          var sendMails = childSnapshot.val()["sendMails"];
+          if (sendMails != null)
+          {
+            if (!sendMails)
+            {
+              console.log("send mails is false for " + childSnapshot.val()["fullName"]);
+              return;
+            }
+          }
+          var lastDonationStr = childSnapshot.val()["lastDonationInString"];
+          var isInLast3Months = checkLastDonationDate(lastDonationStr);
+          if (isInLast3Months)
+          {
+            console.log(childSnapshot.val()["fullName"]+ " has donated in the last 3 months");
+            return;
+          }
           var addressArray = [];
           var email = childSnapshot.val()["email"];
           if (email.trim().length == 0 )
@@ -126,7 +144,21 @@ function sendTestEmail(email, mobileDetails)
 });
 }
 
+function checkLastDonationDate(lastDonationStr)
+{
+  if (lastDonationStr == "")
+  {
+    return false;
+  }
+  var today = moment();
 
+  var lastDonation = moment(lastDonationStr, "DD-MM-YYYY")
+  if (lastDonation.add(3, "months").isAfter(today)) //isInLast3Months
+  {
+    return true;
+  }
+  return false; //is not inlast3Months
+}
 
 
 module.exports =sendNotifications;
