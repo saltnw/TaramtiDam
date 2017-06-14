@@ -134,8 +134,10 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
                 Log.d("FENCE", "Notification was sent");
                 List toRemove= new ArrayList();//TODO remove and handle double notifications
                 toRemove.add(MDANear);
-                LocationServices.GeofencingApi.removeGeofences(OurPullService.mClient , toRemove);
-
+                if (OurPullService.mClient != null)
+                {
+                    LocationServices.GeofencingApi.removeGeofences(OurPullService.mClient, toRemove);
+                }
             } else {
                 Log.d("FENCE", "Not in operating hours. Notification was not sent");
             }
@@ -216,5 +218,5 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
         // Issue the notification
         mNotificationManager.notify(0, builder.build());
     }
-
+    
 }
