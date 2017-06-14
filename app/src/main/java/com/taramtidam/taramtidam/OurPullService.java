@@ -74,19 +74,7 @@ public class OurPullService extends IntentService implements GoogleApiClient.Con
         // Get a reference to our MDA mobiles
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("MDA").child("Today");
-        DatabaseReference db_details = database.getReference("users").child("4KULKNGfznR7hdCRFmms5RVC2mn1").child("completedRegisteration");
-        db_details.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String value =  dataSnapshot.getValue().toString();
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-
-        });
 
         // Attach a listener to read the data at our posts reference
         ref.addValueEventListener(new ValueEventListener() {

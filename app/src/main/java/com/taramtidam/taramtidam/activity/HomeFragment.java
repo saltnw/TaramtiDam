@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -142,6 +143,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
             if (f != null) {
                 Log.d("Game Activity", "loading game1 fragemnt...");
+
+                //Not good
+                getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+
+                //TODO save the state of the login + logout + join the game buttons
+
+                //TODO set all the buttons to Disabled
+
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.container_game2, f);
