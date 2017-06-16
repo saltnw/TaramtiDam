@@ -30,6 +30,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Trigger;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -222,8 +225,7 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
         });
 
         /*start the background location services*/
-        mServiceIntent = new Intent(this, OurPullService.class);
-        this.startService(mServiceIntent);
+        SetupScheduledJob();
     }
 
     /* define behavior to the buttons on the view  */
@@ -648,6 +650,23 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
 
 
+    }
+
+    void SetupScheduledJob()
+    {
+        FirebaseJobDispatcher dispatcher =
+                new FirebaseJobDispatcher(
+                        new GooglePlayDriver(MainActivity.this)
+                );
+
+        dispatcher.mustSchedule(
+                dispatcher.newJobBuilder()
+                        .setService(OurPullService.class)
+                        .setTag("OurPullService")
+                        .setRecurring(true)
+                        .setTrigger(Trigger.executionWindow(5, 60))
+                        .build()
+        );
     }
 
 }
