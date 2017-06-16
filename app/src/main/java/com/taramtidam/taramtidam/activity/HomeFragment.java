@@ -88,6 +88,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             logoutbtn.setVisibility(View.VISIBLE);
             logoutbtn.setEnabled(true);
 
+            //check if to display join the game or not
+            if(MainActivity.currentLoggedUser.isAlreadyJoinedTheGame()==true){
+                //user joined the game so remove game button
+                gamebtn.setVisibility(View.INVISIBLE);
+                gamebtn.setEnabled(false);
+            }
+            else{
+                //user didnt signup for the game yet so show the game button
+                gamebtn.setVisibility(View.VISIBLE);
+                gamebtn.setEnabled(true);
+
+            }
+
         }
 
         //load tipat dam image

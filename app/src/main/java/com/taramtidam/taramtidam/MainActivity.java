@@ -465,8 +465,8 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                     break;
 
                 case 4:
-                    fragment = new EmptyFragment();
-                    title = getString(R.string.title_messages);
+                    fragment = new Game4();
+                    title = getString(R.string.title_gameprogress);
                     break;
                 case 5:
                     fragment = new NavigationFragment();
@@ -556,7 +556,7 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                     //displayProfileAfterLoadingfromDtabase();
                     doThingsAfterLogin();
                     try{
-                        ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
+                       // ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
 
                     }catch (NullPointerException e){
                         //could not load the progress bar. probably was logged in not through home fragment
@@ -578,11 +578,26 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
         try {
 
+            ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
+
             ((Button) findViewById(R.id.loginButton)).setVisibility(View.INVISIBLE);
             ((Button) findViewById(R.id.loginButton)).setEnabled(false);
 
             ((Button) findViewById(R.id.logoutButton)).setVisibility(View.VISIBLE);
             ((Button) findViewById(R.id.logoutButton)).setEnabled(true);
+
+            //check if the user signed up to game or not
+            if(currentLoggedUser.isAlreadyJoinedTheGame()==true){
+                //user joined the game so remove game button
+                ((Button) findViewById(R.id.gamecubeButton)).setVisibility(View.INVISIBLE);
+                ((Button) findViewById(R.id.gamecubeButton)).setEnabled(false);
+            }
+            else{
+                //user didnt signup for the game yet so show the game button
+                ((Button) findViewById(R.id.gamecubeButton)).setVisibility(View.VISIBLE);
+                ((Button) findViewById(R.id.gamecubeButton)).setEnabled(true);
+
+            }
         }
         catch (NullPointerException e) {
 
@@ -590,11 +605,19 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
     }
     private void doThingsAfterLogout(){
         try {
+            //show login button
             ((Button) findViewById(R.id.loginButton)).setVisibility(View.VISIBLE);
             ((Button) findViewById(R.id.loginButton)).setEnabled(true);
 
+            //remove logout button
             ((Button) findViewById(R.id.logoutButton)).setVisibility(View.INVISIBLE);
             ((Button) findViewById(R.id.logoutButton)).setEnabled(false);
+
+            //remove join the game button
+            ((Button) findViewById(R.id.gamecubeButton)).setVisibility(View.INVISIBLE);
+            ((Button) findViewById(R.id.gamecubeButton)).setEnabled(false);
+
+
         }
         catch (NullPointerException e) {
 

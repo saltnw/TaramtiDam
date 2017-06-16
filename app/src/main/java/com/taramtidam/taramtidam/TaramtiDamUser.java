@@ -33,6 +33,7 @@ public class TaramtiDamUser {
     private String imagestring;
     private int donationsCounter;
     private boolean sendMails;
+    private boolean alreadyJoinedTheGame;
 
 
     public TaramtiDamUser(){}
@@ -49,10 +50,13 @@ public class TaramtiDamUser {
         this.imagestring = "";
         this.donationsCounter = 0;
         this.sendMails = true;
+        this.alreadyJoinedTheGame = false;
 
     }
 
-    public TaramtiDamUser(String uid, String fullName,String email) {
+
+
+    public TaramtiDamUser(String uid, String fullName, String email) {
         this.uid = uid;
         this.fullName = fullName;
         this.email = email;
@@ -64,6 +68,8 @@ public class TaramtiDamUser {
         this.imagestring = "";
         this.donationsCounter = 0;
         this.sendMails = true;
+        this.alreadyJoinedTheGame = false;
+
 
     }
 
@@ -196,6 +202,14 @@ public class TaramtiDamUser {
         diffDays = diff / (24*60*60*1000);
 
         return diffDays;
+    }
+
+    public boolean isAlreadyJoinedTheGame() {
+        return alreadyJoinedTheGame;
+    }
+
+    public void setAlreadyJoinedTheGame(boolean alreadyJoinedTheGame) {
+        this.alreadyJoinedTheGame = alreadyJoinedTheGame;
     }
 
 
