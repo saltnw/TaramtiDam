@@ -1,19 +1,15 @@
 package com.taramtidam.taramtidam;
 
 import android.app.Dialog;
-import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +31,9 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Places;
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Trigger;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -195,8 +194,6 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                 while (locations.iterator().hasNext()) {
                     MDAMobile currMda = new MDAMobile();
                     DataSnapshot nextMDALoc =locations.iterator().next();
-                 //   String nextMDALoc = String.valueOf(locations.iterator().next());
-                   // System.out.println(nextMDALoc);
                     currMda.setCity(nextMDALoc.child("city").getValue().toString());
                     currMda.setAddress(nextMDALoc.child("address").getValue().toString());
                     currMda.setLongitude(Double.parseDouble(nextMDALoc.child("longitude").getValue().toString()));
@@ -222,8 +219,8 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
         });
 
         /*start the background location services*/
-        mServiceIntent = new Intent(this, OurPullService.class);
-        this.startService(mServiceIntent);
+        setupOneTimePull();
+        setupScheduledJob();
     }
 
     /* define behavior to the buttons on the view  */
@@ -675,8 +672,52 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
     }
 
+    void setupOneTimePull()
+    {
+        FirebaseJobDispatcher dispatcher =
+                new FirebaseJobDispatcher(
+                        new GooglePlayDriver(MainActivity.this)
+                );
 
-   /* @Override
+
+        Bundle extras = new Bundle();
+        extras.putString("bypassNeedToRun", "true");
+
+        dispatcher.mustSchedule(
+                dispatcher.newJobBuilder()
+                        .setService(OurPullService.class)
+                        .setTag("OneTimePull")
+                        .setRecurring(false)
+                        .setTrigger(Trigger.NOW) //for the first pull
+                        .setExtras(extras)
+                        .build()
+        );
+    }
+
+
+    void setupScheduledJob()
+    {
+        FirebaseJobDispatcher dispatcher =
+                new FirebaseJobDispatcher(
+                        new GooglePlayDriver(MainActivity.this)
+                );
+
+        Bundle extras = new Bundle();
+        extras.putString("bypassNeedToRun", "false");
+
+        dispatcher.mustSchedule(
+                dispatcher.newJobBuilder()
+                        .setService(OurPullService.class)
+                        .setTag("OurPullService")
+                        .setRecurring(true)
+                        .setTrigger(Trigger.executionWindow(55*60, 60*60)) //every hour
+                        .setExtras(extras)
+                        .setReplaceCurrent(false)
+                        .build()
+        );
+    }
+
+       /* @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         Log.d("Home Fragment", "on activity result called");
 

@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:lineSpacingExtra="12sp"
-        android:text="Get live updates of \nblood mobile \naround you."
+        android:text="Get live updates of \nblood mobile \naround you"
         android:textAlignment="viewStart"
         android:textColor="#000000"
         android:textSize="36sp"

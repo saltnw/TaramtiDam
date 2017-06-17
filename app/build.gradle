@@ -5,10 +5,10 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.taramtidam.taramtidam"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "3.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -30,7 +30,6 @@ dependencies {
     })
 
     //geofencing
-    //todo remove this?
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -40,6 +39,8 @@ dependencies {
     compile 'com.google.android.gms:play-services-location:10.2.0'
     compile 'com.intuit.sdp:sdp-android:1.0.4'
 
+
+    compile 'com.firebase:firebase-jobdispatcher:0.5.2'
 
     compile('com.twitter.sdk.android:tweet-composer:2.3.1@aar') {
         transitive = true;
