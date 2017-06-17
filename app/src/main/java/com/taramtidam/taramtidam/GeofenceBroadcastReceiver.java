@@ -140,7 +140,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
                     Log.d("FENCE", "geofence removed " + details[0]);
                 }
             } else {
-                Log.d("FENCE", "Not in operating hours. Notification was not sent");
+                Log.d("FENCE", "Not in operating hours. Notification was not sent. details: " + details[0]);
             }
         }
         else {

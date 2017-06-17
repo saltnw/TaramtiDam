@@ -167,8 +167,7 @@ public class OurPullService extends JobService implements GoogleApiClient.Connec
                         //if the saved date is equal to the date of mobiles from the DB, no need to re-register geofences
                         if (mobiles.get(0).getDate().equals(savedDate)) {
                             Log.d("FENCE","Data is updated no need to register new geofences");
-                            //  cond.open();
-                            // return;
+                            return;
                         }
                     }
                 }

@@ -38,8 +38,8 @@ public class Geofencing implements ResultCallback {
 
     // Constants
     public static final String TAG = Geofencing.class.getSimpleName();
-    private static final float GEOFENCE_RADIUS =2500; // in meters(currently larger for the demonstration-so we have mobile in range)
-    private static final long GEOFENCE_TIMEOUT = 15 * 60 * 60 * 1000; // 24 hours
+    private static final float GEOFENCE_RADIUS =1800; // in meters(currently larger for the demonstration-so we have mobile in range)
+    private static final long GEOFENCE_TIMEOUT = 14 * 60 * 60 * 1000; // 14 hours
     //private static final long GEOFENCE_TIMEOUT = 60 * 1000; //1 minute - for testing
 
 
