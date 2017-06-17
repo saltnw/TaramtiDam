@@ -37,10 +37,12 @@
         </activity>
         <activity android:name=".model.ShareOnFacebook"></activity>
     <receiver android:name=".GeofenceBroadcastReceiver"/>
-        <service
-            android:name=".OurPullService"
-            android:exported="false"
-            android:enabled="true"/>
+         <service android:name=".OurPullService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+            </intent-filter>
+        </service>
 
 </application>
 <uses-permission android:name="android.permission.INTERNET" />

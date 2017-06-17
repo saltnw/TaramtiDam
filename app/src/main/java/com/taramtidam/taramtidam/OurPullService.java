@@ -1,15 +1,17 @@
 package com.taramtidam.taramtidam;
 
-import android.app.IntentService;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
+import com.firebase.jobdispatcher.JobParameters;
+import com.firebase.jobdispatcher.JobService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -20,40 +22,55 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.DatabaseError;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Lilach Fishman on 26/05/2017.
  */
 
-public class OurPullService extends IntentService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class OurPullService extends JobService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private Context context;
     public static GoogleApiClient mClient;
     private Geofencing mGeofencing;
     public static List<MDAMobile> mobiles = new ArrayList<>();
+    private static final int PERMISSIONS_REQUEST_FINE_LOCATION = 111;
 
-    /**
-     * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
-     * @param name Used to name the worker thread, important only for debugging.
-     */
-    public OurPullService(String name) {
-        super(name);
-    }
-
-    public OurPullService() {
-        super("string");
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        super.onStartCommand(intent, startId, startId);
-        return START_STICKY;
+    private boolean NeedToRun(JobParameters job) {
+        String bypass = job.getExtras().getString("bypassNeedToRun");
+        if (bypass != null && bypass.equals("true")) {
+            Log.d("FENCE", "bypass request detected");
+            return true;
+        }
+        Calendar rightNow = Calendar.getInstance();
+        int currentHour = rightNow.get(Calendar.HOUR_OF_DAY);
+        Log.d("FENCE", "current hour is " + currentHour);
+        if (currentHour == 8 || currentHour == 9) {
+            return true;
+        }
+        return false;
     }
 
     @Override
-    protected void onHandleIntent(@Nullable Intent intent) {
+    public boolean onStartJob(JobParameters job) {
+        Log.d("FENCE", "onStartJob started executing");
+        if (!NeedToRun(job)) {
+            Log.d("FENCE", "OurPullService shouldn't run - aborting");
+            return false;
+        }
+        Log.d("FENCE", "OurPullService starting getting locations");
+        if (ActivityCompat.checkSelfPermission(OurPullService.this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            try {
+                Thread.sleep(30_000L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Log.d("FENCE", "Initializing Google API Client");
         mClient = new GoogleApiClient.Builder(this)
@@ -66,13 +83,32 @@ public class OurPullService extends IntentService implements GoogleApiClient.Con
 
 
         Log.d("FENCE","Connecting Google API Client");
-        mClient.connect();//TODO put it here for now. dosent help
+
+        mClient.connect();
+
+
+        return false;
+    }
+
+
+    @Override
+    public boolean onStopJob(JobParameters job) {
+        Log.d("SHOSHAN_JOB","stopped");
+        return false;
+    }
+
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Log.i("FENCE", "API Client Connection Successful!");
+
         Log.d("FENCE","Initialize Geofencing object");
         mGeofencing = new Geofencing(this, mClient);
 
         Log.d("FENCE", "Get reference to Firebase Database at MDA");
         // Get a reference to our MDA mobiles
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
+
         DatabaseReference ref = database.getReference("MDA").child("Today");
 
         // Attach a listener to read the data at our posts reference
@@ -85,8 +121,6 @@ public class OurPullService extends IntentService implements GoogleApiClient.Con
                 while (locations.iterator().hasNext()) {
                     MDAMobile currMda = new MDAMobile();
                     DataSnapshot nextMDALoc = locations.iterator().next();
-                    //   String nextMDALoc = String.valueOf(locations.iterator().next());
-                    // System.out.println(nextMDALoc);
                     currMda.setCity(nextMDALoc.child("city").getValue().toString());
                     currMda.setAddress(nextMDALoc.child("address").getValue().toString());
                     currMda.setLongitude(Double.parseDouble(nextMDALoc.child("longitude").getValue().toString()));
@@ -106,10 +140,45 @@ public class OurPullService extends IntentService implements GoogleApiClient.Con
                 Log.d("FENCE", "Done updating mobiles");
                 System.out.println("done");
                 Log.d("FENCE", "Going to update geofences list to match new MDA mobiles list");
+                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                Date date = new Date();
+                //adding a shared preferences
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("Pref", MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+//                editor.clear();
+//                editor.commit();
+                //cheking if we already have a date saved in our map
+                String savedDate  = pref.getString("date", null);
+                //if not, insert current date
+                if(savedDate == null){
+                    if(mClient == null){
+                        Log.d("FENCE","API client not available-retry later");
+                        return;
+                    }
+                    String stringDate = dateFormat.format(date);
+                    editor.putString("date",stringDate);
+                    editor.commit();
+                    Log.d("FENCE","Initializing date" + stringDate);
+                }
+                else {
+                    Log.d("FENCE", "saved date is: "+savedDate);
+                    //if there is a stored date, compare it to current date via DB entry
+                    if (mobiles != null && mobiles.size() !=0 && mobiles.get(0) != null) {
+                        //if the saved date is equal to the date of mobiles from the DB, no need to re-register geofences
+                        if (mobiles.get(0).getDate().equals(savedDate)) {
+                            Log.d("FENCE","Data is updated no need to register new geofences");
+                            return;
+                        }
+                    }
+                }
+                // the date that was saved in the machine is different from the DB mobiles date
+                //update the date and register new (today's) geofences
+                editor.putString("date", dateFormat.format(date));
+                editor.commit();
+                Log.d("FENCE","updating shared preferences date");
                 mGeofencing.updateGeofencesList(mobiles);
                 Log.d("FENCE", "Going to register all geofences per all MDA mobiles");
                 mGeofencing.registerAllGeofences();
-
             }
 
 
@@ -119,15 +188,7 @@ public class OurPullService extends IntentService implements GoogleApiClient.Con
             }
         });
 
-    }
-
-
-
-
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        Log.i("FENCE", "API Client Connection Successful!");
+        Log.d("FENCE", "Registering geofences finished");
     }
 
     @Override

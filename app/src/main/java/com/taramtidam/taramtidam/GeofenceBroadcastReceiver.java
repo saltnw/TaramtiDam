@@ -137,9 +137,10 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
                 if (OurPullService.mClient != null)
                 {
                     LocationServices.GeofencingApi.removeGeofences(OurPullService.mClient, toRemove);
+                    Log.d("FENCE", "geofence removed " + details[0]);
                 }
             } else {
-                Log.d("FENCE", "Not in operating hours. Notification was not sent");
+                Log.d("FENCE", "Not in operating hours. Notification was not sent. details: " + details[0]);
             }
         }
         else {
