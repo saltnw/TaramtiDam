@@ -225,6 +225,7 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
         });
 
         /*start the background location services*/
+        SetupOneTimePull();
         SetupScheduledJob();
     }
 
@@ -652,6 +653,29 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
     }
 
+    void SetupOneTimePull()
+    {
+        FirebaseJobDispatcher dispatcher =
+                new FirebaseJobDispatcher(
+                        new GooglePlayDriver(MainActivity.this)
+                );
+
+
+        Bundle extras = new Bundle();
+        extras.putString("bypassNeedToRun", "true");
+
+        dispatcher.mustSchedule(
+                dispatcher.newJobBuilder()
+                        .setService(OurPullService.class)
+                        .setTag("OneTimePull")
+                        .setRecurring(false)
+                        .setTrigger(Trigger.NOW) //for the first pull
+                        .setExtras(extras)
+                        .build()
+        );
+    }
+
+
     void SetupScheduledJob()
     {
         FirebaseJobDispatcher dispatcher =
@@ -664,7 +688,8 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                         .setService(OurPullService.class)
                         .setTag("OurPullService")
                         .setRecurring(true)
-                        .setTrigger(Trigger.executionWindow(5, 60))
+                        .setTrigger(Trigger.executionWindow(55*60, 60*60)) //every hour
+                        .setReplaceCurrent(false)
                         .build()
         );
     }

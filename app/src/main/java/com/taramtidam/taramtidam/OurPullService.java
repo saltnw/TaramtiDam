@@ -1,19 +1,14 @@
 package com.taramtidam.taramtidam;
 
-import android.app.IntentService;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.ConditionVariable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
@@ -30,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -44,9 +40,28 @@ public class OurPullService extends JobService implements GoogleApiClient.Connec
     public static List<MDAMobile> mobiles = new ArrayList<>();
     private static final int PERMISSIONS_REQUEST_FINE_LOCATION = 111;
 
+    private boolean NeedToRun(JobParameters job) {
+        String bypass = job.getExtras().getString("bypassNeedToRun");
+        if (bypass != null && bypass.equals("true")) {
+            Log.d("FENCE", "bypass request detected");
+            return true;
+        }
+        Calendar rightNow = Calendar.getInstance();
+        int currentHour = rightNow.get(Calendar.HOUR_OF_DAY);
+        Log.d("FENCE", "current hour is " + currentHour);
+        if (currentHour == 8 || currentHour == 9) {
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public boolean onStartJob(JobParameters job) {
+        Log.d("FENCE", "onStartJob started executing");
+        if (!NeedToRun(job)) {
+            Log.d("FENCE", "OurPullService shouldn't run - aborting");
+            return false;
+        }
         Log.d("FENCE", "OurPullService starting getting locations");
         if (ActivityCompat.checkSelfPermission(OurPullService.this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -148,7 +163,7 @@ public class OurPullService extends JobService implements GoogleApiClient.Connec
                 else {
                     Log.d("FENCE", "saved date is: "+savedDate);
                     //if there is a stored date, compare it to current date via DB entry
-                    if (mobiles != null && mobiles.get(0) != null) {
+                    if (mobiles != null && mobiles.size() !=0 && mobiles.get(0) != null) {
                         //if the saved date is equal to the date of mobiles from the DB, no need to re-register geofences
                         if (mobiles.get(0).getDate().equals(savedDate)) {
                             Log.d("FENCE","Data is updated no need to register new geofences");
