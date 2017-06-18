@@ -65,11 +65,7 @@ public class OurPullService extends JobService implements GoogleApiClient.Connec
         Log.d("FENCE", "OurPullService starting getting locations");
         if (ActivityCompat.checkSelfPermission(OurPullService.this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            try {
-                Thread.sleep(30_000L);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+                return false; //no permissions - return and try again later
         }
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Log.d("FENCE", "Initializing Google API Client");
