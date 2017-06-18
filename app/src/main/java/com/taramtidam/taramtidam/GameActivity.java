@@ -12,6 +12,7 @@ import android.util.Log;
 public class GameActivity extends AppCompatActivity {
 
     public static String str = "nitzan";
+    public static String vTeam = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

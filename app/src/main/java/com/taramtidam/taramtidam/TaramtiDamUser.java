@@ -8,17 +8,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-        import android.os.Bundle;
-        import android.support.annotation.NonNull;
-        import android.support.v7.app.AppCompatActivity;
-        import android.util.Log;
-
-        import android.widget.Toast;
-
-
-        import java.util.Arrays;
-        import java.util.Date;
-
 public class TaramtiDamUser {
 
     private boolean completedRegisteration;
@@ -34,7 +23,7 @@ public class TaramtiDamUser {
     private int donationsCounter;
     private boolean sendMails;
     private boolean alreadyJoinedTheGame;
-
+    private TeamInfo team;
 
     public TaramtiDamUser(){}
 
@@ -51,7 +40,7 @@ public class TaramtiDamUser {
         this.donationsCounter = 0;
         this.sendMails = true;
         this.alreadyJoinedTheGame = false;
-
+        this.team = new TeamInfo();
     }
 
 
@@ -69,7 +58,7 @@ public class TaramtiDamUser {
         this.donationsCounter = 0;
         this.sendMails = true;
         this.alreadyJoinedTheGame = false;
-
+        this.team = new TeamInfo();
 
     }
 
@@ -147,6 +136,9 @@ public class TaramtiDamUser {
         this.email = email;
     }
 
+    public TeamInfo getTeam() { return this.team; }
+
+    public void setTeam(TeamInfo Team) { this.team = Team; }
 
     public void increaseRankByOne (){
 

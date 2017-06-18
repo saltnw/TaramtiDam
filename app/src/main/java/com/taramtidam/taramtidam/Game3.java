@@ -142,7 +142,9 @@ public class Game3 extends Fragment implements View.OnClickListener{
         Log.d("GAME3", "The  chosen area is " + area);
 
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("users").child(userId).child("Team").child("Area").setValue(area);
+        mDatabase.child("users").child(userId).child("team").child("area").setValue(area);
+
+        MainActivity.currentLoggedUser.getTeam().setArea(area);
         final String AREA = area;
         final String UID = userId;
 

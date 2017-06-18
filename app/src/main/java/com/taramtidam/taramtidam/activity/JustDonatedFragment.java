@@ -31,6 +31,7 @@ import java.util.Map;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.taramtidam.taramtidam.Game3.area;
+import static com.taramtidam.taramtidam.MainActivity.currentLoggedUser;
 import static com.taramtidam.taramtidam.MainActivity.team;
 
 //twitter share
@@ -77,23 +78,25 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
                     // get user team (area + vampires team)
-                    String area = (String)dataSnapshot.child("users").child(UID).child("Team").child("Area").getValue();
-                    String vempTeam = (String)dataSnapshot.child("users").child(UID).child("Team").child("Vemp").getValue();
+                    String area = currentLoggedUser.getTeam().getArea();
+                    String vempTeam = currentLoggedUser.getTeam().getVemp();
+                    Log.d("GAME", "user area: " + area);
+                    Log.d("GAME", "user vemp: " + vempTeam);
+
                     //Update global donations counter
                     long globalDonations = (long)dataSnapshot.child("Game").child("_GlobalDonationCounter").getValue();
                     globalDonations++;
                     ref.child("Game").child("_GlobalMemberCounter").setValue(globalDonations);
+
                     //update area counter
-                    //TODO
                     long areaDonations = (long)dataSnapshot.child("Game").child(area).child("Donations").getValue();
                     areaDonations++;
                     ref.child("Game").child(area).child("Donations").setValue(areaDonations);
+
                     //update team counter
-                    //TODO
                     long teamDonations = (long)dataSnapshot.child("Game").child(area).child(vempTeam).child("Donations").getValue();
                     teamDonations++;
                     ref.child("Game").child(area).child(vempTeam).child("Donations").setValue(teamDonations);
-
                 }
 
                 @Override
