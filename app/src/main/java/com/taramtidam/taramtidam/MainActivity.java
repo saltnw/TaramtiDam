@@ -26,11 +26,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
-import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.Places;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Trigger;
@@ -42,7 +37,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.taramtidam.taramtidam.activity.DonateNowFragment;
-import com.taramtidam.taramtidam.activity.EmptyFragment;
 import com.taramtidam.taramtidam.activity.FragmentDrawer;
 import com.taramtidam.taramtidam.activity.HomeFragment;
 import com.taramtidam.taramtidam.activity.JustDonatedFragment;
@@ -72,8 +66,6 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
     /* Geofencing */
     private static final int PERMISSIONS_REQUEST_FINE_LOCATION = 111;
-    //private GoogleApiClient mClient;
-    //private Geofencing mGeofencing;
     public static List<MDAMobile> mobiles =new ArrayList<>();
 
     /* Notification flag on/off */
@@ -89,6 +81,9 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
     Fragment fragment = null;
     String title;
     private Intent mServiceIntent;
+
+    //  GAME
+    public static String team=null;
 
 
 
@@ -445,7 +440,7 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                     title = getString(R.string.title_myprofile);
                     break;
                 case 2:
-                    if (JustDonatedFragment.isLegalDonatoin()) {
+                    if (JustDonatedFragment.isLegalDonation()) {
                         //fragment = new JustDonatedFragment();
                         //title = getString(R.string.title_just_donated);
                         showBloodDonationCinfirmDialog().show();

@@ -1,6 +1,7 @@
 package com.taramtidam.taramtidam;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,8 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import static com.taramtidam.taramtidam.MainActivity.currentLoggedUser;
 
 /**
  * Created by Asaf on 08/06/2017.
@@ -82,14 +88,14 @@ public class Game2 extends Fragment implements View.OnClickListener {
     public void onClick(View arg0) {
 
         int buttonId = arg0.getId();
-        int team = 0;
+         String team = null;
 
         if (buttonId == R.id.dayvampireButton) {
-            team = 1;
+            team = "Day";
             HandleTeam(team);
         }
         if (buttonId == R.id.nightvampireButton) {
-            team = 2;
+            team = "Night";
             HandleTeam(team);
         }
 
@@ -103,8 +109,14 @@ public class Game2 extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void HandleTeam (int team){
-        //TODO
+    private void HandleTeam (String team){
+        String userId = currentLoggedUser.getuid();
+        Log.d("GAME2", "user id is " + userId);
+
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("users").child(userId).child("Team").child("Vemp").setValue(team);
+        MainActivity.team = team;
+
         Log.d("GAME2","The chosen team is " + team);
     }
 }

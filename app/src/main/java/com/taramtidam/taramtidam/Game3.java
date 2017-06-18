@@ -13,6 +13,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.StringLoader;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.taramtidam.taramtidam.MainActivity.currentLoggedUser;
+import static com.taramtidam.taramtidam.MainActivity.team;
 
 /**
  * Created by Asaf on 08/06/2017.
@@ -25,10 +37,7 @@ public class Game3 extends Fragment implements View.OnClickListener{
     Button northButton;
     Button eastButton;
     Button westButton;
-
-
-
-
+    public static String area;
 
 
     public Game3() {
@@ -98,23 +107,23 @@ public class Game3 extends Fragment implements View.OnClickListener{
 
     public void onClick(View arg0) {
 
-        int area = 0;
+        area = null;
         int buttonId = arg0.getId();
 
         if (buttonId == R.id.mapsouthButton) {
-            area = 1;
+            area = "South";
             HandleArea(area);
         }
         if (buttonId == R.id.mapeastButton) {
-            area = 2;
+            area = "East";
             HandleArea(area);
         }
         if (buttonId == R.id.mapnorthButton) {
-            area = 3;
+            area = "North";
             HandleArea(area);
         }
         if (buttonId == R.id.mapwestButton) {
-            area = 4;
+            area = "West";
             HandleArea(area);
         }
 
@@ -128,9 +137,42 @@ public class Game3 extends Fragment implements View.OnClickListener{
         }
     }
 
-    private void HandleArea (int area){
+    private void HandleArea (String area){
+        String userId = currentLoggedUser.getuid();
         Log.d("GAME3", "The  chosen area is " + area);
-        //TODO
+
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("users").child(userId).child("Team").child("Area").setValue(area);
+        final String AREA = area;
+        final String UID = userId;
+
+        final DatabaseReference ref =  mDatabase.child("Game");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //add the user to the team
+                Map<String,Object> map = new HashMap<String, Object>();
+                map.put(UID,UID);
+                ref.child(AREA).child(team).child("Users").updateChildren(map);
+
+                //increase number of members in team
+                long members = (long)dataSnapshot.child(AREA).child(team).child("Members").getValue();
+                members++ ;
+                ref.child(AREA).child(team).child("Members").setValue(members);
+                long globalMembers = (long)dataSnapshot.child("_GlobalMemberCounter").getValue();
+                globalMembers++;
+                ref.child("_GlobalMemberCounter").setValue(globalMembers);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
     }
 }
 
