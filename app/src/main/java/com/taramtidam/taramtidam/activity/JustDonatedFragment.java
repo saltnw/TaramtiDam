@@ -86,7 +86,7 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
                     //Update global donations counter
                     long globalDonations = (long)dataSnapshot.child("Game").child("_GlobalDonationCounter").getValue();
                     globalDonations++;
-                    ref.child("Game").child("_GlobalMemberCounter").setValue(globalDonations);
+                    ref.child("Game").child("_GlobalDonationCounter").setValue(globalDonations);
 
                     //update area counter
                     long areaDonations = (long)dataSnapshot.child("Game").child(area).child("Donations").getValue();

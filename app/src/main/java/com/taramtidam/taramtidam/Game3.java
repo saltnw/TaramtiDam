@@ -143,28 +143,46 @@ public class Game3 extends Fragment implements View.OnClickListener{
 
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("users").child(userId).child("team").child("area").setValue(area);
+        mDatabase.child("users").child(userId).child("alreadyJoinedTheGame").setValue(true);
 
         MainActivity.currentLoggedUser.getTeam().setArea(area);
+        MainActivity.currentLoggedUser.setAlreadyJoinedTheGame(true);
+
         final String AREA = area;
         final String UID = userId;
 
-        final DatabaseReference ref =  mDatabase.child("Game");
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        final DatabaseReference gameRef =  mDatabase.child("Game");
+        //add the user to the team
+        Map<String,Object> map = new HashMap<String, Object>();
+        map.put(UID,UID);
+        gameRef.child(AREA).child(team).child("Users").updateChildren(map);
+
+        //increase the global game members counter
+        gameRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //add the user to the team
-                Map<String,Object> map = new HashMap<String, Object>();
-                map.put(UID,UID);
-                ref.child(AREA).child(team).child("Users").updateChildren(map);
 
-                //increase number of members in team
-                long members = (long)dataSnapshot.child(AREA).child(team).child("Members").getValue();
-                members++ ;
-                ref.child(AREA).child(team).child("Members").setValue(members);
                 long globalMembers = (long)dataSnapshot.child("_GlobalMemberCounter").getValue();
                 globalMembers++;
-                ref.child("_GlobalMemberCounter").setValue(globalMembers);
+                gameRef.child("_GlobalMemberCounter").setValue(globalMembers);
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        //increase number of members in area
+        final DatabaseReference areaRef =  mDatabase.child("Game").child(AREA);
+        areaRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                long members = (long) dataSnapshot.child("Members").getValue();
+                members++;
+                areaRef.child("Members").setValue(members);
             }
 
             @Override
@@ -174,6 +192,22 @@ public class Game3 extends Fragment implements View.OnClickListener{
         });
 
 
+        //increase number of members in team
+        final DatabaseReference teamRef =  mDatabase.child("Game").child(AREA).child(team);
+        teamRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                long members = (long)dataSnapshot.child("Members").getValue();
+                members++ ;
+                teamRef.child("Members").setValue(members);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 }
