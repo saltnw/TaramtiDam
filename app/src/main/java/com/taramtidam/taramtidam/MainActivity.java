@@ -3,6 +3,7 @@ package com.taramtidam.taramtidam;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
@@ -92,6 +93,14 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //AuthUI.getInstance().signOut(this);   // logout
+        SharedPreferences prefs = getSharedPreferences("com.taramtidam.taramtidam", MODE_PRIVATE);
+        if (prefs.getBoolean("firstrun", true)) {
+            prefs.edit().putBoolean("firstrun", false).commit();
+            //call the tutorial activity
+            Intent tutintent = new Intent(this, tutActi.class);
+            startActivity(tutintent);
+        }
+        //else continue as normal
 
         setContentView(R.layout.activity_main);
 
