@@ -194,10 +194,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
     }
 
     public void onClick(View arg0) {
-        getView().findViewById(R.id.homeEditText).setFocusable(false);
-        getView().findViewById(R.id.workEditText).setFocusable(false);
-
-        if (arg0 == getView().findViewById(R.id.saveProfileButton)) {
+         if (arg0 == getView().findViewById(R.id.saveProfileButton)) {
             //save button pressed :
             Spinner bloodType = (Spinner) (getView().findViewById(R.id.bloodSpinner));
 
