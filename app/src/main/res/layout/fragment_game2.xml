@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.taramtidam.taramtidam.Game2"
+    android:background="@color/windowBackground">
+
+    <ImageView
+        android:id="@+id/selectteamtitleImageView"
+        android:layout_width="306dp"
+        android:layout_height="130dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/selectyourteam"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="29dp" />
+
+    <Button
+        android:id="@+id/nightvampireButton"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="@+id/selectteamnightvampiresImageView"
+        app:layout_constraintLeft_toLeftOf="@+id/selectteamnightvampiresImageView"
+        app:layout_constraintRight_toRightOf="@+id/selectteamnightvampiresImageView"
+        app:layout_constraintTop_toTopOf="@+id/selectteamnightvampiresImageView" />
+
+    <Button
+        android:id="@+id/dayvampireButton"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="@+id/selectteamdayvampiresImageView"
+        app:layout_constraintLeft_toLeftOf="@+id/selectteamdayvampiresImageView"
+        app:layout_constraintRight_toRightOf="@+id/selectteamdayvampiresImageView"
+        app:layout_constraintTop_toTopOf="@+id/selectteamdayvampiresImageView" />
+
+    <ImageView
+        android:id="@+id/selectteamdayvampiresImageView"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selectteamnightvampiresImageView" />
+
+    <ImageView
+        android:id="@+id/selectteamnightvampiresImageView"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selectteamtitleImageView" />
+
+</android.support.constraint.ConstraintLayout>

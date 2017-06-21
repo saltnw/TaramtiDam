@@ -36,6 +36,8 @@
     <string name="nav_item_Navigation">Navigation</string>
     <string name="nav_item_just_donated">Just Donated</string>
     <string name="nav_item_donate_now">Donate Now</string>
+    <string name="nav_item_game_progress">Game Progress</string>
+
 
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
@@ -43,6 +45,7 @@
         <item>@string/nav_item_myprofile</item>
         <item>@string/nav_item_just_donated</item>
         <item>@string/nav_item_donate_now</item>
+        <item>@string/nav_item_game_progress</item>
         <!--<item>@string/nav_item_notifications</item>-->
         <!--<item>@string/nav_item_Navigation</item>-->
     </string-array>
@@ -52,6 +55,7 @@
     <string name="title_donate_now">Donate Now</string>
     <string name="title_just_donated">Just Donated</string>
     <string name="title_myprofile">My Profile</string>
+    <string name="title_gameprogress">Game progress</string>
     <string name="title_home">Home</string>
 
     <!-- TODO: Remove or change this placeholder text -->

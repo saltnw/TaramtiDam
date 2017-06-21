@@ -35,7 +35,7 @@ public class ProfileActivity extends AppCompatActivity {
     //private TextView last_donation;
     //private ImageView image;
 
-    TaramtiDamUser currentLoggedUser;
+    public TaramtiDamUser currentLoggedUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

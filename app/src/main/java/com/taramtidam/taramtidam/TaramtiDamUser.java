@@ -8,17 +8,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-        import android.os.Bundle;
-        import android.support.annotation.NonNull;
-        import android.support.v7.app.AppCompatActivity;
-        import android.util.Log;
-
-        import android.widget.Toast;
-
-
-        import java.util.Arrays;
-        import java.util.Date;
-
 public class TaramtiDamUser {
 
     private boolean completedRegisteration;
@@ -33,7 +22,8 @@ public class TaramtiDamUser {
     private String imagestring;
     private int donationsCounter;
     private boolean sendMails;
-
+    private boolean alreadyJoinedTheGame;
+    private TeamInfo team;
 
     public TaramtiDamUser(){}
 
@@ -49,10 +39,13 @@ public class TaramtiDamUser {
         this.imagestring = "";
         this.donationsCounter = 0;
         this.sendMails = true;
-
+        this.alreadyJoinedTheGame = false;
+        this.team = new TeamInfo();
     }
 
-    public TaramtiDamUser(String uid, String fullName,String email) {
+
+
+    public TaramtiDamUser(String uid, String fullName, String email) {
         this.uid = uid;
         this.fullName = fullName;
         this.email = email;
@@ -64,6 +57,8 @@ public class TaramtiDamUser {
         this.imagestring = "";
         this.donationsCounter = 0;
         this.sendMails = true;
+        this.alreadyJoinedTheGame = false;
+        this.team = new TeamInfo();
 
     }
 
@@ -141,6 +136,9 @@ public class TaramtiDamUser {
         this.email = email;
     }
 
+    public TeamInfo getTeam() { return this.team; }
+
+    public void setTeam(TeamInfo Team) { this.team = Team; }
 
     public void increaseRankByOne (){
 
@@ -196,6 +194,14 @@ public class TaramtiDamUser {
         diffDays = diff / (24*60*60*1000);
 
         return diffDays;
+    }
+
+    public boolean isAlreadyJoinedTheGame() {
+        return alreadyJoinedTheGame;
+    }
+
+    public void setAlreadyJoinedTheGame(boolean alreadyJoinedTheGame) {
+        this.alreadyJoinedTheGame = alreadyJoinedTheGame;
     }
 
 

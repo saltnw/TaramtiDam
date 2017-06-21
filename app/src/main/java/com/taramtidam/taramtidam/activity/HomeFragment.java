@@ -5,15 +5,19 @@ package com.taramtidam.taramtidam.activity;
  */
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.view.menu.ActionMenuItemView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +25,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
 import com.firebase.ui.auth.AuthUI;
+import com.taramtidam.taramtidam.Game1;
+import com.taramtidam.taramtidam.GameActivity;
 import com.taramtidam.taramtidam.MainActivity;
 import com.taramtidam.taramtidam.R;
 
@@ -33,6 +39,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     Button loginBtn;
     Button logoutbtn;
+    Button gamebtn;
     private static final int RC_SIGN_IN = 12;               // return code from firebase UI
 
 
@@ -56,11 +63,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         //set login button onCliclListener
         loginBtn = (Button) rootView.findViewById(R.id.loginButton);
-
         loginBtn.setOnClickListener(this);
+
         //set logout button onCliclListener
         logoutbtn = (Button) rootView.findViewById(R.id.logoutButton);
         logoutbtn.setOnClickListener(this);
+
+        //set game button onCliclListener
+        gamebtn = (Button) rootView.findViewById(R.id.gamecubeButton);
+        gamebtn.setOnClickListener(this);
 
         if (MainActivity.currentLoggedUser == null){
 
@@ -76,6 +87,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
             logoutbtn.setVisibility(View.VISIBLE);
             logoutbtn.setEnabled(true);
+
+            //check if to display join the game or not
+            if(MainActivity.currentLoggedUser.isAlreadyJoinedTheGame()==true){
+                //user joined the game so remove game button
+                gamebtn.setVisibility(View.INVISIBLE);
+                gamebtn.setEnabled(false);
+            }
+            else{
+                //user didnt signup for the game yet so show the game button
+                gamebtn.setVisibility(View.VISIBLE);
+                gamebtn.setEnabled(true);
+
+            }
 
         }
 
@@ -125,6 +149,30 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         }
 
+        if (buttonId == R.id.gamecubeButton){
+            Log.d("HOME_FREAMENT", "game cube btn click!");
+
+            Fragment f = new Game1();
+
+            if (f != null) {
+                Log.d("Game Activity", "loading game1 fragemnt...");
+
+                //Not good
+                getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+
+                //TODO save the state of the login + logout + join the game buttons
+
+                //TODO set all the buttons to Disabled
+
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.container_game2, f);
+                fragmentTransaction.commit();
+            }
+
+
+
+        }
 
     }
 

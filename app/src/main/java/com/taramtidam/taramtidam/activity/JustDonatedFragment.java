@@ -2,7 +2,6 @@ package com.taramtidam.taramtidam.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -15,8 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.taramtidam.taramtidam.MainActivity;
 import com.taramtidam.taramtidam.R;
 import com.taramtidam.taramtidam.model.ShareOnFacebook;
@@ -24,15 +26,18 @@ import com.taramtidam.taramtidam.model.ShareOnFacebook;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
+import static com.taramtidam.taramtidam.Game3.area;
+import static com.taramtidam.taramtidam.MainActivity.currentLoggedUser;
 
 //twitter share
 import io.fabric.sdk.android.Fabric;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
-import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
 
 public class JustDonatedFragment extends Fragment implements View.OnClickListener {
@@ -48,7 +53,7 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
 
         /* increase the rank of the user */
 
-        if (isLegalDonatoin()){
+        if (isLegalDonation()){
             //save the new rank
             prevRank = MainActivity.currentLoggedUser.getRankLevel();
 
@@ -64,6 +69,41 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
             //update database
             DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
             mDatabase.child("users").child(MainActivity.currentLoggedUser.getuid()).setValue(MainActivity.currentLoggedUser);
+
+            final String UID = MainActivity.currentLoggedUser.getuid();
+            final DatabaseReference ref =  mDatabase;
+            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    // get user team (area + vampires team)
+                    String area = currentLoggedUser.getTeam().getArea();
+                    String vempTeam = currentLoggedUser.getTeam().getVemp();
+                    Log.d("GAME", "user area: " + area);
+                    Log.d("GAME", "user vemp: " + vempTeam);
+
+                    //Update global donations counter
+                    long globalDonations = (long)dataSnapshot.child("Game").child("_GlobalDonationCounter").getValue();
+                    globalDonations++;
+                    ref.child("Game").child("_GlobalDonationCounter").setValue(globalDonations);
+
+                    //update area counter
+                    long areaDonations = (long)dataSnapshot.child("Game").child(area).child("Donations").getValue();
+                    areaDonations++;
+                    ref.child("Game").child(area).child("Donations").setValue(areaDonations);
+
+                    //update team counter
+                    long teamDonations = (long)dataSnapshot.child("Game").child(area).child(vempTeam).child("Donations").getValue();
+                    teamDonations++;
+                    ref.child("Game").child(area).child(vempTeam).child("Donations").setValue(teamDonations);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
         }
         else{
             Toast.makeText(getApplicationContext(), R.string.ilegallDonation, Toast.LENGTH_LONG).show();
@@ -153,7 +193,7 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
     }
 
 
-    public static boolean isLegalDonatoin(){
+    public static boolean isLegalDonation(){
         //return true;
         // check date margin
         return isLegalDate();

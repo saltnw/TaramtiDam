@@ -38,7 +38,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.taramtidam.taramtidam.activity.DonateNowFragment;
-import com.taramtidam.taramtidam.activity.EmptyFragment;
 import com.taramtidam.taramtidam.activity.FragmentDrawer;
 import com.taramtidam.taramtidam.activity.HomeFragment;
 import com.taramtidam.taramtidam.activity.JustDonatedFragment;
@@ -68,8 +67,6 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
     /* Geofencing */
     private static final int PERMISSIONS_REQUEST_FINE_LOCATION = 111;
-    //private GoogleApiClient mClient;
-    //private Geofencing mGeofencing;
     public static List<MDAMobile> mobiles =new ArrayList<>();
 
     /* Notification flag on/off */
@@ -85,6 +82,10 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
     Fragment fragment = null;
     String title;
     private Intent mServiceIntent;
+
+    //  GAME
+    public static GameData gameData = new GameData();
+    //public static String team=null;
 
 
 
@@ -225,6 +226,41 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
         /*start the background location services*/
         setupOneTimePull();
         setupScheduledJob();
+
+        //Game stats init
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference gameRef =  dbRef.child("Game");
+        gameRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //read donation per vampires team
+                gameData.setDayEastCounter((long)dataSnapshot.child("East").child("Day").child("Donations").getValue());
+                //nightEastCounter = (long)dataSnapshot.child("East").child("Night").child("Donations").getValue();
+                gameData.setDayNorthCounter((long)dataSnapshot.child("North").child("Day").child("Donations").getValue());
+                gameData.setDaySouthCounter((long)dataSnapshot.child("South").child("Day").child("Donations").getValue());
+                gameData.setDayWestCounter((long)dataSnapshot.child("West").child("Day").child("Donations").getValue());
+
+                //read donations per all area
+                gameData.setEastTotal((long)dataSnapshot.child("East").child("Donations").getValue());
+                gameData.setNorthTotal((long)dataSnapshot.child("North").child("Donations").getValue());
+                gameData.setSouthTotal((long)dataSnapshot.child("South").child("Donations").getValue());
+                gameData.setWestTotal((long)dataSnapshot.child("West").child("Donations").getValue());
+
+                Log.d("GAME4", "done importing game stats update" );
+
+                gameData.computeGameStats();
+                Log.d("GAME4", "done computing stats from updated data");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
     }
 
     /* define behavior to the buttons on the view  */
@@ -449,7 +485,7 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                     title = getString(R.string.title_myprofile);
                     break;
                 case 2:
-                    if (JustDonatedFragment.isLegalDonatoin()) {
+                    if (JustDonatedFragment.isLegalDonation()) {
                         //fragment = new JustDonatedFragment();
                         //title = getString(R.string.title_just_donated);
                         showBloodDonationCinfirmDialog().show();
@@ -466,8 +502,8 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                     break;
 
                 case 4:
-                    fragment = new EmptyFragment();
-                    title = getString(R.string.title_messages);
+                    fragment = new Game4();
+                    title = getString(R.string.title_gameprogress);
                     break;
                 case 5:
                     fragment = new NavigationFragment();
@@ -557,7 +593,7 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                     //displayProfileAfterLoadingfromDtabase();
                     doThingsAfterLogin();
                     try{
-                        ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
+                       // ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
 
                     }catch (NullPointerException e){
                         //could not load the progress bar. probably was logged in not through home fragment
@@ -579,11 +615,26 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
         try {
 
+            ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
+
             ((Button) findViewById(R.id.loginButton)).setVisibility(View.INVISIBLE);
             ((Button) findViewById(R.id.loginButton)).setEnabled(false);
 
             ((Button) findViewById(R.id.logoutButton)).setVisibility(View.VISIBLE);
             ((Button) findViewById(R.id.logoutButton)).setEnabled(true);
+
+            //check if the user signed up to game or not
+            if(currentLoggedUser.isAlreadyJoinedTheGame()==true){
+                //user joined the game so remove game button
+                ((Button) findViewById(R.id.gamecubeButton)).setVisibility(View.INVISIBLE);
+                ((Button) findViewById(R.id.gamecubeButton)).setEnabled(false);
+            }
+            else{
+                //user didnt signup for the game yet so show the game button
+                ((Button) findViewById(R.id.gamecubeButton)).setVisibility(View.VISIBLE);
+                ((Button) findViewById(R.id.gamecubeButton)).setEnabled(true);
+
+            }
         }
         catch (NullPointerException e) {
 
@@ -591,11 +642,19 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
     }
     private void doThingsAfterLogout(){
         try {
+            //show login button
             ((Button) findViewById(R.id.loginButton)).setVisibility(View.VISIBLE);
             ((Button) findViewById(R.id.loginButton)).setEnabled(true);
 
+            //remove logout button
             ((Button) findViewById(R.id.logoutButton)).setVisibility(View.INVISIBLE);
             ((Button) findViewById(R.id.logoutButton)).setEnabled(false);
+
+            //remove join the game button
+            ((Button) findViewById(R.id.gamecubeButton)).setVisibility(View.INVISIBLE);
+            ((Button) findViewById(R.id.gamecubeButton)).setEnabled(false);
+
+
         }
         catch (NullPointerException e) {
 
@@ -613,6 +672,8 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
 
     }
+
+
 
     public Dialog showBloodDonationCinfirmDialog(){
 
@@ -695,5 +756,18 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                         .build()
         );
     }
+
+       /* @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        Log.d("Home Fragment", "on activity result called");
+
+        if (requestCode == 11){
+            if (resultCode == RESULT_OK){
+                Log.d("Home Fragment", data.getDataString());
+            }
+        }
+
+    }
+    */
 
 }
