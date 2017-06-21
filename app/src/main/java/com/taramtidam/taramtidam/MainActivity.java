@@ -84,7 +84,8 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
     private Intent mServiceIntent;
 
     //  GAME
-    public static String team=null;
+    public static GameData gameData = new GameData();
+    //public static String team=null;
 
 
 
@@ -225,6 +226,41 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
         /*start the background location services*/
         setupOneTimePull();
         setupScheduledJob();
+
+        //Game stats init
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference gameRef =  dbRef.child("Game");
+        gameRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //read donation per vampires team
+                gameData.setDayEastCounter((long)dataSnapshot.child("East").child("Day").child("Donations").getValue());
+                //nightEastCounter = (long)dataSnapshot.child("East").child("Night").child("Donations").getValue();
+                gameData.setDayNorthCounter((long)dataSnapshot.child("North").child("Day").child("Donations").getValue());
+                gameData.setDaySouthCounter((long)dataSnapshot.child("South").child("Day").child("Donations").getValue());
+                gameData.setDayWestCounter((long)dataSnapshot.child("West").child("Day").child("Donations").getValue());
+
+                //read donations per all area
+                gameData.setEastTotal((long)dataSnapshot.child("East").child("Donations").getValue());
+                gameData.setNorthTotal((long)dataSnapshot.child("North").child("Donations").getValue());
+                gameData.setSouthTotal((long)dataSnapshot.child("South").child("Donations").getValue());
+                gameData.setWestTotal((long)dataSnapshot.child("West").child("Donations").getValue());
+
+                Log.d("GAME4", "done importing game stats update" );
+
+                gameData.computeGameStats();
+                Log.d("GAME4", "done computing stats from updated data");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
     }
 
     /* define behavior to the buttons on the view  */

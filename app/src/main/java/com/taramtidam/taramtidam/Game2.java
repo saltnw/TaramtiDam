@@ -116,7 +116,7 @@ public class Game2 extends Fragment implements View.OnClickListener {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("users").child(userId).child("team").child("vemp").setValue(team);
         MainActivity.currentLoggedUser.getTeam().setVemp(team);
-        MainActivity.team = team;
+        //MainActivity.team = team;
 
         Log.d("GAME2","The chosen team is " + team);
     }

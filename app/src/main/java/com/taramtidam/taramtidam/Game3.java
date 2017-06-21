@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.taramtidam.taramtidam.MainActivity.currentLoggedUser;
-import static com.taramtidam.taramtidam.MainActivity.team;
+//import static com.taramtidam.taramtidam.MainActivity.team;
 
 /**
  * Created by Asaf on 08/06/2017.
@@ -150,13 +150,14 @@ public class Game3 extends Fragment implements View.OnClickListener{
 
         final String AREA = area;
         final String UID = userId;
+        final String VEMP = MainActivity.currentLoggedUser.getTeam().getVemp();
 
 
         final DatabaseReference gameRef =  mDatabase.child("Game");
         //add the user to the team
         Map<String,Object> map = new HashMap<String, Object>();
         map.put(UID,UID);
-        gameRef.child(AREA).child(team).child("Users").updateChildren(map);
+        gameRef.child(AREA).child(VEMP).child("Users").updateChildren(map);
 
         //increase the global game members counter
         gameRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -192,8 +193,8 @@ public class Game3 extends Fragment implements View.OnClickListener{
         });
 
 
-        //increase number of members in team
-        final DatabaseReference teamRef =  mDatabase.child("Game").child(AREA).child(team);
+        //increase number of members in team (team = area + day or night)
+        final DatabaseReference teamRef =  mDatabase.child("Game").child(AREA).child(VEMP);
         teamRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

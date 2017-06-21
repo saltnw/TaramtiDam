@@ -1,8 +1,6 @@
 package com.taramtidam.taramtidam;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,9 +14,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.taramtidam.taramtidam.activity.HomeFragment;
 
-import java.util.Arrays;
+import static com.taramtidam.taramtidam.MainActivity.gameData;
 
 /**
  * Created by Asaf on 08/06/2017.
@@ -27,25 +30,18 @@ import java.util.Arrays;
 public class Game4 extends Fragment implements View.OnClickListener {
 
     Button backToMain;
-    int daySouthCounter = 10;
-    int dayNorthCounter = 2;
-    int dayWestCounter = 11;
-    int dayEastCounter = 0;
 
-    int nightSouthCounter = 9;
-    int nightNorthCounter = 0;
-    int nightWestCounter = 80;
-    int nightEastCounter = 100;
+    long dayEastPercent = gameData.getDayEastPercent();
+    long nightEastPercent = gameData.getNightEastPercent();
 
-    int daySouthPrecent;
-    int dayNorthPrecent;
-    int dayWestPrecent;
-    int dayEastPrecent;
+    long dayNorthPercent = gameData.getDayNorthPercent();
+    long nightNorthPercent = gameData.getNightNorthPercent();
 
-    int nightSouthPrecent;
-    int nightNorthPrecent;
-    int nightWestPrecent;
-    int nightEastPrecent;
+    long daySouthPercent = gameData.getDaySouthPercent();
+    long nightSouthPercent = gameData.getNightSouthPercent();
+
+    long dayWestPercent = gameData.getDayWestPercent();
+    long nightWestPercent = gameData.getNightWestPercent();
 
     TextView t1, t2, t3, t4, t5, t6, t7, t8;
 
@@ -57,27 +53,6 @@ public class Game4 extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        daySouthPrecent = (int)((double) (daySouthCounter / (double)(daySouthCounter + nightSouthCounter)) * 100);
-        nightSouthPrecent = 100 - daySouthPrecent;
-
-        dayNorthPrecent = (int)((double)dayNorthCounter / (double)(dayNorthCounter + nightNorthCounter) * 100);
-        nightNorthPrecent = 100 - dayNorthPrecent;
-
-        dayEastPrecent = (int)((double)dayEastCounter / (double)(dayEastCounter + nightEastCounter) * 100);
-        nightEastPrecent = 100 - dayEastPrecent;
-
-        dayWestPrecent = (int)((double)dayWestCounter / (double)(dayWestCounter + nightWestCounter) * 100);
-        nightWestPrecent = 100 - dayWestPrecent;
-
-        Log.d("Game4", "precetage south are: day = "+daySouthPrecent+"% night= "+nightSouthPrecent);
-        Log.d("Game4", "precetage north are: day = "+dayNorthPrecent+"% night= "+nightNorthPrecent);
-        Log.d("Game4", "precetage east are: day = "+dayEastPrecent+"% night= "+nightEastPrecent);
-        Log.d("Game4", "precetage west are: day = "+dayWestPrecent+"% night= "+nightWestPrecent);
-
-
-
-
 
     }
 
@@ -92,10 +67,10 @@ public class Game4 extends Fragment implements View.OnClickListener {
         backToMain.setOnClickListener(this);
 
         int bitN,bitW,bitE,bitS;
-        bitN = dayNorthPrecent > nightNorthPrecent ? 1 : 0;
-        bitW = dayWestPrecent > nightWestPrecent ? 1 : 0;
-        bitE = dayEastPrecent > nightEastPrecent ? 1 : 0;
-        bitS = daySouthCounter > nightSouthPrecent ? 1 : 0;
+        bitN = dayNorthPercent > nightNorthPercent ? 1 : 0;
+        bitW = dayWestPercent > nightWestPercent ? 1 : 0;
+        bitE = dayEastPercent > nightEastPercent ? 1 : 0;
+        bitS = daySouthPercent > nightSouthPercent ? 1 : 0;
 
         String binNum = "" + bitN + bitW + bitE + bitS + "";
         int mapNum = Integer.parseInt(binNum, 2);
@@ -145,28 +120,28 @@ public class Game4 extends Fragment implements View.OnClickListener {
         super.onStart();
 
         t1 = (TextView) getView().findViewById(R.id.resultSouthDayTextBox);
-        t1.setText(percentToString(daySouthPrecent));
+        t1.setText(percentToString(daySouthPercent));
 
         t2 = (TextView) getView().findViewById(R.id.resultWestDayTextBox);
-        t2.setText(percentToString(dayWestPrecent));
+        t2.setText(percentToString(dayWestPercent));
 
         t3 = (TextView) getView().findViewById(R.id.resultEastDayTextBox);
-        t3.setText(percentToString(dayEastPrecent));
+        t3.setText(percentToString(dayEastPercent));
 
         t4 = (TextView) getView().findViewById(R.id.resultNorthDayTextBox);
-        t4.setText(percentToString(dayNorthPrecent));
+        t4.setText(percentToString(dayNorthPercent));
 
         t5 = (TextView) getView().findViewById(R.id.resultSouthNightTextBox);
-        t5.setText(percentToString(nightSouthPrecent));
+        t5.setText(percentToString(nightSouthPercent));
 
         t6 = (TextView) getView().findViewById(R.id.resultWestNightTextBox);
-        t6.setText(percentToString(nightWestPrecent));
+        t6.setText(percentToString(nightWestPercent));
 
         t7 = (TextView) getView().findViewById(R.id.resultEastNightTextBox);
-        t7.setText(percentToString(nightEastPrecent));
+        t7.setText(percentToString(nightEastPercent));
 
         t8 = (TextView) getView().findViewById(R.id.resultNorthNightTextBox);
-        t8.setText(percentToString(nightNorthPrecent));
+        t8.setText(percentToString(nightNorthPercent));
     }
 
     @Override
@@ -205,7 +180,7 @@ public class Game4 extends Fragment implements View.OnClickListener {
         }
     }
 
-    private String percentToString(int percent){
+    private String percentToString(long percent){
 
         String res;
         return "" + percent + "%";

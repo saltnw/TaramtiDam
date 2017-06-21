@@ -32,7 +32,6 @@ import java.util.Map;
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.taramtidam.taramtidam.Game3.area;
 import static com.taramtidam.taramtidam.MainActivity.currentLoggedUser;
-import static com.taramtidam.taramtidam.MainActivity.team;
 
 //twitter share
 import io.fabric.sdk.android.Fabric;
