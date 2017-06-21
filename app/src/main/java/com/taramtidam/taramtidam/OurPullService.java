@@ -49,7 +49,7 @@ public class OurPullService extends JobService implements GoogleApiClient.Connec
         Calendar rightNow = Calendar.getInstance();
         int currentHour = rightNow.get(Calendar.HOUR_OF_DAY);
         Log.d("FENCE", "current hour is " + currentHour);
-        if (currentHour == 8 || currentHour == 9) {
+        if (currentHour == 8 || currentHour == 12 || currentHour == 14 || currentHour == 16) {
             return true;
         }
         return false;
