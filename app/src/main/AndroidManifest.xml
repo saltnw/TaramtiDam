@@ -12,8 +12,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <!-- <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> -->
-
 
     <!-- add android:largeHeap="true" in application -->
 
@@ -47,11 +45,7 @@
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
             </intent-filter>
         </service>
-
-
-        <!-- </intent-filter> -->
-        <!-- </receiver> -->
-        <activity android:name=".GameActivity"></activity>
-    </application>
-
+    <activity android:name=".tutActi"></activity>
+    <activity android:name=".GameActivity"></activity>
+</application>
 </manifest>

@@ -30,6 +30,14 @@ dependencies {
     })
 
     //geofencing
+
+
+
+    compile('com.twitter.sdk.android:tweet-composer:2.3.1@aar') {
+        transitive = true;
+    }
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.seatgeek:placesautocomplete:0.2-SNAPSHOT'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -41,10 +49,6 @@ dependencies {
 
 
     compile 'com.firebase:firebase-jobdispatcher:0.5.2'
-
-    compile('com.twitter.sdk.android:tweet-composer:2.3.1@aar') {
-        transitive = true;
-    }
     compile 'com.android.support:support-v4:25.3.1'
     testCompile 'junit:junit:4.12'
     compile 'com.github.bumptech.glide:glide:4.0.0-RC0'
