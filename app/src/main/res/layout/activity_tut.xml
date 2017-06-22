@@ -28,7 +28,7 @@
         android:layout_marginStart="40dp"
         android:background="@android:drawable/menuitem_background"
         android:outlineProvider="bounds"
-        android:text="Prev"
+        android:text="Skip"
         android:textColor="@color/tw__solid_white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
