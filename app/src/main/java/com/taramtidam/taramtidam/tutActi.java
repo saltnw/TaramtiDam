@@ -10,8 +10,8 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 public class tutActi extends AppCompatActivity implements View.OnClickListener {
-    int currLook = 1;
-    int maxView  = 2;
+    int currLook = 0;
+    int maxView  = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +29,7 @@ public class tutActi extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         Button nextBtn = (Button) findViewById(R.id.tutNext);
+        Button prevBtn = (Button) findViewById(R.id.tutPrev);
         if (v == findViewById(R.id.tutNext)) {
             if (nextBtn.getText().equals("Done")) {
                 finish();
@@ -42,28 +43,42 @@ public class tutActi extends AppCompatActivity implements View.OnClickListener {
                     nextBtn.setText("Done");
                 }
             }
+            if (prevBtn.getText().equals("Skip")) {
+                prevBtn.setText("Prev");
+            }
         }
         else if (v == findViewById(R.id.tutPrev)) {
+            if (prevBtn.getText().equals("Skip")) {
+               finish();
+            }
             if(currLook == maxView){
                 nextBtn.setText("Next");
             }
-            if(currLook > 1){
+            if(currLook > 0){
                 currLook = currLook-1;
                 setImageViewer(currLook);
-
+            }
+            if (currLook == 0) {
+                prevBtn.setText("Skip");
             }
         }
     }
 
 
     public void setImageViewer(int viewNumber){
-        Log.d("###t###","entered setImageViewer with " + viewNumber);
+        //Log.d("###t###","entered setImageViewer with " + viewNumber);
         ImageView imageView = (ImageView) findViewById(R.id.tutImage);
-        if(viewNumber == 1){
-            Glide.with(imageView).load(R.drawable.tut1).into(imageView);
+        if(viewNumber == 0){
+            Glide.with(imageView).load(R.drawable.tutorial0).into(imageView);
+        }
+        else if(viewNumber == 1){
+            Glide.with(imageView).load(R.drawable.tutorial1).into(imageView);
         }
         else if(viewNumber == 2){
-            Glide.with(imageView).load(R.drawable.tut2).into(imageView);
+            Glide.with(imageView).load(R.drawable.tutorial2).into(imageView);
+        }
+        else if(viewNumber == 3){
+            Glide.with(imageView).load(R.drawable.tutorial3).into(imageView);
         }
     }
 }
