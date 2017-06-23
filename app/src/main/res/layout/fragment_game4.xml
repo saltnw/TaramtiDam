@@ -136,8 +136,8 @@
 
     <ImageView
         android:id="@+id/currentscoresImageView"
-        android:layout_width="136dp"
-        android:layout_height="97dp"
+        android:layout_width="120dp"
+        android:layout_height="85dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintLeft_toLeftOf="parent"

@@ -23,9 +23,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
@@ -628,6 +630,20 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                 //user joined the game so remove game button
                 ((Button) findViewById(R.id.gamecubeButton)).setVisibility(View.INVISIBLE);
                 ((Button) findViewById(R.id.gamecubeButton)).setEnabled(false);
+
+                //show the vampire image
+                //show correct team image
+                ImageView vampire_image_view = (ImageView)findViewById(R.id.vampireImageView);
+                vampire_image_view.setVisibility(View.VISIBLE);
+                if (MainActivity.currentLoggedUser.getTeam().getVemp().equals("Night")){
+                     vampire_image_view = (ImageView)findViewById(R.id.vampireImageView);
+                    Glide.with(this).load(R.drawable.youareanightvampire).into(vampire_image_view);
+
+                }
+                else if(MainActivity.currentLoggedUser.getTeam().getVemp().equals("Day")){
+                     vampire_image_view = (ImageView)findViewById(R.id.vampireImageView);
+                    Glide.with(this).load(R.drawable.youareadayvamprie).into(vampire_image_view);
+                }
             }
             else{
                 //user didnt signup for the game yet so show the game button
@@ -653,6 +669,10 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
             //remove join the game button
             ((Button) findViewById(R.id.gamecubeButton)).setVisibility(View.INVISIBLE);
             ((Button) findViewById(R.id.gamecubeButton)).setEnabled(false);
+
+            //remove the vampire image
+            ImageView vampire_image_view = (ImageView)findViewById(R.id.vampireImageView);
+            vampire_image_view.setVisibility(View.INVISIBLE);
 
 
         }

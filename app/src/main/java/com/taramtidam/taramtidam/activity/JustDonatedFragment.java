@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.taramtidam.taramtidam.Game4;
 import com.taramtidam.taramtidam.MainActivity;
 import com.taramtidam.taramtidam.R;
 import com.taramtidam.taramtidam.model.ShareOnFacebook;
@@ -43,6 +48,7 @@ import com.twitter.sdk.android.core.TwitterCore;
 public class JustDonatedFragment extends Fragment implements View.OnClickListener {
 
     Button facebookBtn;
+    Button toGameProgressBtn;
     Button twitterBtn;
     int prevRank;
 
@@ -70,39 +76,43 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
             DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
             mDatabase.child("users").child(MainActivity.currentLoggedUser.getuid()).setValue(MainActivity.currentLoggedUser);
 
-            final String UID = MainActivity.currentLoggedUser.getuid();
-            final DatabaseReference ref =  mDatabase;
-            ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+            //if the user is in the game than update the game state
+            if (MainActivity.currentLoggedUser.isAlreadyJoinedTheGame()) {
 
-                    // get user team (area + vampires team)
-                    String area = currentLoggedUser.getTeam().getArea();
-                    String vempTeam = currentLoggedUser.getTeam().getVemp();
-                    Log.d("GAME", "user area: " + area);
-                    Log.d("GAME", "user vemp: " + vempTeam);
+                final String UID = MainActivity.currentLoggedUser.getuid();
+                final DatabaseReference ref = mDatabase;
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    //Update global donations counter
-                    long globalDonations = (long)dataSnapshot.child("Game").child("_GlobalDonationCounter").getValue();
-                    globalDonations++;
-                    ref.child("Game").child("_GlobalDonationCounter").setValue(globalDonations);
+                        // get user team (area + vampires team)
+                        String area = currentLoggedUser.getTeam().getArea();
+                        String vempTeam = currentLoggedUser.getTeam().getVemp();
+                        Log.d("GAME", "user area: " + area);
+                        Log.d("GAME", "user vemp: " + vempTeam);
 
-                    //update area counter
-                    long areaDonations = (long)dataSnapshot.child("Game").child(area).child("Donations").getValue();
-                    areaDonations++;
-                    ref.child("Game").child(area).child("Donations").setValue(areaDonations);
+                        //Update global donations counter
+                        long globalDonations = (long) dataSnapshot.child("Game").child("_GlobalDonationCounter").getValue();
+                        globalDonations++;
+                        ref.child("Game").child("_GlobalDonationCounter").setValue(globalDonations);
 
-                    //update team counter
-                    long teamDonations = (long)dataSnapshot.child("Game").child(area).child(vempTeam).child("Donations").getValue();
-                    teamDonations++;
-                    ref.child("Game").child(area).child(vempTeam).child("Donations").setValue(teamDonations);
-                }
+                        //update area counter
+                        long areaDonations = (long) dataSnapshot.child("Game").child(area).child("Donations").getValue();
+                        areaDonations++;
+                        ref.child("Game").child(area).child("Donations").setValue(areaDonations);
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+                        //update team counter
+                        long teamDonations = (long) dataSnapshot.child("Game").child(area).child(vempTeam).child("Donations").getValue();
+                        teamDonations++;
+                        ref.child("Game").child(area).child(vempTeam).child("Donations").setValue(teamDonations);
+                    }
 
-                }
-            });
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
 
         }
         else{
@@ -137,6 +147,10 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
         //set facebook share button onCliclListener
         twitterBtn = (Button) rootView.findViewById(R.id.twitterButton);
         twitterBtn.setOnClickListener(this);
+
+        //set facebook share button onCliclListener
+        toGameProgressBtn = (Button) rootView.findViewById(R.id.togameresultButton);
+        toGameProgressBtn.setOnClickListener(this);
 
         //load blood bag image
         ImageView sakit_dam_image_view = (ImageView)rootView.findViewById(R.id.bloodCounterImgaeView);
@@ -194,9 +208,9 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
 
 
     public static boolean isLegalDonation(){
-        //return true;
+        return true;
         // check date margin
-        return isLegalDate();
+        //return isLegalDate();
 
 
         //check distance
@@ -227,6 +241,22 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
             TweetComposer.Builder builder = new TweetComposer.Builder(getActivity())
                     .text("I just donated blood using TarmtiDam app. Go Get It!");
             builder.show();
+        }
+
+        if (buttonId == R.id.togameresultButton) {
+
+        }
+            Fragment fragment = new Game4();
+            String title = getString(R.string.title_gameprogress);
+            if (fragment != null) {
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.container_body, fragment);
+                fragmentTransaction.commit();
+
+                // set the toolbar title
+                ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(title);
+
         }
     }
 

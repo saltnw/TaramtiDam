@@ -90,9 +90,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
             //check if to display join the game or not
             if(MainActivity.currentLoggedUser.isAlreadyJoinedTheGame()==true){
-                //user joined the game so remove game button
+                //user joined the game so remove game button and display the correct team
+
+                //hide "join the game" button
                 gamebtn.setVisibility(View.INVISIBLE);
                 gamebtn.setEnabled(false);
+
+                //show correct team image
+                if (MainActivity.currentLoggedUser.getTeam().getVemp().equals("Night")){
+                    ImageView vampire_image_view = (ImageView)rootView.findViewById(R.id.vampireImageView);
+                    Glide.with(getContext()).load(R.drawable.youareanightvampire).into(vampire_image_view);
+
+                }
+                else if(MainActivity.currentLoggedUser.getTeam().getVemp().equals("Day")){
+                    ImageView vampire_image_view = (ImageView)rootView.findViewById(R.id.vampireImageView);
+                    Glide.with(getContext()).load(R.drawable.youareadayvamprie).into(vampire_image_view);
+                }
+
             }
             else{
                 //user didnt signup for the game yet so show the game button
