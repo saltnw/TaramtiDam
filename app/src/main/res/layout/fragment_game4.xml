@@ -8,139 +8,73 @@
     tools:context="com.taramtidam.taramtidam.Game4"
     android:background="@color/windowBackground">
 
-    <Button
-        android:id="@+id/backToMainButton"
-        android:layout_width="79dp"
-        android:layout_height="44dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/homebutton"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        style="?android:attr/borderlessButtonStyle"
-        tools:layout_editor_absoluteX="297dp" />
-
     <ImageView
         android:id="@+id/mapresultImageView"
-        android:layout_width="170dp"
-        android:layout_height="400dp"
+        android:layout_width="208dp"
+        android:layout_height="469dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="16dp" />
-
-    <ImageView
-        android:id="@+id/resultstableImageView"
-        android:layout_width="347dp"
-        android:layout_height="133dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintHorizontal_bias="0.513"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mapresultImageView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/resultSouthDayTextBox"
-        android:layout_width="50dp"
-        android:layout_height="26dp"
-        android:layout_marginBottom="23dp"
-        android:layout_marginLeft="0dp"
-        android:text="300%"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/resultSouthNightTextBox"
-        app:layout_constraintLeft_toLeftOf="@+id/resultSouthNightTextBox"
-        tools:layout_editor_absoluteY="474dp" />
-
-    <TextView
-        android:id="@+id/resultSouthNightTextBox"
-        android:layout_width="50dp"
-        android:layout_height="26dp"
-        android:layout_marginBottom="12dp"
-        android:layout_marginLeft="23dp"
-        android:layout_marginStart="23dp"
-        android:text="300%"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/resultstableImageView"
-        app:layout_constraintLeft_toLeftOf="@+id/resultstableImageView" />
-
-    <TextView
-        android:id="@+id/resultWestNightTextBox"
-        android:layout_width="50dp"
-        android:layout_height="26dp"
-        android:layout_marginBottom="12dp"
-        android:layout_marginLeft="19dp"
-        android:layout_marginStart="31dp"
-        android:text="300%"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/resultstableImageView"
-        app:layout_constraintLeft_toRightOf="@+id/resultSouthNightTextBox" />
-
-    <TextView
-        android:id="@+id/resultWestDayTextBox"
-        android:layout_width="50dp"
-        android:layout_height="26dp"
-        android:layout_marginBottom="23dp"
-        android:text="300%"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/resultWestNightTextBox"
-        app:layout_constraintLeft_toLeftOf="@+id/resultWestNightTextBox" />
-
-    <TextView
-        android:id="@+id/resultNorthDayTextBox"
+        android:id="@+id/northTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="23dp"
-        android:text="300%"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/resultNorthNightTextBox"
-        app:layout_constraintLeft_toLeftOf="@+id/resultNorthNightTextBox" />
+        android:layout_marginRight="140dp"
+        android:layout_marginTop="50dp"
+        android:text="Day: 79%\nNight: 21%"
+        android:textColor="#448ccb"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintRight_toRightOf="@+id/mapresultImageView"
+        app:layout_constraintTop_toTopOf="@+id/mapresultImageView" />
 
     <TextView
-        android:id="@+id/resultEastNightTextBox"
-        android:layout_width="50dp"
-        android:layout_height="26dp"
-        android:layout_marginBottom="12dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="31dp"
-        android:text="300%"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/resultstableImageView"
-        app:layout_constraintLeft_toRightOf="@+id/resultWestNightTextBox" />
+        android:id="@+id/eastTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="190dp"
+        android:layout_marginTop="240dp"
+        android:text="Day: 79%\nNight: 21%"
+        android:textColor="#d8ad0c"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="@+id/mapresultImageView"
+        app:layout_constraintTop_toTopOf="@+id/mapresultImageView" />
 
     <TextView
-        android:id="@+id/resultNorthNightTextBox"
-        android:layout_width="50dp"
-        android:layout_height="26dp"
-        android:layout_marginBottom="12dp"
-        android:layout_marginLeft="18dp"
-        android:layout_marginStart="31dp"
-        android:text="300%"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/resultstableImageView"
-        app:layout_constraintLeft_toRightOf="@+id/resultEastNightTextBox" />
+        android:id="@+id/westTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="195dp"
+        android:layout_marginTop="185dp"
+        android:text="Day: 79%\nNight: 21%"
+        android:textColor="#f57c00"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintRight_toRightOf="@+id/mapresultImageView"
+        app:layout_constraintTop_toTopOf="@+id/mapresultImageView" />
 
     <TextView
-        android:id="@+id/resultEastDayTextBox"
-        android:layout_width="50dp"
-        android:layout_height="26dp"
-        android:layout_marginBottom="23dp"
-        android:text="300%"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/resultEastNightTextBox"
-        app:layout_constraintLeft_toLeftOf="@+id/resultEastNightTextBox" />
+        android:id="@+id/southTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="175dp"
+        android:layout_marginTop="380dp"
+        android:text="Day: 79%\nNight: 21%"
+        android:textColor="#00a651"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintRight_toRightOf="@+id/mapresultImageView"
+        app:layout_constraintTop_toTopOf="@+id/mapresultImageView" />
 
-    <ImageView
-        android:id="@+id/currentscoresImageView"
-        android:layout_width="136dp"
-        android:layout_height="97dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

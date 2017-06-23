@@ -1,7 +1,5 @@
 package com.taramtidam.taramtidam;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -25,7 +23,7 @@ public class GameActivity extends AppCompatActivity {
         setResult(Activity.RESULT_OK,returnIntent);
         finish();*/
 
-        Fragment f = new Game1();
+        Fragment f = new Game1a();
 
         if (f != null) {
             Log.d("Game Activity", "loading game1 fragemnt...");

@@ -71,9 +71,6 @@ public class DonateNowFragment extends Fragment implements GoogleApiClient.Conne
         }
         Log.d("asaf","DN the size is " +MainActivity.mobiles.size());
 
-
-
-
     }
 
     @Override
@@ -157,46 +154,51 @@ public class DonateNowFragment extends Fragment implements GoogleApiClient.Conne
             return;
         }
         Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient); //TODO to check it with lilach
-        if (mLastLocation != null) {
-            Log.d("Donate Now Fragment","mLastLocation != NULL");
 
-            //mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
-            //mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
-            //Log.d("ASAF", "the are :"+Integer.toString(MainActivity.mobiles.size()) + " mobiles");
-            if(Distances.findNearestBloodMobile(mLastLocation.getLatitude() ,mLastLocation.getLongitude(),MainActivity.mobiles )==-1){
-                addressTV.setText("No Active Station Available");
-                hoursTV.setText("N/A");
-                informationTV.setText("N/A");
-                return;
-            }
-            nearsetStationIndex = Distances.findNearestBloodMobile(mLastLocation.getLatitude() ,mLastLocation.getLongitude(),MainActivity.mobiles );
-            Log.d("Donate Now Fragment", "The closest station index is: "+ Integer.toString(nearsetStationIndex) );
-            Log.d("Donate Now Fragment", "The numbers of stations is: "+MainActivity.mobiles.size());
-            Log.d("Donate Now Fragment","The Closest station is: "+ MainActivity.mobiles.get(nearsetStationIndex).getAddress() +", " +MainActivity.mobiles.get(nearsetStationIndex).getCity());
-            //((TextView) getView().findViewById(R.id.nearsetStationTextView)).setText("Right Now the Nearset Station is located at: "+ MainActivity.mobiles.get(nearsetStationIndex).getAddress() +", "  +MainActivity.mobiles.get(nearsetStationIndex).getCity());
-            address = MainActivity.mobiles.get(nearsetStationIndex).getAddress() +"\n"+MainActivity.mobiles.get(nearsetStationIndex).getCity();
-            addressTV.setText(address);
-            openings_hours = "From: "+(MainActivity.mobiles.get(nearsetStationIndex).getTime()) + " To: "+ (MainActivity.mobiles.get(nearsetStationIndex).getEndTime());
-            hoursTV.setText(openings_hours);
+        if (MainActivity.mobiles.size() > 0) { //check if the there are mobiles (at least 1)
+            if (mLastLocation != null) {
+                Log.d("Donate Now Fragment", "mLastLocation != NULL");
 
-            if (MainActivity.currentLoggedUser.getDonationsCounter() == 0){
-                info = "You still haven't donated yet. Go for it!";
-            }
-            else{
-                info = "Your last donation was at: "+MainActivity.currentLoggedUser.getLastDonationInString();
-                info += "\n";
-                if (MainActivity.currentLoggedUser.daysFromLastDonation() > 90){
-                    info += "Seems like you haven't donated for a while\nGo for it!";
+                //mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
+                //mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
+                //Log.d("ASAF", "the are :"+Integer.toString(MainActivity.mobiles.size()) + " mobiles");
+                if (Distances.findNearestBloodMobile(mLastLocation.getLatitude(), mLastLocation.getLongitude(), MainActivity.mobiles) == -1) {
+                    addressTV.setText("No Active Station Available");
+                    hoursTV.setText("N/A");
+                    informationTV.setText("N/A");
+                    return;
                 }
-                else{
-                    info+= "For your safety, it is recommanded to\nwait at least 3 monthes between donations ";
+                nearsetStationIndex = Distances.findNearestBloodMobile(mLastLocation.getLatitude(), mLastLocation.getLongitude(), MainActivity.mobiles);
+                Log.d("Donate Now Fragment", "The closest station index is: " + Integer.toString(nearsetStationIndex));
+                Log.d("Donate Now Fragment", "The numbers of stations is: " + MainActivity.mobiles.size());
+                Log.d("Donate Now Fragment", "The Closest station is: " + MainActivity.mobiles.get(nearsetStationIndex).getAddress() + ", " + MainActivity.mobiles.get(nearsetStationIndex).getCity() +"\n"+MainActivity.mobiles.get(nearsetStationIndex).getDescription());
+                //((TextView) getView().findViewById(R.id.nearsetStationTextView)).setText("Right Now the Nearset Station is located at: "+ MainActivity.mobiles.get(nearsetStationIndex).getAddress() +", "  +MainActivity.mobiles.get(nearsetStationIndex).getCity());
+                address = MainActivity.mobiles.get(nearsetStationIndex).getAddress() + "\n" + MainActivity.mobiles.get(nearsetStationIndex).getCity() + "\n"+MainActivity.mobiles.get(nearsetStationIndex).getDescription();
+                addressTV.setText(address);
+                openings_hours = "From: " + (MainActivity.mobiles.get(nearsetStationIndex).getTime()) + " To: " + (MainActivity.mobiles.get(nearsetStationIndex).getEndTime());
+                hoursTV.setText(openings_hours);
+
+
+                if (MainActivity.currentLoggedUser.getDonationsCounter() == 0) {
+                    info = "You still haven't donated yet. Go for it!";
+                } else {
+                    info = "Your last donation was at: " + MainActivity.currentLoggedUser.getLastDonationInString();
+                    info += "\n";
+                    if (MainActivity.currentLoggedUser.daysFromLastDonation() > 90) {
+                        info += "Seems like you haven't donated for a while\nGo for it!";
+                    } else {
+                        info += "For your safety, it is recommanded to\nwait at least 3 monthes between donations ";
+                    }
+
                 }
-
+                informationTV.setText(info);
             }
-            informationTV.setText(info);
-
-
-
+        }
+        else{
+            //if there are no blood mobiles on MainActivity.mobiles array
+            addressTV.setText("There are no stations today\n Please check tomorrow");
+            hoursTV.setText("");
+            informationTV.setText("");
 
         }
 

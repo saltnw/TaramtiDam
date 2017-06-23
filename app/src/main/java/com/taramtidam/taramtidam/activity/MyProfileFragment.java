@@ -129,9 +129,13 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
             ImageView send_email_image_view = (ImageView)rootView.findViewById(R.id.sendemailImageView);
             if (MainActivity.currentLoggedUser.isSendMails()){
                 Glide.with(getContext()).load(R.drawable.sendemailson).into(send_email_image_view);
+                ((AutoCompleteTextView) rootView.findViewById(R.id.homeEditText)).setEnabled(true);
+                ((AutoCompleteTextView) rootView.findViewById(R.id.workEditText)).setEnabled(true);
             }
             else{
                 Glide.with(getContext()).load(R.drawable.sendemailsoff).into(send_email_image_view);
+                ((AutoCompleteTextView) rootView.findViewById(R.id.homeEditText)).setEnabled(false);
+                ((AutoCompleteTextView) rootView.findViewById(R.id.workEditText)).setEnabled(false);
 
             }
 
@@ -234,11 +238,16 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
                 ImageView send_email_image_view = (ImageView)getView().findViewById(R.id.sendemailImageView);
                 if (MainActivity.currentLoggedUser.isSendMails()){
                     Glide.with(getContext()).load(R.drawable.sendemailson).into(send_email_image_view);
-                 }
+
+                    ((AutoCompleteTextView) getView().findViewById(R.id.homeEditText)).setEnabled(true);
+                    ((AutoCompleteTextView) getView().findViewById(R.id.workEditText)).setEnabled(true);
+
+                }
                 else{
                     Glide.with(getContext()).load(R.drawable.sendemailsoff).into(send_email_image_view);
-
-                    }
+                    ((AutoCompleteTextView) getView().findViewById(R.id.homeEditText)).setEnabled(false);
+                    ((AutoCompleteTextView) getView().findViewById(R.id.workEditText)).setEnabled(false);
+                }
                 }
 
             // else if(arg0 == getView().findViewById(R.id.imageUploaded)){
@@ -255,6 +264,8 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
      //       imageToUpload.setImageURI(selectedImage);
      //   }
     //}
+
+
 
 
 }

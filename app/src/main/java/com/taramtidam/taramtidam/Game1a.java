@@ -5,23 +5,27 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 
 /**
  * Created by Asaf on 08/06/2017.
  */
 
-public class Game1 extends Fragment implements View.OnClickListener{
+public class Game1a extends Fragment implements View.OnClickListener{
 
     Button nextButton;
 
 
 
-    public Game1() {
+    public Game1a() {
         // Required empty public constructor
     }
 
@@ -36,11 +40,16 @@ public class Game1 extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_game1, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_game1a, container, false);
 
         //set logout button onCliclListener
         nextButton = (Button) rootView.findViewById(R.id.nextButton1);
         nextButton.setOnClickListener(this);
+
+
+        //load backgroud image
+        //ImageView background_image_view = (ImageView)rootView.findViewById(R.id.imageView2);
+        //Glide.with(getContext()).load(R.drawable.gameinstuctions1).into(background_image_view);
 
         return rootView;
 
@@ -66,14 +75,17 @@ public class Game1 extends Fragment implements View.OnClickListener{
         int buttonId = arg0.getId();
 
         if (buttonId == R.id.nextButton1) {
-            Fragment f = new Game2();
+            Fragment f = new Game1b();
 
             if (f != null) {
                 Log.d("Game Activity", "loading game1 fragemnt...");
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.container_game2, f);
+                fragmentTransaction.replace(R.id.container_body, f);
                 fragmentTransaction.commit();
+
+                // set the toolbar title
+                ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Instructions");
 
             }
         }

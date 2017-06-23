@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -132,8 +133,11 @@ public class Game3 extends Fragment implements View.OnClickListener{
         if (f != null) {
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.container_game2, f);
+            fragmentTransaction.replace(R.id.container_body, f);
             fragmentTransaction.commit();
+
+            // set the toolbar title
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(getString(R.string.title_gameprogress));
         }
     }
 

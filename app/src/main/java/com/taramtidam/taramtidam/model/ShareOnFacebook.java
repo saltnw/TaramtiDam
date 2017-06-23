@@ -63,7 +63,7 @@ public class ShareOnFacebook extends Activity {
             ShareLinkContent linkContent = new ShareLinkContent.Builder()
                     .setContentTitle("Get Tarmati Dam App")
                     .setContentDescription("תרמתי דם! כל תרומת דם מצילה חיים")
-                    .setContentUrl(Uri.parse("https://www.mdais.org"))
+                    .setContentUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.taramtidam.taramtidam"))
                     .build();
 
             shareDialog.show(linkContent);
