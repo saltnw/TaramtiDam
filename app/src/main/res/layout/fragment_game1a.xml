@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.taramtidam.taramtidam.Game1"
+    tools:context="com.taramtidam.taramtidam.Game1a"
     android:background="@color/windowBackground">
 
 
@@ -37,20 +37,20 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="35dp"
             android:layout_weight="1"
-            android:text="Got it!"
+            android:text="Next"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 
         <ImageView
             android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/welcometogame"
-            app:layout_constraintRight_toRightOf="parent"
+            android:layout_width="307dp"
+            android:layout_height="89dp"
+            android:layout_marginTop="5dp"
             app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="35dp" />
+            app:srcCompat="@drawable/welcometogame" />
     </android.support.constraint.ConstraintLayout>
 
     <ImageView
@@ -63,6 +63,6 @@
         android:layout_marginTop="106dp"
         android:gravity="bottom|center_horizontal"
         android:scaleType="fitXY"
-        app:srcCompat="@drawable/gameinsructions" />
+        app:srcCompat="@drawable/gameinstuctions1" />
 
 </RelativeLayout>

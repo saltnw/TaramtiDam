@@ -790,4 +790,29 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
     }
     */
 
+    @Override
+    public void onBackPressed() {
+
+        //if the game in
+        if (getSupportActionBar().getTitle() == getString(R.string.title_home) ){
+            super.onBackPressed();
+        }
+        else{
+
+            fragment = new HomeFragment();
+            title = getString(R.string.title_home);
+            if (fragment != null) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.container_body, fragment);
+                fragmentTransaction.commit();
+
+                // set the toolbar title
+                getSupportActionBar().setTitle(title);
+            }
+
+        }
+
+    }
+
 }

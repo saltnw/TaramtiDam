@@ -30,6 +30,10 @@ import static com.taramtidam.taramtidam.MainActivity.gameData;
 public class Game4 extends Fragment implements View.OnClickListener {
 
     Button backToMain;
+    TextView north;
+    TextView east;
+    TextView west;
+    TextView south;
 
     long dayEastPercent = gameData.getDayEastPercent();
     long nightEastPercent = gameData.getNightEastPercent();
@@ -61,10 +65,6 @@ public class Game4 extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_game4, container, false);
-
-        //set logout button onCliclListener
-        backToMain = (Button) rootView.findViewById(R.id.backToMainButton);
-        backToMain.setOnClickListener(this);
 
         int bitN,bitW,bitE,bitS;
         bitN = dayNorthPercent > nightNorthPercent ? 1 : 0;
@@ -100,15 +100,19 @@ public class Game4 extends Fragment implements View.OnClickListener {
         ImageView map_result_image_view = (ImageView)rootView.findViewById(R.id.mapresultImageView);
         Glide.with(getContext()).load(images[mapNum]).into(map_result_image_view);
 
-        //load table image
-        ImageView table_image_view = (ImageView)rootView.findViewById(R.id.resultstableImageView);
-        Glide.with(getContext()).load(R.drawable.resultstable).into(table_image_view);
-
         //load score title image
-        ImageView scores_title_image_view = (ImageView)rootView.findViewById(R.id.currentscoresImageView);
-        Glide.with(getContext()).load(R.drawable.currentscores).into(scores_title_image_view);
+        //ImageView scores_title_image_view = (ImageView)rootView.findViewById(R.id.currentscoresImageView);
+        //Glide.with(getContext()).load(R.drawable.currentscores).into(scores_title_image_view);
 
+        north = (TextView)rootView.findViewById(R.id.northTextView);
+        east = (TextView)rootView.findViewById(R.id.eastTextView);
+        west = (TextView)rootView.findViewById(R.id.westTextView);
+        south = (TextView)rootView.findViewById(R.id.southTextView);
 
+        north.setText("Night: " + nightNorthPercent + "%\nDay: " + dayNorthPercent + "%");
+        east.setText("Night: " + nightEastPercent + "%\nDay: " + dayEastPercent + "%");
+        west.setText("Night: " + nightWestPercent + "%\nDay: " + dayWestPercent + "%");
+        south.setText("Night: " + nightSouthPercent + "%\nDay: " + daySouthPercent + "%");
 
         return rootView;
 
@@ -119,29 +123,6 @@ public class Game4 extends Fragment implements View.OnClickListener {
     public void onStart() {
         super.onStart();
 
-        t1 = (TextView) getView().findViewById(R.id.resultSouthDayTextBox);
-        t1.setText(percentToString(daySouthPercent));
-
-        t2 = (TextView) getView().findViewById(R.id.resultWestDayTextBox);
-        t2.setText(percentToString(dayWestPercent));
-
-        t3 = (TextView) getView().findViewById(R.id.resultEastDayTextBox);
-        t3.setText(percentToString(dayEastPercent));
-
-        t4 = (TextView) getView().findViewById(R.id.resultNorthDayTextBox);
-        t4.setText(percentToString(dayNorthPercent));
-
-        t5 = (TextView) getView().findViewById(R.id.resultSouthNightTextBox);
-        t5.setText(percentToString(nightSouthPercent));
-
-        t6 = (TextView) getView().findViewById(R.id.resultWestNightTextBox);
-        t6.setText(percentToString(nightWestPercent));
-
-        t7 = (TextView) getView().findViewById(R.id.resultEastNightTextBox);
-        t7.setText(percentToString(nightEastPercent));
-
-        t8 = (TextView) getView().findViewById(R.id.resultNorthNightTextBox);
-        t8.setText(percentToString(nightNorthPercent));
     }
 
     @Override
@@ -158,26 +139,6 @@ public class Game4 extends Fragment implements View.OnClickListener {
 
         int buttonId = arg0.getId();
         int team = 0;
-
-        if (buttonId == R.id.backToMainButton) {
-
-            //switch to the next fragment
-            Fragment f = new HomeFragment();
-
-            if (f != null) {
-                Log.d("Game Activity", "loading again home fragemnt...");
-
-                getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
-
-                //TODO restore all the state of the buuton (login +logout + join the game)
-
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.container_body, f);
-                fragmentTransaction.commit();
-
-            }
-        }
     }
 
     private String percentToString(long percent){

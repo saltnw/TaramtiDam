@@ -171,9 +171,9 @@ public class DonateNowFragment extends Fragment implements GoogleApiClient.Conne
                 nearsetStationIndex = Distances.findNearestBloodMobile(mLastLocation.getLatitude(), mLastLocation.getLongitude(), MainActivity.mobiles);
                 Log.d("Donate Now Fragment", "The closest station index is: " + Integer.toString(nearsetStationIndex));
                 Log.d("Donate Now Fragment", "The numbers of stations is: " + MainActivity.mobiles.size());
-                Log.d("Donate Now Fragment", "The Closest station is: " + MainActivity.mobiles.get(nearsetStationIndex).getAddress() + ", " + MainActivity.mobiles.get(nearsetStationIndex).getCity());
+                Log.d("Donate Now Fragment", "The Closest station is: " + MainActivity.mobiles.get(nearsetStationIndex).getAddress() + ", " + MainActivity.mobiles.get(nearsetStationIndex).getCity() +"\n"+MainActivity.mobiles.get(nearsetStationIndex).getDescription());
                 //((TextView) getView().findViewById(R.id.nearsetStationTextView)).setText("Right Now the Nearset Station is located at: "+ MainActivity.mobiles.get(nearsetStationIndex).getAddress() +", "  +MainActivity.mobiles.get(nearsetStationIndex).getCity());
-                address = MainActivity.mobiles.get(nearsetStationIndex).getAddress() + "\n" + MainActivity.mobiles.get(nearsetStationIndex).getCity();
+                address = MainActivity.mobiles.get(nearsetStationIndex).getAddress() + "\n" + MainActivity.mobiles.get(nearsetStationIndex).getCity() + "\n"+MainActivity.mobiles.get(nearsetStationIndex).getDescription();
                 addressTV.setText(address);
                 openings_hours = "From: " + (MainActivity.mobiles.get(nearsetStationIndex).getTime()) + " To: " + (MainActivity.mobiles.get(nearsetStationIndex).getEndTime());
                 hoursTV.setText(openings_hours);

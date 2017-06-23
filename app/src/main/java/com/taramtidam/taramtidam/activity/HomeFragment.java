@@ -5,28 +5,22 @@ package com.taramtidam.taramtidam.activity;
  */
 
 import android.app.Activity;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.view.menu.ActionMenuItemView;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.facebook.login.LoginManager;
 import com.firebase.ui.auth.AuthUI;
-import com.taramtidam.taramtidam.Game1;
-import com.taramtidam.taramtidam.GameActivity;
+import com.taramtidam.taramtidam.Game1a;
 import com.taramtidam.taramtidam.MainActivity;
 import com.taramtidam.taramtidam.R;
 
@@ -166,7 +160,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         if (buttonId == R.id.gamecubeButton){
             Log.d("HOME_FREAMENT", "game cube btn click!");
 
-            Fragment f = new Game1();
+            Fragment f = new Game1a();
 
             if (f != null) {
                 Log.d("Game Activity", "loading game1 fragemnt...");
@@ -180,8 +174,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.container_game2, f);
+                fragmentTransaction.replace(R.id.container_body, f);
                 fragmentTransaction.commit();
+
+                // set the toolbar title
+                ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Instructions");
             }
 
 
