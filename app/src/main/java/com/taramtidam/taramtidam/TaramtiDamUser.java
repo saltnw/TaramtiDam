@@ -24,6 +24,7 @@ public class TaramtiDamUser {
     private boolean sendMails;
     private boolean alreadyJoinedTheGame;
     private TeamInfo team;
+    private String instanceId;
 
     public TaramtiDamUser(){}
 
@@ -41,6 +42,7 @@ public class TaramtiDamUser {
         this.sendMails = true;
         this.alreadyJoinedTheGame = false;
         this.team = new TeamInfo();
+        this.instanceId= "";
     }
 
 
@@ -59,6 +61,7 @@ public class TaramtiDamUser {
         this.sendMails = true;
         this.alreadyJoinedTheGame = false;
         this.team = new TeamInfo();
+        this.instanceId = "";
 
     }
 
@@ -177,10 +180,19 @@ public class TaramtiDamUser {
         }
 
     }
+
+    public String getInstanceId() {
+        return instanceId;
+    }
+
+    public void setInstanceId(String instanceId) {
+        this.instanceId = instanceId;
+    }
+
     /*
-    returns the number of days from the user's last donation
-    returns -1 if the users didn't donated yet
-     */
+        returns the number of days from the user's last donation
+        returns -1 if the users didn't donated yet
+         */
     public long daysFromLastDonation(){
         if (donationsCounter == 0){
             return -1;

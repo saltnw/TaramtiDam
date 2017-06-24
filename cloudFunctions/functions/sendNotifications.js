@@ -161,4 +161,5 @@ function checkLastDonationDate(lastDonationStr)
 }
 
 
-module.exports =sendNotifications;
+module.exports.sendNotifications = sendNotifications;
+module.exports.checkLastDonationDate = checkLastDonationDate;

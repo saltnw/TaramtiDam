@@ -21,8 +21,7 @@ var tommorowRef = mdaRef.child("Tommorow")
 var GeoFire = require("geofire");
 var today = moment();
 var tommorow = moment().add("1", "days");
-
-var sendNotifications = require("./sendNotifications.js");
+var sendNotifications = require("./sendNotifications.js"); 
 
 function onDonationPageReceived(page)
 {
@@ -34,8 +33,8 @@ function onDonationPageReceived(page)
      var children = $(this).children();
      var dateItem = children.eq(0);
      var cityItem = children.eq(1);
-     var addressItem = children.eq(3);
-     var descriptionItem = children.eq(2);
+     var addressItem = children.eq(2); //flipped desc and address 24.06
+     var descriptionItem = children.eq(3);
      var startTimeItem = children.eq(5);
      var endTimeItem = children.eq(6);
      if (i==0 || !dateItem.text().trim()) return;
@@ -44,14 +43,14 @@ function onDonationPageReceived(page)
          "city": cityItem.text(),
           "address": addressItem.text(),
          "description": descriptionItem.text(),
-         //"second address": secondAddressItem.title,
+         //"information": informationItem.text(),
          "start time": startTimeItem.text(),
          "end time": endTimeItem.text(),
       };
       var currPromise = getGeoLocationAndPush(row, i);
       promiseArray.push(currPromise);
     });
-    return Promise.all(promiseArray).then(() => sendNotifications(ref, tommorowRef));
+    return Promise.all(promiseArray).then(() => sendNotifications.sendNotifications(ref, tommorowRef));
   } )
 }
 
