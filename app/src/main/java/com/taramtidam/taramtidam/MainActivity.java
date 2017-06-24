@@ -39,6 +39,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.taramtidam.taramtidam.activity.DonateNowFragment;
 import com.taramtidam.taramtidam.activity.FragmentDrawer;
 import com.taramtidam.taramtidam.activity.HomeFragment;
@@ -176,7 +177,6 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
             }
         };
 
-
         /* MDA STUFF GOES HERE */
 
         if (ActivityCompat.checkSelfPermission(MainActivity.this,
@@ -259,9 +259,6 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
             }
         });
-
-
-
 
     }
 
@@ -578,6 +575,14 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                         //could not load the progress bar. probably was logged in not through home fragment
                     }
                     doThingsAfterLogin();
+                    mDatabase = FirebaseDatabase.getInstance().getReference();
+                    String instanceId = FirebaseInstanceId.getInstance().getToken();
+                    if (instanceId != null) {
+                        mDatabase.child("users")
+                                .child(currentLoggedUser.getuid())
+                                .child("instanceId")
+                                .setValue(instanceId);
+                    }
 
                 }
                 else{
@@ -594,6 +599,14 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
                     //displayProfileAfterLoadingfromDtabase();
                     doThingsAfterLogin();
+                    String instanceId = FirebaseInstanceId.getInstance().getToken();
+                    if (instanceId != null) {
+                        mDatabase.child("users")
+                                .child(currentLoggedUser.getuid())
+                                .child("instanceId")
+                                .setValue(instanceId);
+                    }
+
                     try{
                        // ((ProgressBar)findViewById(R.id.loadprofileProgressBar)).setVisibility(View.GONE); //remove the progress bar
 
@@ -609,7 +622,6 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
 
         });
-
 
     }
 
