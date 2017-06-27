@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.taramtidam.taramtidam.activity.HomeFragment;
 
+import static com.taramtidam.taramtidam.MainActivity.currentLoggedUser;
 import static com.taramtidam.taramtidam.MainActivity.gameData;
 
 /**
@@ -34,6 +35,8 @@ public class Game4 extends Fragment implements View.OnClickListener {
     TextView east;
     TextView west;
     TextView south;
+    TextView titleTV;
+    TextView winningTeamTV;
 
     long dayEastPercent = gameData.getDayEastPercent();
     long nightEastPercent = gameData.getNightEastPercent();
@@ -114,7 +117,26 @@ public class Game4 extends Fragment implements View.OnClickListener {
         west.setText("Night: " + nightWestPercent + "%\nDay: " + dayWestPercent + "%");
         south.setText("Night: " + nightSouthPercent + "%\nDay: " + daySouthPercent + "%");
 
+
+        //load the title of the game progress
+        titleTV = (TextView)rootView.findViewById(R.id.titleTextView);
+
+        //if the user is in the game
+        if (MainActivity.currentLoggedUser.isAlreadyJoinedTheGame() == true){
+            titleTV.setText("You are a "+MainActivity.currentLoggedUser.getTeam().getVemp()+" vampire in the "+MainActivity.currentLoggedUser.getTeam().getArea());
+        }
+        else{
+            titleTV.setText("You havn't joined the game yet");
+
+        }
+
+        winningTeamTV = (TextView)rootView.findViewById(R.id.winningTeamTextView);
+        winningTeamTV.setText(MainActivity.gameData.getWinningTeamName()+ " Vampires");
+
+
         return rootView;
+
+
 
     }
 

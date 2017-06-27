@@ -208,9 +208,9 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
 
 
     public static boolean isLegalDonation(){
-        //return true;
+        return true;
         // check date margin
-        return isLegalDate();
+        //return isLegalDate();
 
 
         //check distance
@@ -245,7 +245,7 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
 
         if (buttonId == R.id.togameresultButton) {
 
-        }
+
             Fragment fragment = new Game4();
             String title = getString(R.string.title_gameprogress);
             if (fragment != null) {
@@ -255,8 +255,9 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
                 fragmentTransaction.commit();
 
                 // set the toolbar title
-                ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(title);
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(title);
 
+            }
         }
     }
 

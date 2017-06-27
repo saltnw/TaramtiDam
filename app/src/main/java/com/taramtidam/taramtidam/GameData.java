@@ -270,4 +270,13 @@ public class GameData {
         return total;
     }
 
+    public String getWinningTeamName(){
+        if (this.getNightScore() >= this.getDayScore()){
+            return "Night";
+        }
+        else{
+            return "Day";
+        }
+    }
+
 }
