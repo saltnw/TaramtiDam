@@ -10,3 +10,9 @@ cron:
 - description: Push a "tick" onto pubsub every week
   url: /publish/weekly-tick
   schedule: every sunday 10:00
+
+- description: Push a "tick" onto pubsub every 3 months
+  url: /publish/three-months-tick
+  schedule: 1 of mar,jun,sep,dec 20:00
+
+
