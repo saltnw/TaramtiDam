@@ -14,6 +14,9 @@ import com.google.firebase.database.ValueEventListener;
 
 public class GameData {
 
+    long dayScore;
+    long nightScore;
+
     long dayEastCounter;
     long nightEastCounter;
     long dayEastPercent;
@@ -39,29 +42,6 @@ public class GameData {
     long nightWestPercent;
     long westTotal;
 
-
-    /*public GameData() {
-        this.dayEastCounter = 0;
-        this.nightEastCounter = 0;;
-        this.dayEastPercent = 0;
-        this.nightEastPercent = 0;
-        this.eastTotal = 0;
-        this.dayNorthCounter = 0;
-        this.nightNorthCounter = 0;
-        this.dayNorthPercent = 0;
-        this.nightNorthPercent = 0;
-        this.northTotal = 0;
-        this.daySouthCounter = 0;
-        this.nightSouthCounter = 0;
-        this.daySouthPercent = 0;
-        this.nightSouthPercent = 0;
-        this.southTotal = 0;
-        this.dayWestCounter = 0;
-        this.nightWestCounter = 0;
-        this.dayWestPercent = 0;
-        this.nightWestPercent = 0;
-        this.westTotal = 0;
-    }*/
 
     public void updateGameStats(DatabaseReference dbRef) {
         final DatabaseReference gameRef =  dbRef.child("Game");
@@ -279,4 +259,15 @@ public class GameData {
     public void setWestTotal(long westTotal) {
         this.westTotal = westTotal;
     }
+
+    public long getDayScore() {
+        long total = dayEastCounter + dayWestCounter + daySouthCounter + dayNorthCounter;
+        return total;
+    }
+
+    public long getNightScore() {
+        long total = nightEastCounter + nightWestCounter + nightSouthCounter + nightNorthCounter;
+        return total;
+    }
+
 }
