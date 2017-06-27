@@ -208,13 +208,9 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
 
 
     public static boolean isLegalDonation(){
-        return true;
+        //return true;
         // check date margin
-        //return isLegalDate();
-
-
-        //check distance
-        //TODO add distance checks
+        return isLegalDate();
 
     }
 
