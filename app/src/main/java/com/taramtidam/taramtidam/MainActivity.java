@@ -242,6 +242,12 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                 gameData.setDaySouthCounter((long)dataSnapshot.child("South").child("Day").child("Donations").getValue());
                 gameData.setDayWestCounter((long)dataSnapshot.child("West").child("Day").child("Donations").getValue());
 
+                gameData.setNightEastCounter((long)dataSnapshot.child("East").child("Night").child("Donations").getValue());
+                //nightEastCounter = (long)dataSnapshot.child("East").child("Night").child("Donations").getValue();
+                gameData.setNightNorthCounter((long)dataSnapshot.child("North").child("Night").child("Donations").getValue());
+                gameData.setNightSouthCounter((long)dataSnapshot.child("South").child("Night").child("Donations").getValue());
+                gameData.setNightWestCounter((long)dataSnapshot.child("West").child("Night").child("Donations").getValue());
+
                 //read donations per all area
                 gameData.setEastTotal((long)dataSnapshot.child("East").child("Donations").getValue());
                 gameData.setNorthTotal((long)dataSnapshot.child("North").child("Donations").getValue());

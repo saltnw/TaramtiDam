@@ -43,34 +43,9 @@ public class GameData {
     long westTotal;
 
 
-    public void updateGameStats(DatabaseReference dbRef) {
-        final DatabaseReference gameRef =  dbRef.child("Game");
-        gameRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                //read donation per vampires team
-                dayEastCounter = (long)dataSnapshot.child("East").child("Day").child("Donations").getValue();
-                //nightEastCounter = (long)dataSnapshot.child("East").child("Night").child("Donations").getValue();
-                dayNorthCounter = (long)dataSnapshot.child("North").child("Day").child("Donations").getValue();
-                daySouthCounter = (long)dataSnapshot.child("South").child("Day").child("Donations").getValue();
-                dayWestCounter = (long)dataSnapshot.child("West").child("Day").child("Donations").getValue();
 
-                //read donations per all area
-                eastTotal = (long)dataSnapshot.child("East").child("Donations").getValue();
-                northTotal = (long)dataSnapshot.child("North").child("Donations").getValue();
-                southTotal = (long)dataSnapshot.child("South").child("Donations").getValue();
-                westTotal = (long)dataSnapshot.child("West").child("Donations").getValue();
 
-                Log.d("GAME4", "east total is: " + eastTotal);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-    }
 
     public void computeGameStats(){
         if(southTotal != 0) {
@@ -268,6 +243,15 @@ public class GameData {
     public long getNightScore() {
         long total = nightEastCounter + nightWestCounter + nightSouthCounter + nightNorthCounter;
         return total;
+    }
+
+    public String getWinningTeamName(){
+        if (this.getNightScore() >= this.getDayScore()){
+            return "Night";
+        }
+        else{
+            return "Day";
+        }
     }
 
 }

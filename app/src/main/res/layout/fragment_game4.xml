@@ -35,7 +35,8 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintRight_toRightOf="@+id/mapresultImageView"
-        app:layout_constraintTop_toTopOf="@+id/mapresultImageView" />
+        app:layout_constraintTop_toTopOf="@+id/mapresultImageView"
+        android:layout_marginEnd="140dp" />
 
     <TextView
         android:id="@+id/eastTextView"
@@ -48,7 +49,8 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="@+id/mapresultImageView"
-        app:layout_constraintTop_toTopOf="@+id/mapresultImageView" />
+        app:layout_constraintTop_toTopOf="@+id/mapresultImageView"
+        android:layout_marginStart="190dp" />
 
     <TextView
         android:id="@+id/westTextView"
@@ -61,7 +63,8 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintRight_toRightOf="@+id/mapresultImageView"
-        app:layout_constraintTop_toTopOf="@+id/mapresultImageView" />
+        app:layout_constraintTop_toTopOf="@+id/mapresultImageView"
+        android:layout_marginEnd="195dp" />
 
     <TextView
         android:id="@+id/southTextView"
@@ -74,7 +77,57 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintRight_toRightOf="@+id/mapresultImageView"
-        app:layout_constraintTop_toTopOf="@+id/mapresultImageView" />
+        app:layout_constraintTop_toTopOf="@+id/mapresultImageView"
+        android:layout_marginEnd="175dp" />
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:text="You are a Day vampire in the North"
+        android:textColor="@android:color/black"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toTopOf="@+id/mapresultImageView"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="122dp"
+        android:layout_height="22dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="0dp"
+        android:text="Leading Team:"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toRightOf="@+id/imageView4"
+        app:layout_constraintTop_toTopOf="@+id/imageView4" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="30dp"
+        android:layout_height="27dp"
+        android:layout_marginLeft="125dp"
+        android:layout_marginTop="417dp"
+        app:layout_constraintLeft_toLeftOf="@+id/mapresultImageView"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+        app:srcCompat="@drawable/trophy" />
+
+    <TextView
+        android:id="@+id/winningTeamTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="5dp"
+        android:text="win team"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="@+id/imageView4"
+        app:layout_constraintRight_toRightOf="@+id/textView12"
+        app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
 
 </android.support.constraint.ConstraintLayout>

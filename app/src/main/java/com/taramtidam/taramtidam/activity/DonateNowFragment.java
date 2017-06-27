@@ -119,7 +119,7 @@ public class DonateNowFragment extends Fragment implements GoogleApiClient.Conne
     public void onClick(View arg0) {
 
         // Create a Uri from an intent string. Use the result to create an Intent.
-        Uri intentUri = Uri.parse("google.navigation:q="+addressTV.getText()+"&mode=w");
+        Uri intentUri = Uri.parse("google.navigation:q="+addressTV.getText()+"&mode=d");
 
         // Create an Intent from intentUri. Set the action to ACTION_VIEW
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, intentUri);
