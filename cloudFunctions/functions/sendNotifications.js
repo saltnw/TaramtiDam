@@ -14,8 +14,9 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-function sendNotifications(ref, tommorowRef)
+function sendNotifications(ref, mdaRef)
 {
+    var tommorowRef = mdaRef.child("Tommorow")
     var mobilesDetailsArr = [];
     var mobilesLocArr = [];
     tommorowRef.once("value")

@@ -11,13 +11,6 @@ var functions = require('firebase-functions');
 var admin = require("firebase-admin");
 admin.initializeApp(functions.config().firebase);
 var db = admin.database();
-var ref = db.ref();
-ref.child("MDA").remove();
-//ref.child("testShoshan").remove();
-//var mdaRef = ref.child("testShoshan");
-var mdaRef = ref.child("MDA");
-var todayRef = mdaRef.child("Today")
-var tommorowRef = mdaRef.child("Tommorow")
 var GeoFire = require("geofire");
 var today = moment();
 var tommorow = moment().add("1", "days");
@@ -25,6 +18,9 @@ var sendNotifications = require("./sendNotifications.js");
 
 function onDonationPageReceived(page)
 {
+  var ref = db.ref();
+  ref.child("MDA").remove();
+  var mdaRef = ref.child("MDA");
   return new Promise((resolve, reject) => {
     var promiseArray = [];
     var cheerio = require('cheerio');
@@ -47,15 +43,17 @@ function onDonationPageReceived(page)
          "start time": startTimeItem.text(),
          "end time": endTimeItem.text(),
       };
-      var currPromise = getGeoLocationAndPush(row, i);
+      var currPromise = getGeoLocationAndPush(row, i, mdaRef);
       promiseArray.push(currPromise);
     });
-    return Promise.all(promiseArray).then(() => sendNotifications.sendNotifications(ref, tommorowRef));
+    return Promise.all(promiseArray).then(() => sendNotifications.sendNotifications(ref, mdaRef));
   } )
 }
 
-function getGeoLocationAndPush(row, timeout)
+function getGeoLocationAndPush(row, timeout, mdaRef)
 {
+  var todayRef = mdaRef.child("Today")
+  var tommorowRef = mdaRef.child("Tommorow")
   return new Promise((resolve, reject) => {
     var address = row["address"];
     if (address.trim().length == 0)
