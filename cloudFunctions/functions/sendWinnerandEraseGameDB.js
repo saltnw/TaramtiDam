@@ -11,8 +11,7 @@ function sendWinnerandEraseGameDB()
 
     sendWinngingNotifications(winner); 
 
-    //commented out for demo
-    //eraseGameDB(gameRef);
+    eraseGameDB(gameRef);
 
 }
 

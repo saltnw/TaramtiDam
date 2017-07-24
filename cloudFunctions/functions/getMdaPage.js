@@ -1,7 +1,10 @@
 var unirest = require("unirest")
 
-const DOMAIN = "https://www.mdais.org";
-const PAGE = "/index.php?option=com_blooddonations&view=blooddonations&Itemid=771&lang=he"
+//const DOMAIN = "https://www.mdais.org";
+//const PAGE = "/index.php?option=com_blooddonations&view=blooddonations&Itemid=771&lang=he"
+const DOMAIN = "https://b.mda.org.il"
+const PAGE = "/Donation.aspx"
+
 
 //onValidCookie
 function obtainValidCookie()
@@ -28,9 +31,11 @@ function LoadDonationPageInternal(cookie)
 // API - LoadDonationPage().then(...)
 function LoadDonationPage()
 {
-	return obtainValidCookie().then(function(cookie) {
+	/*return obtainValidCookie().then(function(cookie) {
 		return LoadDonationPageInternal(cookie)
-	})
+	})*/
+	return LoadDonationPageInternal();
 }
-
+//for testing
+//LoadDonationPage().then((page) => console.log(page));
 module.exports = LoadDonationPage;

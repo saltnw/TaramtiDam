@@ -21,31 +21,32 @@ function onDonationPageReceived(page)
   var ref = db.ref();
   ref.child("MDA").remove();
   var mdaRef = ref.child("MDA");
+  console.log("in onDonationPageReceived! after removing MDA ref");
   return new Promise((resolve, reject) => {
     var promiseArray = [];
-    var cheerio = require('cheerio');
-   $ = cheerio.load(page)
-   $('tr').each(function(i, tr){
-     var children = $(this).children();
-     var dateItem = children.eq(0);
-     var cityItem = children.eq(1);
-     var addressItem = children.eq(2); //flipped desc and address 24.06
-     var descriptionItem = children.eq(3);
-     var startTimeItem = children.eq(5);
-     var endTimeItem = children.eq(6);
-     if (i==0 || !dateItem.text().trim()) return;
-     var row = {
-          "date": dateItem.text(),
-         "city": cityItem.text(),
-          "address": addressItem.text(),
-         "description": descriptionItem.text(),
-         //"information": informationItem.text(),
-         "start time": startTimeItem.text(),
-         "end time": endTimeItem.text(),
+   var cheerio = require('cheerio');
+   $ = cheerio.load(page) 
+   var numOfStations = $('div[class="list-group-item"]').length;
+   var date = $('input[id="tbDate"]').attr("value");
+   for (i =0; i< numOfStations; ++i)
+   {
+       var address = ($('a[id="rptDonations_lblCity_' + i + '"]').text());
+       var startTime = $('span[id="rptDonations_lblBeginTime_' + i + '"]').text();
+       var endTime = $('span[id="rptDonations_lblEndTime_' + i + '"]').text();
+       var mapStr =  $('a[id="rptDonations_lblCity_' + i + '"]').attr("href").replace("http://maps.google.com?q=", "");
+       var row = {
+         "date": date,
+         "city": "",
+         "address": address,
+         "description": "",
+         "start time": startTime,
+         "end time": endTime,
+         "map str": mapStr,
       };
+      //console.log(row);
       var currPromise = getGeoLocationAndPush(row, i, mdaRef);
       promiseArray.push(currPromise);
-    });
+    };
     return Promise.all(promiseArray).then(() => sendNotifications.sendNotifications(ref, mdaRef));
   } )
 }
@@ -55,12 +56,13 @@ function getGeoLocationAndPush(row, timeout, mdaRef)
   var todayRef = mdaRef.child("Today")
   var tommorowRef = mdaRef.child("Tommorow")
   return new Promise((resolve, reject) => {
-    var address = row["address"];
+    var address = row["map str"]; //get the string MDA webstie use for google map and not the full string! 
+                                  //the full string includes description as well
     if (address.trim().length == 0)
     {
       address = row["description"];
     }
-    var fullAddress = address + " " + row["city"];
+    var fullAddress = address + " " + row["city"]; 
     fullAddress = fullAddress.trim();
     if (fullAddress.length == 0)
       {
@@ -79,11 +81,12 @@ function getGeoLocationAndPush(row, timeout, mdaRef)
           row["latitude"] = res[0].latitude;
           row["longitude"] = res[0].longitude;
           var newMobileRef = null;
-          if (moment(row["date"], "DD-MM-YYYY").isSame(today, "day"))
-          {
+          //if (moment(row["date"], "DD-MM-YYYY").isSame(today, "day"))
+          //{
             newMobileRef =  todayRef.push(row);
-          }
-          else if (moment(row["date"], "DD-MM-YYYY").isSame(tommorow, "day"))
+            console.log("after db push");
+          //}
+         /* else if (moment(row["date"], "DD-MM-YYYY").isSame(tommorow, "day"))
           {
             newMobileRef =  tommorowRef.push(row);
           }
@@ -91,7 +94,7 @@ function getGeoLocationAndPush(row, timeout, mdaRef)
           {
               resolve("done");
               return;
-          }
+          }*/
           var geoFire = new GeoFire(newMobileRef);
           geoFire.set("geoLoc", [res[0].latitude, res[0].longitude]).then(function() {
               resolve("done");

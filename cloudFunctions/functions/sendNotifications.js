@@ -53,7 +53,7 @@ function sendNotifications(ref, mdaRef)
           var isInLast3Months = checkLastDonationDate(lastDonationStr);
           if (isInLast3Months)
           {
-            console.log(childSnapshot.val()["fullName"]+ " has donated in the last 3 months");
+            //console.log(childSnapshot.val()["fullName"]+ " has donated in the last 3 months");
             return;
           }
           var addressArray = [];
