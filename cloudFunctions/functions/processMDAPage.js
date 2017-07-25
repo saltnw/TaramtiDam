@@ -16,12 +16,32 @@ var today = moment();
 var tommorow = moment().add("1", "days");
 var sendNotifications = require("./sendNotifications.js"); 
 
-function onDonationPageReceived(page)
+
+function processPages(pages)
+{
+  if (pages.length != 2)
+  {
+    console.log("getMDAPAge did not return the two wanted pages");
+  }
+  todayPage = pages[0];
+  tommorowPage = pages[1];
+  return Promise.all([onDonationPageReceived(todayPage, 0), onDonationPageReceived(tommorowPage, 1)]);
+}
+
+function onDonationPageReceived(page, dayIndex)
 {
   var ref = db.ref();
   ref.child("MDA").remove();
   var mdaRef = ref.child("MDA");
-  console.log("in onDonationPageReceived! after removing MDA ref");
+  var innerRef = null; 
+  if (dayIndex == 0)
+  {
+    innerRef = mdaRef.child("Today");
+  }
+  else if (dayIndex == 1)
+  {
+    innerRef = mdaRef.child("Tommorow");
+  }
   return new Promise((resolve, reject) => {
     var promiseArray = [];
    var cheerio = require('cheerio');
@@ -44,7 +64,7 @@ function onDonationPageReceived(page)
          "map str": mapStr,
       };
       //console.log(row);
-      var currPromise = getGeoLocationAndPush(row, i, mdaRef);
+      var currPromise = getGeoLocationAndPush(row, i, innerRef);
       promiseArray.push(currPromise);
     };
     return Promise.all(promiseArray).then(() => sendNotifications.sendNotifications(ref, mdaRef));
@@ -53,8 +73,6 @@ function onDonationPageReceived(page)
 
 function getGeoLocationAndPush(row, timeout, mdaRef)
 {
-  var todayRef = mdaRef.child("Today")
-  var tommorowRef = mdaRef.child("Tommorow")
   return new Promise((resolve, reject) => {
     var address = row["map str"]; //get the string MDA webstie use for google map and not the full string! 
                                   //the full string includes description as well
@@ -81,20 +99,7 @@ function getGeoLocationAndPush(row, timeout, mdaRef)
           row["latitude"] = res[0].latitude;
           row["longitude"] = res[0].longitude;
           var newMobileRef = null;
-          //if (moment(row["date"], "DD-MM-YYYY").isSame(today, "day"))
-          //{
-            newMobileRef =  todayRef.push(row);
-            console.log("after db push");
-          //}
-         /* else if (moment(row["date"], "DD-MM-YYYY").isSame(tommorow, "day"))
-          {
-            newMobileRef =  tommorowRef.push(row);
-          }
-          else //we don't want future dates in the db
-          {
-              resolve("done");
-              return;
-          }*/
+          newMobileRef =  mdaRef.push(row);
           var geoFire = new GeoFire(newMobileRef);
           geoFire.set("geoLoc", [res[0].latitude, res[0].longitude]).then(function() {
               resolve("done");
@@ -116,4 +121,4 @@ function getGeoLocationAndPush(row, timeout, mdaRef)
 //for testing:
 //var getMdaPage = require("./getMdaPage.js");
 //getMdaPage().then(onDonationPageReceived).then(() => console.log("done!"));
-module.exports = onDonationPageReceived;
+module.exports = processPages;
