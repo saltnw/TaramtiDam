@@ -113,7 +113,6 @@ function sendEmail(email, mobileDetails)
       from: '"TaramtiDam" <TaramtiDam@gmail.com>', // sender address
       to: email, // list of receivers
       subject: "ניידת התרמת דם באיזורך מחר", // Subject line
-      //text: 'Hello world ?', // plain text body
       html: htmlStr // html body
   };
 
