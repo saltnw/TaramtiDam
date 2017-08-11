@@ -16,6 +16,7 @@ var transporter = nodemailer.createTransport({
 
 function sendNotifications(ref, mdaRef)
 {
+   console.log("called send notifications (daily email notifications)");
     var tommorowRef = mdaRef.child("Tommorow")
     var mobilesDetailsArr = [];
     var mobilesLocArr = [];
@@ -45,7 +46,7 @@ function sendNotifications(ref, mdaRef)
           {
             if (!sendMails)
             {
-              console.log("send mails is false for " + childSnapshot.val()["fullName"]);
+              //console.log("send mails is false for " + childSnapshot.val()["fullName"]);
               return;
             }
           }

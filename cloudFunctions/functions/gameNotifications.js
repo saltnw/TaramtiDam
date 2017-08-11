@@ -30,14 +30,14 @@ function sendGameNotifications() {
           }
           if (!alreadyJoinedTheGame)
           {
-            console.log(email + " didn't join the game");
+            //console.log(email + " didn't join the game");
             return; 
           }
           var lastDonationStr = childSnapshot.val()["lastDonationInString"];
           var isInLast3Months = sendNotifications.checkLastDonationDate(lastDonationStr);
           if (isInLast3Months)
           {
-            console.log(email + " has donated in the last 3 months");
+            //console.log(email + " has donated in the last 3 months");
             return;
           }
           

@@ -147,27 +147,11 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    //findViewById(R.id.logoutButton).setEnabled(true);
-                    //findViewById(R.id.logoutButton).setVisibility(View.VISIBLE);
-                    //findViewById(R.id.EditProfileButton).setEnabled(true);
-                    //findViewById(R.id.EditProfileButton).setVisibility(View.VISIBLE);
-                    //findViewById(R.id.loginButton).setEnabled(false);
-                    //findViewById(R.id.loginButton).setVisibility(View.INVISIBLE);
-
                     finishLoginAndRegistration();
 
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
-
-                    //infotv.setText("" );                  // update the TextView text
-
-                    //findViewById(R.id.logoutButton).setEnabled(false);
-                    //findViewById(R.id.logoutButton).setVisibility(View.INVISIBLE);
-                    //findViewById(R.id.EditProfileButton).setEnabled(false);
-                    //findViewById(R.id.EditProfileButton).setVisibility(View.INVISIBLE);
-                   // findViewById(R.id.loginButton).setEnabled(true);
-                    //findViewById(R.id.loginButton).setVisibility(View.VISIBLE);
 
                     currentLoggedUser = null;
                     doThingsAfterLogout();
@@ -237,13 +221,11 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //read donation per vampires team
                 gameData.setDayEastCounter((long)dataSnapshot.child("East").child("Day").child("Donations").getValue());
-                //nightEastCounter = (long)dataSnapshot.child("East").child("Night").child("Donations").getValue();
                 gameData.setDayNorthCounter((long)dataSnapshot.child("North").child("Day").child("Donations").getValue());
                 gameData.setDaySouthCounter((long)dataSnapshot.child("South").child("Day").child("Donations").getValue());
                 gameData.setDayWestCounter((long)dataSnapshot.child("West").child("Day").child("Donations").getValue());
 
                 gameData.setNightEastCounter((long)dataSnapshot.child("East").child("Night").child("Donations").getValue());
-                //nightEastCounter = (long)dataSnapshot.child("East").child("Night").child("Donations").getValue();
                 gameData.setNightNorthCounter((long)dataSnapshot.child("North").child("Night").child("Donations").getValue());
                 gameData.setNightSouthCounter((long)dataSnapshot.child("South").child("Night").child("Donations").getValue());
                 gameData.setNightWestCounter((long)dataSnapshot.child("West").child("Night").child("Donations").getValue());
@@ -491,8 +473,6 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                     break;
                 case 2:
                     if (JustDonatedFragment.isLegalDonation()) {
-                        //fragment = new JustDonatedFragment();
-                        //title = getString(R.string.title_just_donated);
                         showBloodDonationCinfirmDialog().show();
                     }
                     else{
@@ -704,8 +684,6 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
     public static void signOutFromOurApplication(){
 
         mAuth.signOut();
-        //AuthUI.getInstance().signOut();
-        //FirebaseAuth.getInstance().getCurrentUser().
         LoginManager.getInstance().logOut();  // clear facebook login also
 
 
@@ -794,19 +772,6 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                         .build()
         );
     }
-
-       /* @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        Log.d("Home Fragment", "on activity result called");
-
-        if (requestCode == 11){
-            if (resultCode == RESULT_OK){
-                Log.d("Home Fragment", data.getDataString());
-            }
-        }
-
-    }
-    */
 
     @Override
     public void onBackPressed() {

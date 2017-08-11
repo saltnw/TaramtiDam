@@ -89,7 +89,6 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        //currentLoggedUser = new TaramtiDamUser("12345678","Nitzan Frogel","nitzanfrogel@gmail.com");
     }
 
     public void showDetails(TaramtiDamUser currentLoggedUser){

@@ -15,6 +15,7 @@ var transporter = nodemailer.createTransport({
 
 function reminderEmail()
 {
+    console.log("called send reminder emails!");
     var usersRef = db.ref().child("users");
     usersRef.once("value")
       .then(function(snapshot) {
