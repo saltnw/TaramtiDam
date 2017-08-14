@@ -1,6 +1,8 @@
 package com.taramtidam.taramtidam;
 
 
+import com.taramtidam.taramtidam.model.DistanceIndex;
+
 import java.util.List;
 
 public class Distances {
@@ -8,15 +10,15 @@ public class Distances {
 
     /*
     *
-    * return the index of the nearset bloodMobile to a sepcific location
+    * return the index of the nearest bloodMobile to a specific location
     *
-    * myLatitude, myLongitude are the cordinated of the point
+    * myLatitude, myLongitude are the coordinates of the point
     * mobilesList is a List of MDAMobile
     *
     * return - 1 on error
     *
     * */
-    public static int findNearestBloodMobile(double myLatitude, double myLongitude, List<MDAMobile> mobilesList){
+    public static DistanceIndex findNearestBloodMobile(double myLatitude, double myLongitude, List<MDAMobile> mobilesList){
 
         int nearestBloodMobileIndex;
         double minDistance = 0;
@@ -24,7 +26,8 @@ public class Distances {
 
 
         if (mobilesList == null){
-            return -1;
+            DistanceIndex emptyDistIndex = new DistanceIndex(-1, -1);
+            return emptyDistIndex;
         }
         if(!(mobilesList.isEmpty())){
             minDistance = distanceBetweenTwoCords(myLatitude, mobilesList.get(0).getLatitude(), myLongitude, mobilesList.get(0).getLongitude(), 0.0, 0.0);
@@ -33,15 +36,14 @@ public class Distances {
 
         for (int i=0; i<mobilesList.size(); i++){
             tmpDist = distanceBetweenTwoCords(myLatitude, mobilesList.get(i).getLatitude(), myLongitude, mobilesList.get(i).getLongitude(), 0.0, 0.0);
-            //Log.d("Asaf",Double.toString(tmpDist));
 
             if (tmpDist < minDistance){ //if we found a more closer station
                 nearestBloodMobileIndex = i;
                 minDistance = tmpDist;
             }
         }
-
-        return nearestBloodMobileIndex;
+        DistanceIndex distIndex = new DistanceIndex(nearestBloodMobileIndex, minDistance);
+        return distIndex;
     }
 
 

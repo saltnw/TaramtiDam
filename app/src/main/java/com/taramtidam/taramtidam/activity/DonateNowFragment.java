@@ -142,33 +142,22 @@ public class DonateNowFragment extends Fragment implements GoogleApiClient.Conne
         String address;
 
         int nearsetStationIndex;
-        //Log.d("ASAF","google api connected!");
         if (ActivityCompat.checkSelfPermission(this.getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getActivity().getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient); //TODO to check it with lilach
+        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         if (MainActivity.mobiles.size() > 0) { //check if the there are mobiles (at least 1)
             if (mLastLocation != null) {
                 Log.d("Donate Now Fragment", "mLastLocation != NULL");
 
-                //mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
-                //mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
-                //Log.d("ASAF", "the are :"+Integer.toString(MainActivity.mobiles.size()) + " mobiles");
-                if (Distances.findNearestBloodMobile(mLastLocation.getLatitude(), mLastLocation.getLongitude(), MainActivity.mobiles) == -1) {
+                if (Distances.findNearestBloodMobile(mLastLocation.getLatitude(), mLastLocation.getLongitude(), MainActivity.mobiles).getMobileIndex() == -1) {
                     addressTV.setText("No Active Station Available");
                     hoursTV.setText("N/A");
                     informationTV.setText("N/A");
                     return;
                 }
-                nearsetStationIndex = Distances.findNearestBloodMobile(mLastLocation.getLatitude(), mLastLocation.getLongitude(), MainActivity.mobiles);
+                nearsetStationIndex = Distances.findNearestBloodMobile(mLastLocation.getLatitude(), mLastLocation.getLongitude(), MainActivity.mobiles).getMobileIndex();
                 Log.d("Donate Now Fragment", "The closest station index is: " + Integer.toString(nearsetStationIndex));
                 Log.d("Donate Now Fragment", "The numbers of stations is: " + MainActivity.mobiles.size());
                 Log.d("Donate Now Fragment", "The Closest station is: " + MainActivity.mobiles.get(nearsetStationIndex).getAddress() + ", " + MainActivity.mobiles.get(nearsetStationIndex).getCity() +"\n"+MainActivity.mobiles.get(nearsetStationIndex).getDescription());

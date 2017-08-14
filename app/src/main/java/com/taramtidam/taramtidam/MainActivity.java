@@ -32,6 +32,8 @@ import com.facebook.login.LoginManager;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Trigger;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -88,9 +90,9 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
     //  GAME
     public static GameData gameData = new GameData();
-    //public static String team=null;
 
-
+    //Global Google API Client
+    public static GoogleApiClient mGoogleApiClient;
 
 
     @Override
@@ -101,7 +103,7 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
         if (prefs.getBoolean("firstrun", true)) {
             prefs.edit().putBoolean("firstrun", false).commit();
             //call the tutorial activity
-            Intent tutintent = new Intent(this, tutActi.class);
+            Intent tutintent = new Intent(this, TutorialActivity.class);
             startActivity(tutintent);
         }
         //else continue as normal
@@ -248,6 +250,15 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
             }
         });
 
+        //Global google Api client init
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this.getApplicationContext())
+                    //.addConnectionCallbacks(this)
+                    //.addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+
     }
 
     /* define behavior to the buttons on the view  */
@@ -263,7 +274,7 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
     protected void onStart(){
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
-      //  LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(ourReceiver, new IntentFilter(Constants.BROADCAST_ACTION));
+        mGoogleApiClient.connect();
         Log.d("asaf","MA the size is " +mobiles.size());
 
 
@@ -472,12 +483,15 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
                     title = getString(R.string.title_myprofile);
                     break;
                 case 2:
-                    if (JustDonatedFragment.isLegalDonation()) {
-                        showBloodDonationCinfirmDialog().show();
+                    JustDonatedFragment.DonationValidity donationValidity = JustDonatedFragment.isLegalDonation();
+                    if (donationValidity == JustDonatedFragment.DonationValidity.LEGAL) {
+                        showBloodDonationConfirmDialog().show();
                     }
-                    else{
-                        Toast.makeText(MainActivity.this, R.string.ilegallDonation, Toast.LENGTH_LONG).show();  // display message
-
+                    else if (donationValidity == JustDonatedFragment.DonationValidity.ILLEGAL_DATE){
+                        Toast.makeText(MainActivity.this, R.string.illegalDonationDate, Toast.LENGTH_LONG).show();  // display message
+                    }
+                    else {
+                        Toast.makeText(MainActivity.this, R.string.illegalDonationLocation, Toast.LENGTH_LONG).show();  // display message
                     }
                     break;
 
@@ -691,7 +705,7 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
 
 
-    public Dialog showBloodDonationCinfirmDialog(){
+    public Dialog showBloodDonationConfirmDialog(){
 
         AlertDialog.Builder adb = new AlertDialog.Builder(this);
         adb.setTitle("Confirm Blood Donation");

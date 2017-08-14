@@ -65,7 +65,7 @@
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/blooddrop" />
 
-    <activity android:name=".tutActi"></activity>
+    <activity android:name=".TutorialActivity"></activity>
     <activity android:name=".GameActivity"></activity>
 </application>
 </manifest>
