@@ -31,7 +31,6 @@ public class NavigationFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_navigation, container, false);
 
-//todo: use this to implement "donate now" - just replace the address with the relevant one
 
 //        // Create a Uri from an intent string. Use the result to create an Intent.
 //        Uri intentUri = Uri.parse("google.navigation:q=בזל+22,+תל+אביב&mode=w");

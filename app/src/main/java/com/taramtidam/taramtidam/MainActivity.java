@@ -282,6 +282,7 @@ public class  MainActivity extends AppCompatActivity implements FragmentDrawer.F
 
     @Override
     public void onStop() {
+        mGoogleApiClient.disconnect();
         super.onStop();
     }
 

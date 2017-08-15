@@ -10,7 +10,7 @@ public class Distances {
 
     /*
     *
-    * return the index of the nearest bloodMobile to a specific location
+    * return the index and distance of the nearest bloodMobile to a specific location
     *
     * myLatitude, myLongitude are the coordinates of the point
     * mobilesList is a List of MDAMobile

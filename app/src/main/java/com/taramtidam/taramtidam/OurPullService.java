@@ -73,7 +73,7 @@ public class OurPullService extends JobService implements GoogleApiClient.Connec
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
-                .addApi(Places.GEO_DATA_API)//todo remove?
+                .addApi(Places.GEO_DATA_API)
                 //.enableAutoManage(this, this)
                 .build();
 

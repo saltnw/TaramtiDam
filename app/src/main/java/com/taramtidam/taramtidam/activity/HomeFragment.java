@@ -165,12 +165,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             if (f != null) {
                 Log.d("Game Activity", "loading game1 fragemnt...");
 
-                //Not good
                 getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
-
-                //TODO save the state of the login + logout + join the game buttons
-
-                //TODO set all the buttons to Disabled
 
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

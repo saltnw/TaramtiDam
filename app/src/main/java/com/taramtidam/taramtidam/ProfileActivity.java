@@ -97,14 +97,14 @@ public class ProfileActivity extends AppCompatActivity {
         String current_mail = currentLoggedUser.getEmail();
         String current_address1 = currentLoggedUser.getAddress1();
         String current_address2 = currentLoggedUser.getAddress2();
-        //String current_last_donation = null; //TODO: add this field to user profile
+        //String current_last_donation = null;
 
         //set content in Text views with the current information of the user
         full_name.setText(current_full_name);
         mail.setText(current_mail);
         address1.setText(current_address1,TextView.BufferType.EDITABLE);
         address2.setText(current_address2,TextView.BufferType.EDITABLE);
-        //last_donation.setText(current_last_donation.toString()); //TODO next milestone
+        //last_donation.setText(current_last_donation.toString());
 
         addItemsOnSpinner();
     }

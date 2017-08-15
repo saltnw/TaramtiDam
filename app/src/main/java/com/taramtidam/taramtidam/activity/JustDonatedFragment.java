@@ -60,7 +60,6 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
     Button toGameProgressBtn;
     Button twitterBtn;
     int prevRank;
-    //static GoogleApiClient mGoogleApiClient;
     static Context mContext;
 
     public static enum DonationValidity {
