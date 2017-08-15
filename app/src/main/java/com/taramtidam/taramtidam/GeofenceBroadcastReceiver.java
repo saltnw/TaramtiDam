@@ -116,7 +116,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
             if (local.getTime() > start.getTime() && local.getTime() < end.getTime()) {
                 sendNotification(context, details[0]);
                 Log.d("FENCE", "Notification was sent");
-                List toRemove= new ArrayList();//TODO remove and handle double notifications
+                List toRemove= new ArrayList();
                 toRemove.add(MDANear);
                 if (OurPullService.mClient != null)
                 {
@@ -186,8 +186,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
             builder.setSmallIcon(R.mipmap.td)
                     .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
                             R.mipmap.td))
-                    .setContentTitle("ניידת התרמת דם בסביבה");//todo change to this style:context.getString(R.string.silent_mode_activated
-
+                    .setContentTitle("ניידת התרמת דם בסביבה");
 
         // Continue building the notification
         builder.setContentText(notifyMsg);

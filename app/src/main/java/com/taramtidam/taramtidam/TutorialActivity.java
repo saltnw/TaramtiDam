@@ -9,7 +9,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
-public class tutActi extends AppCompatActivity implements View.OnClickListener {
+public class TutorialActivity extends AppCompatActivity implements View.OnClickListener {
     int currLook = 0;
     int maxView  = 3;
 
