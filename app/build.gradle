@@ -7,8 +7,8 @@ android {
         applicationId "com.taramtidam.taramtidam"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 7
-        versionName "7.0"
+        versionCode 9
+        versionName "9.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

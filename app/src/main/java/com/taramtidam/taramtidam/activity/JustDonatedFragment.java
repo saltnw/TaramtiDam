@@ -243,7 +243,8 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
 
         Log.d("JustDonated", "closest station distance is " + closestStationDistance);
 
-        return (closestStationDistance < 700 );
+        //return (closestStationDistance < 700 );
+        return (closestStationDistance < 20000); //for testing by the workshop instructors
     }
 
     public static DonationValidity isLegalDonation(){

@@ -20,6 +20,7 @@ function sendNotifications(ref, mdaRef)
     var tommorowRef = mdaRef.child("Tommorow")
     var mobilesDetailsArr = [];
     var mobilesLocArr = [];
+    var mobilesFilled = false;
     tommorowRef.once("value")
       .then(function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
@@ -31,8 +32,15 @@ function sendNotifications(ref, mdaRef)
           var detailsRow = {location, startTime, endTime, address, description};
           mobilesLocArr.push(location);
           mobilesDetailsArr.push(detailsRow);
-      });
+        }
+      );
+      mobilesFilled = true;
     });
+
+    while (!mobilesFilled);
+
+    if (mobilesLocArr.length == 0)
+      return;
 
     // Loop through users in order with the forEach() method. The callback
     // provided to forEach() will be called synchronously with a DataSnapshot
