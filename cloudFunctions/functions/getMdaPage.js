@@ -1,5 +1,5 @@
 var unirest = require("unirest")
-var moment = require("moment")
+var moment = require("moment-timezone")
 
 const DOMAIN = "https://b.mda.org.il"
 const PAGE = "/Donation.aspx"
@@ -54,7 +54,7 @@ function getParameters(page)
         params[input.attr("name")] = input.attr("value");
     });
 
-    var tommorow = moment().add("1", "days").format("YYYY-MM-DD");
+    var tommorow = moment().tz("Asia/Jerusalem").add("1", "days").format("YYYY-MM-DD");
     params["tbDate"] = tommorow;
     return params; 
 }
