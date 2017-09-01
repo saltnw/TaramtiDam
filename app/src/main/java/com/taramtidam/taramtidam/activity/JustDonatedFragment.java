@@ -213,7 +213,7 @@ public class JustDonatedFragment extends Fragment implements View.OnClickListene
         Log.d("JustDonated","diff days: "+diffDays);
 
 
-        if (diffDays >= 88){
+        if (diffDays >= 1){
             return true;
         }
         else{
